@@ -15,8 +15,8 @@ const StepThree = () => {
             <div component="div" className="text_center form-heading" sx={{ paddingBottom: '10px ' }} > Profile Picture </div>
 
             <div className="my-3">
-                <form class="form d-flex justify-content-center">
-                    <label htmlFor="file-input" class="drop-container">
+                <form className="form d-flex justify-content-center">
+                    <label htmlFor="file-input" className="drop-container">
                         <span>
                             <BsPlusLg />
                         </span>
