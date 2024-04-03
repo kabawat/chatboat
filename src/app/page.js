@@ -1,8 +1,10 @@
 'use client'
 import SiderButton from "@/components/button/SiderButton";
+import { DividerText, DividerTextShip } from "@/components/comman/DividerText";
+import { CheckBoxACheck, CheckBoxAmin } from "@/components/comman/checkBox";
 import InputTextField from "@/components/form/field";
 import OTPInput from "@/components/otp/otp";
-import { Card, Dialog, DialogTitle, Typography } from "@mui/material";
+import { Box, Card, Dialog, DialogTitle, Typography } from "@mui/material";
 import Link from "next/link";
 import { useState } from "react";
 import { LuSend } from "react-icons/lu";
@@ -25,17 +27,26 @@ export default function BasicGrid() {
 
   return (
     <div className="just_center">
-      <Card sx={{ padding: '30px 40px' }} className="form_card">
+      <Card className="form_card">
         <Typography variant="h5" component="div" className="text_center" sx={{ paddingBottom: '10px ' }} > Login </Typography>
-        <InputTextField label="First Name" id="outlined-size-small" defaultValue="" fullWidth sx={{ margin: '10px 0px' }} />
-        <InputTextField label="Last Name" id="outlined-size-small" defaultValue="" fullWidth sx={{ margin: '10px 0px' }} />
-        <InputTextField label="Email" id="outlined-size-small" defaultValue="" fullWidth sx={{ margin: '10px 0px' }} />
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-        
-        </Typography>
-        <div className="dFlex jusitfyContentCenter">
+        <InputTextField label="First Name" variant="standard" id="outlined-size-small" defaultValue="" fullWidth sx={{ margin: '10px 0px', }} />
+        <InputTextField label="Last Name" variant="standard" id="outlined-size-small" defaultValue="" fullWidth sx={{ margin: '10px 0px' }} />
+        <InputTextField label="Email" variant="standard" id="outlined-size-small" defaultValue="" fullWidth sx={{ margin: '10px 0px' }} />
+        <div className="d-flex align-items-center py-2">
+          <CheckBoxACheck />
+          <Typography sx={{ fontSize: 14, textAlign: 'center', padding: '0px 10px' }} color="text.secondary" >
+            remember me
+          </Typography>
+        </div>
+        <div className="d-flex justify-content-center mt-2">
           <SiderButton title="Send OTP" endIcon={<LuSend />} handalClick={handalOpenOtpModel} />
         </div>
+        <Typography sx={{ fontSize: 14, textAlign: 'center', paddingTop: '18px' }} color="text.secondary" gutterBottom>
+          Don't have an account?  <Link href="/" >Signup</Link>
+        </Typography>
+        <Box sx={{ padding: '10px 0px' }}>
+          <DividerText align={'center'} label={"Or"} />
+        </Box>
       </Card>
 
       <Dialog onClose={handalCloseOtpModal} open={isOtpModal}>

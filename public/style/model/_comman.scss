@@ -4,12 +4,99 @@
 
 .form_card {
     width: 425px;
+    margin: auto;
+    padding: 40px;
+
+    @media screen and (max-width:425px) {
+        padding: 20px;
+        width: 95%;
+    }
 }
 
-.dFlex {
-    display: flex;
+
+// check box 
+.checkbox-container {
+    cursor: pointer;
 }
 
-.jusitfyContentCenter {
-    justify-content: center;
+.checkbox-container input {
+    display: none;
+}
+
+.checkbox-container svg {
+    overflow: visible;
+}
+
+.path {
+    fill: none;
+    stroke: #675c9c;
+    stroke-width: 6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke-dasharray 0.5s ease, stroke-dashoffset 0.5s ease;
+    stroke-dasharray: 241 9999999;
+    stroke-dashoffset: 0;
+}
+
+.checkbox-container input:checked~svg .path {
+    stroke-dasharray: 70.5096664428711 9999999;
+    stroke-dashoffset: -262.2723388671875;
+}
+
+// 2
+.checkboxCheck {
+    appearance: none;
+    width: 16px;
+    aspect-ratio: 1;
+    border-radius: 3px;
+    border: 2px solid #675c9c;
+    position: relative;
+    transition: all 0.2s ease-in-out;
+}
+
+.checkboxCheck::before {
+    font-family: "Quicksand", sans-serif;
+    position: absolute;
+    bottom: -4px;
+    left: 1px;
+    content: "✔";
+    font-size: 20px;
+    color: rgb(255, 153, 0);
+    transform: scale(0);
+    transition: all 0.2s ease-in-out;
+}
+
+.checkboxCheck:checked::before {
+    animation: zoom 0.5s ease-in-out;
+    transform: scale(1);
+}
+
+@keyframes zoom {
+    0% {
+        transform: scale(0);
+    }
+
+    20% {
+        transform: scale(1.5);
+    }
+
+    40% {
+        transform: scale(0.5);
+    }
+
+    50% {
+        transform: scale(1);
+    }
+
+    70% {
+        transform: scale(1.2);
+    }
+
+    90% {
+        transform: scale(0.8);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
