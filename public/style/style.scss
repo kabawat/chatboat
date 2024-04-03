@@ -12,6 +12,7 @@ body {
 
 @import './model/comman';
 @import './model/button';
+@import './model/loader';
 
 .main {
     max-height: 100vh;
@@ -23,7 +24,7 @@ body {
 .just_center {
     position: relative;
     display: grid;
-    place-items: center;    
+    place-items: center;
     height: 100%;
     width: 100%;
     z-index: 2;
@@ -54,4 +55,71 @@ body {
         background-position: left top;
         z-index: -1;
     }
+}
+
+.form-heading {
+    color: #675c9c;
+    font-size: 28px;
+    font-weight: 600;
+    text-align: center;
+}
+
+
+.drop-container {
+    background-color: transparent;
+    position: relative;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    overflow: hidden;
+    width: 180px;
+    height: 180px;
+    border: 2px dashed #e8e8e8;
+    color: #444;
+    cursor: pointer;
+    transition: background .2s ease-in-out, border .2s ease-in-out;
+
+    span {
+        position: absolute;
+        font-size: 50px;
+        display: grid;
+        place-items: center;
+        width: 100%;
+        height: 100%;
+        left: 0px;
+        color: #e8e8e8;
+        top: 0px;
+        padding: 0px 20px;
+    }
+}
+
+.drop-container:hover {
+    background: #fcfdfe;
+    border-color: #e8e8e8;
+}
+
+
+#file-input {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+#file-input::file-selector-button {
+    margin-right: 20px;
+    border: none;
+    background: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: transparent;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    transition: background .2s ease-in-out;
+}
+
+#file-input::file-selector-button:hover {
+    background: none;
 }

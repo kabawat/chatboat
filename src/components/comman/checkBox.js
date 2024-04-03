@@ -13,6 +13,6 @@ export const CheckBoxAmin = () => {
 
 export const CheckBoxACheck = () => {
     return (
-        <input class="checkboxCheck" type="checkbox" />
+        <input class="checkboxCheck" type="checkbox" id='pwd' />
     )
 }
