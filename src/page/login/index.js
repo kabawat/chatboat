@@ -8,7 +8,7 @@ import Link from "next/link";
 import { LuSend } from "react-icons/lu";
 export default function LoginPage() {
     const loader = false
-    const isForgotPassword = false
+    const isForgotPassword = true
     const handalLogin = () => {
 
     }

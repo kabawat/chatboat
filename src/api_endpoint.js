@@ -6,6 +6,10 @@ const fetchBaseURL = () => {
 }
 const baseURL = fetchBaseURL()
 const endpoint = {
-    REGISTRATION_OTP: `${baseURL}/api/auth/login`,
+    SEND_OTP_ON_EMIAL: `${baseURL}/api/auth/send-otp`,
+    VERIFY_EMAIL_USING_OTP: `${baseURL}/api/auth/verify-email`,
+    REGISTRATION: `${baseURL}/api/auth/registration`,
+    FINISH_SIGNUP:`${baseURL}/api/auth/finish-signup`
+
 }
 export default endpoint
