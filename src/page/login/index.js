@@ -20,7 +20,7 @@ export default function LoginPage() {
                 <InputTextField label="Password" variant="standard" id="outlined-size-small" defaultValue="" fullWidth sx={{ margin: '10px 0px' }} />
                 <div className="d-flex align-items-center justify-content-between">
                     <label htmlFor="pwd" className="d-inline-flex align-items-center py-2">
-                        <CheckBoxACheck />
+                        <CheckBoxACheck id={'pwd'} />
                         <Typography sx={{ fontSize: 14, textAlign: 'center', padding: '0px 6px' }} color="text.secondary" >
                             Show Password
                         </Typography>

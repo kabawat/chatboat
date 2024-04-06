@@ -68,6 +68,7 @@ body {
 .drop-container {
     background-color: transparent;
     position: relative;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -100,26 +101,33 @@ body {
 }
 
 
-#file-input {
+#file_input {
     width: 100%;
     max-width: 100%;
     height: 100%;
-    position: relative;
+    position: absolute;
 }
 
-#file-input::file-selector-button {
+#file_input::file-selector-button {
     margin-right: 20px;
     border: none;
     background: none;
     padding: 10px 20px;
     border-radius: 10px;
     color: transparent;
+    background: transparent;
     cursor: pointer;
     width: 100%;
     height: 100%;
-    transition: background .2s ease-in-out;
+    transition: all .2s ease-in-out;
 }
 
-#file-input::file-selector-button:hover {
+#file_input::file-selector-button:hover {
     background: none;
+}
+
+.preview {
+    width: 99%;
+    height: 99%;
+    border-radius: 50%;
 }

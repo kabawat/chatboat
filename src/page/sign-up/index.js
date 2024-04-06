@@ -7,6 +7,11 @@ import { Card, Typography } from "@mui/material";
 import Link from "next/link";
 import { useState } from "react";
 import ToastSnackbar from "@/components/Snackbar";
+import endpoint from "@/api_endpoint";
+import Cookies from "js-cookie";
+import { PageLoader } from "@/components/loader/pageLoader";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function SignUpPage() {
     const toastInit = {
@@ -19,11 +24,36 @@ export default function SignUpPage() {
     }
     const [step, setStep] = useState(1)
     const [Toast, setToast] = useState(toastInit)
+    const [loader, setLoader] = useState(false)
+    const router = useRouter()
     const handalToast = (value) => {
         setToast({
             ...Toast,
             ...value
         })
+    }
+    const handalSubmit = async () => {
+        try {
+            setLoader(true)
+            const headers = {
+                "x-verification-tokens": Cookies.get('_xvt')
+            }
+            const res = await axios.post(endpoint.FINISH_SIGNUP, { is_file: 0 }, { headers })
+            Cookies.remove('_xvt')
+            Cookies.set('_x_a_t', res?.data?.authToken)
+
+            setTimeout(() => {
+                setLoader(false)
+                router.push('/login')
+            }, 2000)
+        } catch (error) {
+            handalToast({
+                message: error?.response?.data?.error ? error?.response?.data?.error : error?.message,
+                type: 'error',
+                show: true,
+            })
+            setLoader(false)
+        }
     }
     return (
         <div className="just_center">
@@ -40,7 +70,7 @@ export default function SignUpPage() {
                     {
                         // skip button
                         step === 3 ? <>
-                            <div className="skip">
+                            <div className="skip" onClick={handalSubmit}>
                                 skip
                             </div>
                         </> : <></>
@@ -51,13 +81,14 @@ export default function SignUpPage() {
                 {/* step Two  */}
                 {step === 2 ? <StepTwo setStep={setStep} toastBox={handalToast} /> : <></>}
                 {/* step Three  */}
-                {step === 3 ? <StepThree setStep={setStep} /> : <></>}
+                {step === 3 ? <StepThree setStep={setStep} toastBox={handalToast} /> : <></>}
 
                 <Typography sx={{ fontSize: 14, textAlign: 'center', paddingTop: '18px' }} color="text.secondary" gutterBottom>
                     Already have an account?  <Link href="/login" >Login</Link>
                 </Typography>
             </Card>
             {Toast?.show ? <ToastSnackbar handalClose={() => setToast(toastInit)} data={Toast} /> : <></>}
+            {loader ? <div className="fixedPostionSection"> <PageLoader /> </div> : <></>}
         </div>
     );
 }

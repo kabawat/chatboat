@@ -11,8 +11,8 @@ export const CheckBoxAmin = () => {
     )
 }
 
-export const CheckBoxACheck = () => {
+export const CheckBoxACheck = (props) => {
     return (
-        <input className="checkboxCheck" type="checkbox" id='pwd' />
+        <input className="checkboxCheck" type="checkbox" {...props} />
     )
 }
