@@ -1,0 +1,123 @@
+:root {
+    --dark-background-color: #202124;
+    --sidebar-background-color: #606368;
+    --sidebar-content-background-color: #3c4042;
+}
+
+.chat_containner.dark_mode {
+    background: #202124;
+
+    aside {
+        .aside {
+            background: #606368;
+        }
+
+        .inner_side {
+            .side_profile {
+                .profile_main {
+                    background: #3c4042;
+                }
+
+                .avatar_heading {
+                    color: #fff;
+                }
+
+                .avatar_title {
+                    color: #d4d4d4;
+                }
+            }
+        }
+
+        .navigate {
+            background: #3c4042;
+
+            .link {
+                background: #606368;
+
+                &::before {
+                    background: #3c4042;
+                }
+
+                a {
+                    color: #d4d4d4;
+                }
+            }
+
+            .link.active {
+                &::before {
+                    background: #1976d2;
+                }
+
+                a {
+                    color: #1976d2;
+                }
+            }
+        }
+    }
+
+    .setting-btn {
+        color: #d4d4d4;
+        background: #606368;
+
+        &::before {
+            background: #3c4042;
+        }
+    }
+
+
+    .setting-btn.active {
+        color: #1976d2;
+        background: #606368;
+
+        &::before {
+            background: #1976d2;
+        }
+    }
+
+    .searchbar {
+        border-color: #3c404240;
+
+        .icon {
+            color: #d4d4d4;
+        }
+
+        .search_field {
+            input {
+                color: #d4d4d4;
+            }
+        }
+    }
+
+    .search {
+        border-color: #3c404240;
+    }
+
+
+    // contact list 
+
+    .chatList_main_container {
+        &:hover {
+            &::-webkit-scrollbar-thumb {
+                background-color: #3c4042;
+                border: 6px solid #606368;
+            }
+        }
+
+        .chat_card {
+            margin-bottom: 10px;
+        }
+
+        .chat_card.active {
+            background: #3c4042;
+        }
+
+        .chat_card:hover {
+            background: #3c4042;
+        }
+
+        .textBox {
+            color: #c9c9c9;
+            font-family: 'Poppins' sans-serif;
+        }
+    }
+}
