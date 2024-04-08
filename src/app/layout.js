@@ -1,11 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
-import { ThemeProvider } from '@mui/material/styles';
-import theme from '../theme';
 import { Inter } from "next/font/google";
 import '@/style/style.scss';
-import StyledComponentsRegistry from '@/lib/registry';
-
+import App from './App';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -16,16 +12,8 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <StyledComponentsRegistry>
-          <AppRouterCacheProvider options={{ key: 'css' }}>
-            <ThemeProvider theme={theme}>
-              <div className="main">
-                {children}
-              </div>
-            </ThemeProvider>
-          </AppRouterCacheProvider>
-        </StyledComponentsRegistry>
+      <body className={inter.className} suppressHydrationWarning={true}>
+        <App children={children} />
       </body>
     </html >
   );

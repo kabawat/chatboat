@@ -5,18 +5,20 @@ import { IoSearchOutline } from "react-icons/io5";
 import Avatar from '@mui/material/Avatar';
 import NoChat from '@/components/chat/no-chat';
 import ChatContainer from '@/components/chat/chat-container';
+import { useSelector } from 'react-redux'
 const ChatPage = () => {
-    const [isDarkMode, setDarkMode] = useState(false)
+    const theme = useSelector(state => state.theme)
+    console.log(theme)
     const [isChat, setIsChat] = useState(true)
     return (
-        <div className={`chat_containner ${isDarkMode && 'dark_mode'}`}>
+        <div className={`${theme === 'dark' ? 'dark_mode' : ''} chat_containner`}>
             <aside>
                 <div className="aside">
                     <div className="inner_side">
                         {/* profile section  */}
                         <div className="side_profile">
                             <div className="d-flex align-items-center profile_main">
-                                <Avatar alt="" src="/static/images/avatar/1.jpg" sx={{ width: 50, height: 50 }} />
+                                <Avatar alt="M" src="" sx={{ width: 50, height: 50 }} />
                                 <div className='px-2'>
                                     <div className="avatar_heading">
                                         <b> Ms Rajputana</b>

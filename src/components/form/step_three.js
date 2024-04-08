@@ -50,7 +50,7 @@ const StepThree = ({ setStep, toastBox }) => {
             <div className="my-3">
                 <form className="d-flex justify-content-center overflow-hidden ">
                     <label htmlFor="file_input" className="drop-container">
-                        {!preview ? <span> <BsPlusLg /></span> : <img src={preview} className="preview" alt="" />}
+                        {!preview ? <span> <BsPlusLg /></span> : <img src={preview} className="preview" alt="M" />}
                         <input type="file" accept="image/*" id="file_input" onChange={handalChanage} />
                     </label>
                 </form>

@@ -1,17 +1,18 @@
 import { Badge } from '@mui/base/Badge';
 import React, { useEffect, useRef, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
-import { Typography } from "@mui/material";
 import { BsPlusLg, BsFileEarmarkPdf } from 'react-icons/bs';
 import { IoSendSharp, IoVideocamOutline } from 'react-icons/io5';
 import { IoIosMusicalNotes } from 'react-icons/io';
 import { BiImages } from 'react-icons/bi';
 import { GrSend } from "react-icons/gr";
 import { FileContainer, SelectButton, SelectFileBox, FileList, FileIcon, Label, Title } from './style';
+import Header from './header';
+import RightSideDrawer from './right-aside';
 const ChatContainer = () => {
     const inputRef = useRef(null);
     const chatOperationRef = useRef(null);
-    const [isProfile, setIsProfile] = useState(false)
+    const [isProfile, setIsProfile] = useState(false) // right side user information
     const [paddingBottom, setPaddingBottom] = useState(60)
     const [showFile, setShowFile] = useState(false)
     const setFocus = () => {
@@ -26,27 +27,15 @@ const ChatContainer = () => {
         }
     }
 
-    const handleFileChange = event => {
+    const handleFileChange = (event) => {
         // Reset the value of the file input field
         event.target.value = '';
     };
 
     return (
-        <div className={`chat-container ${isProfile && 'active'}`}>
+        <div className={`${isProfile ? 'active' : ''} chat-container`}>
             <div className="chat_area">
-                <div className="chat_navbar d-flex align-items-center">
-                    <div className="d-flex align-items-center active_user" onClick={() => setIsProfile(!isProfile)}>
-                        <Avatar alt="" src="/static/images/avatar/1.jpg" sx={{ width: 42, height: 42 }} />
-                        <div className='px-2'>
-                            <div className="avatar_heading">
-                                <b> Ms Rajputana</b>
-                            </div>
-                            <div className="avatar_title">
-                                Full stack dev
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <Header setIsProfile={setIsProfile} />
                 <div className="chat_main_container" style={{ '--pb': `${paddingBottom}px` }}>
                     <div className="chat_section" onClick={() => setIsProfile(false)}>
                         <div className="chat_section_area">
@@ -55,9 +44,9 @@ const ChatContainer = () => {
                                     Array.from({ length: 10 }).map((_, key) => {
                                         if (key % 2 == 0) {
                                             return (
-                                                <div className="msg left-msg">
+                                                <div className="msg left-msg" key={key}>
                                                     <div className="msg-img">
-                                                        <Avatar alt="" src="/static/images/avatar/1.jpg" sx={{ width: 45, height: 45 }} />
+                                                        <Avatar alt="m" src="/static/images/avatar/1.jpg" sx={{ width: 45, height: 45 }} />
                                                     </div>
 
                                                     <div className="msg-bubble">
@@ -74,9 +63,9 @@ const ChatContainer = () => {
                                             )
                                         } else {
                                             return (
-                                                <div className="msg right-msg">
+                                                <div className="msg right-msg" key={key}>
                                                     <div className="msg-img">
-                                                        <Avatar alt="" src="/static/images/avatar/1.jpg" sx={{ width: 45, height: 45 }} />
+                                                        <Avatar alt="m" src="/static/images/avatar/1.jpg" sx={{ width: 45, height: 45 }} />
                                                     </div>
 
                                                     <div className="msg-bubble">
@@ -165,19 +154,7 @@ const ChatContainer = () => {
             </div>
 
             {/* right side  */}
-            <div className="user_profile_section" he>
-                <div className="profile_detaile">
-                    <div className="profile_avator d-flex justify-content-center">
-                        <Avatar alt="" src="/static/images/avatar/1.jpg" sx={{ width: 160, height: 160 }} />
-                    </div>
-                    <div className="text-center profile_heading">
-                        Ms Rajputana
-                    </div>
-                    <Typography sx={{ fontSize: 14, textAlign: 'center', width: '50%', margin: 'auto' }} color="text.secondary" gutterBottom>
-                        Full Stack Developer
-                    </Typography>
-                </div>
-            </div>
+            <RightSideDrawer />
         </div>
     );
 };

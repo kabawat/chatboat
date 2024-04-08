@@ -27,7 +27,7 @@ const Navigate = () => {
                     navigateData?.map((item, keys) => {
                         return (
                             <div className="py-1" key={keys}>
-                                <div className={`link ${pathname == item?.link && 'active'}`}>
+                                <div className={`link ${pathname == item?.link ? 'active' : ''}`}>
                                     <Link href={item?.link} className='d-flex align-items-center justify-content-center'>
                                         {item?.icon}
                                     </Link>
@@ -40,7 +40,7 @@ const Navigate = () => {
             </div>
             <div className='d-flex flex-column align-items-center'>
                 <div className='w-100'>
-                    <div className={`setting-btn ${isSetting && 'active'}`}>
+                    <div className={`setting-btn ${isSetting ? 'active' : ''}`}>
                         <IoSettingsOutline />
                     </div>
                 </div>
