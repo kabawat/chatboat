@@ -22,7 +22,7 @@ const ChatPage = () => {
                                         <b> Ms Rajputana</b>
                                     </div>
                                     <div className="avatar_title">
-                                        Full stack dev
+                                        Full Stack Developer
                                     </div>
                                 </div>
                             </div>

@@ -1,7 +1,7 @@
 :root {
     --dark-background-color: #202124;
-    --sidebar-background-color: #606368;
-    --sidebar-content-background-color: #3c4042;
+    --sidebar-background-color: #222429f7;
+    --sidebar-content-background-color: #33464f;
 }
 
 .chat_containner.dark_mode {
@@ -9,33 +9,17 @@
 
     aside {
         .aside {
-            background: #606368;
-        }
-
-        .inner_side {
-            .side_profile {
-                .profile_main {
-                    background: #3c4042;
-                }
-
-                .avatar_heading {
-                    color: #fff;
-                }
-
-                .avatar_title {
-                    color: #d4d4d4;
-                }
-            }
+            background: #222429f7;
         }
 
         .navigate {
-            background: #3c4042;
+            background: #33464f;
 
             .link {
-                background: #606368;
+                background: #7d7d7d45;
 
                 &::before {
-                    background: #3c4042;
+                    background: #33464f;
                 }
 
                 a {
@@ -55,19 +39,35 @@
         }
     }
 
+    .profile_main {
+        background: #33464f;
+    }
+
+    .avatar_heading {
+        color: #fff;
+    }
+
+    .avatar_title {
+        color: #d4d4d4;
+    }
+
+    .right-msg .msg-bubble {
+        background: #52708e;
+    }
+
     .setting-btn {
         color: #d4d4d4;
-        background: #606368;
+        background: #7d7d7d45;
 
         &::before {
-            background: #3c4042;
+            background: #33464f;
         }
     }
 
 
     .setting-btn.active {
         color: #1976d2;
-        background: #606368;
+        background: #222429f7;
 
         &::before {
             background: #1976d2;
@@ -75,7 +75,7 @@
     }
 
     .searchbar {
-        border-color: #3c404240;
+        border-color: #494e5170;
 
         .icon {
             color: #d4d4d4;
@@ -89,7 +89,7 @@
     }
 
     .search {
-        border-color: #3c404240;
+        border-color: #494e5170;
     }
 
 
@@ -98,8 +98,8 @@
     .chatList_main_container {
         &:hover {
             &::-webkit-scrollbar-thumb {
-                background-color: #3c4042;
-                border: 6px solid #606368;
+                background-color: #33464f;
+                border: 6px solid #222429f7;
             }
         }
 
@@ -108,16 +108,97 @@
         }
 
         .chat_card.active {
-            background: #3c4042;
+            background: #33464f;
         }
 
         .chat_card:hover {
-            background: #3c4042;
+            background: #33464f;
         }
 
         .textBox {
             color: #c9c9c9;
             font-family: 'Poppins' sans-serif;
+        }
+    }
+
+    .chat_inner_section::-webkit-scrollbar-thumb {
+        background: transparent;
+        border-color: transparent;
+    }
+
+    .chat_inner_section:hover::-webkit-scrollbar-thumb {
+        background: #33464f;
+        border-color: #202124;
+    }
+
+    // main chat section 
+    main {
+        .chat-container {
+            .chat_navbar {
+                background: #222429f7;
+            }
+
+            .chat_operation {
+                background: #222429f7;
+            }
+
+            .chat_section {
+                // height: 100%;
+                background: url(/_next/static/media/background.9785ec93.svg) repeat;
+                // box-shadow: inset rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+            }
+        }
+    }
+
+    #w-input-text {
+        color: #fff;
+        &::-webkit-scrollbar-thumb{
+            border-color: #33464f;
+        }
+    }
+
+    #w-input-container {
+        background: #33464f;
+    }
+
+    .w-placeholder {
+        color: #909a9f;
+    }
+
+    .chat-container {
+
+        .user_profile_section {
+            background: #33464f;
+            border-left: 1px solid #33464f;
+
+            .profile_heading {
+                color: #ffff;
+            }
+            p{
+                color: #fff9f99c;
+            }
+        }
+    }
+
+    .msg-bubble {
+        box-shadow: none;
+    }
+
+    .left-msg {
+        .msg-info-name {
+            color: #fff;
+        }
+
+        .msg-text {
+            color: #d4d4d4;
+        }
+
+        .msg-info-time {
+            color: #1976d2;
+        }
+
+        .msg-bubble {
+            background: #33464f
         }
     }
 }

@@ -56,3 +56,56 @@
 .button-one:hover::after {
     height: 60%;
 }
+
+
+.FileContainer {
+    position: relative;
+    display: flex;
+    // padding-right: 20px;
+    width: 80px;
+    align-items: center;
+    justify-content: center;
+    transition: all cubic-bezier(0, 0.01, 0, 1.04);
+}
+
+
+// ---------------- send button  =------------------
+.send_btn {
+    --primary-color: #645bff;
+    --secondary-color: #fff;
+    --hover-color: #111;
+    box-sizing: border-box;
+    border: 0;
+    border-radius: 10px;
+    color: var(--secondary-color);
+    padding: 10px 20px;
+    background: var(--primary-color);
+    display: flex;
+    transition: 0.2s background;
+    align-items: center;
+    // gap: 0.6em;
+    font-weight: bold;
+
+    span {
+        text-wrap: nowrap;
+        padding-right: 10px;
+    }
+}
+
+.send_btn .arrow-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.send_btn:hover {
+    background-color: var(--hover-color);
+}
+
+.send_btn:hover .arrow {
+    background: var(--secondary-color);
+}
+
+.send_btn:hover .arrow:before {
+    right: 0;
+}
