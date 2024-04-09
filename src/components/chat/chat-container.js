@@ -16,7 +16,6 @@ const ChatContainer = () => {
     const [paddingBottom, setPaddingBottom] = useState(60)
     const [showFile, setShowFile] = useState(false)
     const setFocus = () => {
-        console.log('Focus function called');
         inputRef.current.focus();
     };
 
@@ -24,6 +23,7 @@ const ChatContainer = () => {
         if (chatOperationRef.current) {
             const height = chatOperationRef.current.offsetHeight;
             setPaddingBottom(height);
+            // console.log(inputRef.current.value)
         }
     }
 

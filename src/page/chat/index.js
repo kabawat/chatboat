@@ -5,11 +5,54 @@ import { IoSearchOutline } from "react-icons/io5";
 import Avatar from '@mui/material/Avatar';
 import NoChat from '@/components/chat/no-chat';
 import ChatContainer from '@/components/chat/chat-container';
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { handalCurrentUser } from '@/redux/slice/user';
+const chatList = [
+    {
+        _id: '093803845',
+        name: "Mukesh Singh",
+        last_seen: "10 min ago",
+        profile: '',
+        lastMsg: "Xhattmahs is not attacking attacking attacking attacking your base!",
+        notification: '12',
+        about: 'Full Stack Developer'
+    },
+    {
+        _id: '093803846',
+        name: "Narendra Singh",
+        last_seen: "13 min ago",
+        profile: '',
+        lastMsg: "Xhattmahs is not attacking attacking attacking attacking your base!",
+        notification: '78',
+        about: 'React Developer'
+    },
+    {
+        _id: '093803847',
+        name: "Milap Singh",
+        last_seen: "40 min ago",
+        profile: '',
+        lastMsg: "Xhattmahs is not attacking attacking attacking attacking your base!",
+        notification: '100',
+        about: 'Node Developer'
+    },
+    {
+        _id: '093803848',
+        name: "denny jangid",
+        last_seen: "6 min ago",
+        profile: '',
+        lastMsg: "Xhattmahs is not attacking attacking attacking attacking your base!",
+        notification: '90',
+        about: 'MERN Developer'
+    },
+]
 const ChatPage = () => {
     const theme = useSelector(state => state.theme)
-    console.log(theme)
-    const [isChat, setIsChat] = useState(true)
+    const chat_profile = useSelector(state => state.current_user)
+    const profile = useSelector(state => state.profile)
+    const dispatch = useDispatch()
+    const handalSelectChat = (data) => {
+        dispatch(handalCurrentUser(data))
+    }
     return (
         <div className={`${theme === 'dark' ? 'dark_mode' : ''} chat_containner`}>
             <aside>
@@ -18,13 +61,13 @@ const ChatPage = () => {
                         {/* profile section  */}
                         <div className="side_profile">
                             <div className="d-flex align-items-center profile_main">
-                                <Avatar alt="M" src="" sx={{ width: 50, height: 50 }} />
+                                <Avatar alt={profile?.firstName} src="/" sx={{ width: 50, height: 50 }} />
                                 <div className='px-2'>
                                     <div className="avatar_heading">
-                                        <b> Ms Rajputana</b>
+                                        <b>{profile?.firstName} {profile?.lastName}</b>
                                     </div>
                                     <div className="avatar_title">
-                                        Full Stack Developer
+                                        {profile?.about}
                                     </div>
                                 </div>
                             </div>
@@ -44,16 +87,16 @@ const ChatPage = () => {
                         <div className="side_main">
                             <div className="chatList_main_container">
                                 {
-                                    Array.from({ length: 10 }).map((_, key) => {
+                                    chatList?.map((currentChat, key) => {
                                         return (
-                                            <div className="chat_card d-flex align-items-center" key={key}>
-                                                <Avatar alt={`${key}`} src="/static/images/avatar/1.jpg" sx={{ width: 40, height: 40 }} />
+                                            <div className={`chat_card d-flex align-items-center ${chat_profile?._id == currentChat?._id ? 'active' : ''}`} key={key} onClick={() => handalSelectChat(currentChat)}>
+                                                <Avatar alt={currentChat?.name} src="/static/images/avatar/1.jpg" sx={{ width: 40, height: 40 }} />
                                                 <div className="textBox">
                                                     <div className="textContent">
-                                                        <p className="h1">Clans of Clash</p>
-                                                        <span className="span">12 min ago</span>
+                                                        <p className="h1">{currentChat?.name}</p>
+                                                        <span className="span">{currentChat?.last_seen}</span>
                                                     </div>
-                                                    <p className="p">Xhattmahs is not attacking attacking attacking attacking your base!</p>
+                                                    <p className="p">{currentChat?.lastMsg}</p>
                                                 </div>
                                             </div>
                                         )
@@ -67,7 +110,7 @@ const ChatPage = () => {
                 <Navigate />
             </aside>
             <main>
-                {isChat ? <ChatContainer /> : <NoChat />}
+                {chat_profile?.status ? <ChatContainer /> : <NoChat />}
             </main>
         </div>
     )
