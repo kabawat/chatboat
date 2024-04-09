@@ -1,12 +1,13 @@
 "use client"
 import Navigate from '@/components/aside/navigate'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoSearchOutline } from "react-icons/io5";
 import Avatar from '@mui/material/Avatar';
 import NoChat from '@/components/chat/no-chat';
 import ChatContainer from '@/components/chat/chat-container';
 import { useSelector, useDispatch } from 'react-redux'
 import { handalCurrentUser } from '@/redux/slice/user';
+import socket from '@/socket';
 const chatList = [
     {
         _id: '093803845',
@@ -53,6 +54,12 @@ const ChatPage = () => {
     const handalSelectChat = (data) => {
         dispatch(handalCurrentUser(data))
     }
+    useEffect(() => {
+        console.log("socket : ", socket.id)
+    }, [socket])
+    function handalTestSocket() {
+        socket.emit("test", { name: "Mukesh Singh" })
+    }
     return (
         <div className={`${theme === 'dark' ? 'dark_mode' : ''} chat_containner`}>
             <aside>
@@ -60,7 +67,7 @@ const ChatPage = () => {
                     <div className="inner_side">
                         {/* profile section  */}
                         <div className="side_profile">
-                            <div className="d-flex align-items-center profile_main">
+                            <div className="d-flex align-items-center profile_main" onClick={handalTestSocket}>
                                 <Avatar alt={profile?.firstName} src="/" sx={{ width: 50, height: 50 }} />
                                 <div className='px-2'>
                                     <div className="avatar_heading">

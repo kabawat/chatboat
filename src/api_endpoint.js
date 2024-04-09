@@ -9,7 +9,8 @@ const endpoint = {
     SEND_OTP_ON_EMIAL: `${baseURL}/api/auth/send-otp`,
     VERIFY_EMAIL_USING_OTP: `${baseURL}/api/auth/verify-email`,
     REGISTRATION: `${baseURL}/api/auth/registration`,
-    FINISH_SIGNUP:`${baseURL}/api/auth/finish-signup`
+    FINISH_SIGNUP:`${baseURL}/api/auth/finish-signup`,
+    LOGIN:`${baseURL}/api/auth/login`,
 
 }
 export default endpoint
