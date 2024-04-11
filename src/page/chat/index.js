@@ -57,6 +57,7 @@ const ChatPage = () => {
     useEffect(() => {
         console.log("socket : ", socket.id)
     }, [socket])
+    
     function handalTestSocket() {
         socket.emit("test", { name: "Mukesh Singh" })
     }

@@ -6,7 +6,8 @@ const Header = ({ setIsProfile }) => {
     const currentUser = useSelector(state => state.current_user)
     const dispatch = useDispatch()
     const handalChangeTheme = () => {
-        dispatch(changeTheme())
+        const theme = localStorage.getItem('theme')
+        dispatch(changeTheme(theme == 'dark' ? 'light' : 'dark'))
     }
     return (
         <div className="chat_navbar d-flex align-items-center justify-content-between">
