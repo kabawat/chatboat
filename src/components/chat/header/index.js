@@ -6,7 +6,6 @@ const Header = ({ setIsProfile }) => {
     const currentUser = useSelector(state => state.current_user)
     const dispatch = useDispatch()
     const handalChangeTheme = () => {
-        const theme = localStorage.getItem('theme')
         dispatch(changeTheme(theme == 'dark' ? 'light' : 'dark'))
     }
     return (

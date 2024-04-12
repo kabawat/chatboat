@@ -1,0 +1,46 @@
+:root {
+    --dark-background-color: #202124;
+    --sidebar-background-color: #222429f7;
+    --sidebar-content-background-color: #33464f;
+}
+
+.chat_containner.dark_mode {
+    .settings_model {
+        .settings {
+            border-color: #3f3e3e9e;
+        }
+
+        .settings_list {
+            background: #33464f91;
+        }
+
+        .settings_section_inner {
+            background: #222429;
+        }
+
+        .setting_menu {
+            padding: 4px;
+            width: 100%;
+        }
+
+        .setting_btn {
+            color: #fff;
+        }
+    }
+
+
+    .setting_main_section {
+        .setting_heading {
+            color: #fff;
+        }
+
+        .Accordion {
+            .title {
+                color: #fff;
+            }
+        }
+        p{
+            color: #fff;
+        }
+    }
+}

@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../theme';
-import { Provider, useDispatch } from 'react-redux'
+import { Provider, useDispatch, useSelector } from 'react-redux'
 import store from '@/redux';
 import { changeTheme } from '@/redux/slice/theme';
 const App = ({ children }) => {
@@ -17,11 +17,12 @@ const App = ({ children }) => {
 export default App
 
 function Main({ children }) {
+    const th = useSelector(state => state.theme)
     const dispatch = useDispatch()
     useEffect(() => {
         const theme = localStorage.getItem('theme')
         dispatch(changeTheme(theme))
-    }, [localStorage])
+    }, [th])
     return (
         <AppRouterCacheProvider options={{ key: 'css' }}>
             <ThemeProvider theme={theme}>

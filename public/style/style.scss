@@ -4,6 +4,7 @@
     box-sizing: border-box;
     list-style: none;
     font-family: 'Poppins', sans-serif;
+    transition: all 0.2s linear;
 }
 
 body {
@@ -15,6 +16,8 @@ body {
 @import './model/loader';
 @import './model/chat';
 @import './model/chat_dark';
+@import './model/setting';
+@import './model/setting_dark';
 
 .main {
     max-height: 100vh;
