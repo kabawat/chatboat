@@ -4,10 +4,6 @@ import Avatar from '@mui/material/Avatar';
 import { changeTheme } from '@/redux/slice/theme';
 const Header = ({ setIsProfile }) => {
     const currentUser = useSelector(state => state.current_user)
-    const dispatch = useDispatch()
-    const handalChangeTheme = () => {
-        dispatch(changeTheme(theme == 'dark' ? 'light' : 'dark'))
-    }
     return (
         <div className="chat_navbar d-flex align-items-center justify-content-between">
             <div className="d-flex align-items-center active_user" onClick={() => setIsProfile(true)}>
@@ -21,7 +17,6 @@ const Header = ({ setIsProfile }) => {
                     </div>
                 </div>
             </div>
-            <button onClick={handalChangeTheme}>Dark</button>
         </div>
     )
 }

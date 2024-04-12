@@ -4,22 +4,25 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { CheckBoxACheck } from './checkBox'
 import { Typography } from "@mui/material";
+import Cookies from 'js-cookie'
 const ThemeSwitch = () => {
     const theme = useSelector(state => state.theme)
     const [defaultTheme, setDefaultTheme] = useState(false)
     const [isDark, setIsDark] = useState(false)
+    const [systemTheme, setSystemTheme] = useState('')
     const dispatch = useDispatch()
     const handalToggleTheme = ({ target }) => {
         const { checked } = target
         if (!defaultTheme) {
             dispatch(changeTheme(checked ? 'dark' : 'light'))
+            Cookies.set('theme', checked ? 'dark' : 'light')
         }
     }
     const HandalDefaultTheme = ({ target }) => {
         const { checked } = target
         if (checked) {
             const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            dispatch(changeTheme('default'))
+            dispatch(changeTheme(prefersDarkMode ? 'dark' : 'light'))
         }
         setDefaultTheme(checked)
     }
