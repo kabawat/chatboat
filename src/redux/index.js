@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import theme from './slice/theme'
 import current_user from './slice/user'
-import profile from './slice/profile'
+import profileSlice from './slice/profile'
 
 const store = configureStore({
     reducer: {
         theme: theme,
-        profile: profile,
+        profile: profileSlice,
         current_user: current_user,
     },
 })

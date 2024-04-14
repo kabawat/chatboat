@@ -5,14 +5,14 @@ const StoryPage = () => {
     const [isDarkMode, setDarkMode] = useState(false)
     return (
         <div className={`chat_containner ${isDarkMode ? 'dark_mode' : ''}`}>
-            <aside>
+            <div id='aside'>
                 <div className="aside">
 
                 </div>
 
                 {/* aside navigate  */}
                 <Navigate />
-            </aside>
+            </div>
             <main>
 
             </main>

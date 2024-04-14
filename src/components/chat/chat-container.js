@@ -1,6 +1,5 @@
 import { Badge } from '@mui/base/Badge';
 import React, { useEffect, useRef, useState } from 'react';
-import Avatar from '@mui/material/Avatar';
 import { BsPlusLg, BsFileEarmarkPdf } from 'react-icons/bs';
 import { IoSendSharp, IoVideocamOutline } from 'react-icons/io5';
 import { IoIosMusicalNotes } from 'react-icons/io';
@@ -9,6 +8,7 @@ import { GrSend } from "react-icons/gr";
 import { FileContainer, SelectButton, SelectFileBox, FileList, FileIcon, Label, Title } from './style';
 import Header from './header';
 import RightSideDrawer from './right-aside';
+import Avatar from '../comman/Avatar';
 const ChatContainer = () => {
     const inputRef = useRef(null);
     const chatOperationRef = useRef(null);
@@ -46,7 +46,7 @@ const ChatContainer = () => {
                                             return (
                                                 <div className="msg left-msg" key={key}>
                                                     <div className="msg-img">
-                                                        <Avatar alt="m" src="/static/images/avatar/1.jpg" sx={{ width: 45, height: 45 }} />
+                                                        <Avatar alt="m" src="/static/images/avatar/1.jpg" size={45} />
                                                     </div>
 
                                                     <div className="msg-bubble">
@@ -65,7 +65,7 @@ const ChatContainer = () => {
                                             return (
                                                 <div className="msg right-msg" key={key}>
                                                     <div className="msg-img">
-                                                        <Avatar alt="m" src="/static/images/avatar/1.jpg" sx={{ width: 45, height: 45 }} />
+                                                        <Avatar alt="m" src="/static/images/avatar/1.jpg" size={45} />
                                                     </div>
 
                                                     <div className="msg-bubble">

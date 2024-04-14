@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { BsChatLeftText } from 'react-icons/bs'
 import { HiStatusOnline } from 'react-icons/hi';
 import { IoSettingsOutline } from 'react-icons/io5';
-import Avatar from '@mui/material/Avatar';
 
 import { MdComputer } from 'react-icons/md'
 import { IoKeyOutline, IoChatbubblesOutline, IoNotificationsOutline } from 'react-icons/io5'
@@ -14,6 +13,7 @@ import { BsBrush } from "react-icons/bs";
 import { useState } from 'react'
 import General from './settings/General';
 import Personalization from './settings/personalization';
+import Avatar from '../comman/Avatar';
 const navigateData = [
     {
         link: '/chat',
@@ -28,31 +28,31 @@ const navigateData = [
 ]
 
 const settingList = [
-    // {
-    //     icon: <MdComputer />,
-    //     title: 'General',
-    //     components: <General />
-    // },
-    // {
-    //     icon: <IoKeyOutline />,
-    //     title: 'Account',
-    //     components: <>3</>
-    // },
-    // {
-    //     icon: <IoChatbubblesOutline />,
-    //     title: 'Chats',
-    //     components: <>4</>
-    // },
-    // {
-    //     icon: <IoNotificationsOutline />,
-    //     title: 'Notification',
-    //     components: <>5</>
-    // },
-    // {
-    //     icon: <BsExclamationCircle />,
-    //     title: 'Help',
-    //     components: <>6</>
-    // },
+    {
+        icon: <MdComputer />,
+        title: 'General',
+        components: <General />
+    },
+    {
+        icon: <IoKeyOutline />,
+        title: 'Account',
+        components: <>3</>
+    },
+    {
+        icon: <IoChatbubblesOutline />,
+        title: 'Chats',
+        components: <>4</>
+    },
+    {
+        icon: <IoNotificationsOutline />,
+        title: 'Notification',
+        components: <>5</>
+    },
+    {
+        icon: <BsExclamationCircle />,
+        title: 'Help',
+        components: <>6</>
+    },
     {
         icon: <BsBrush />,
         title: 'Personalization',
@@ -104,7 +104,8 @@ const Navigate = () => {
                     </div>
                 </div>
                 <div className='my-1' style={{ cursor: 'pointer' }} onClick={() => handleSetting(settingList[settingList?.length - 1])}>
-                    <Avatar alt="Mukesh Singh" src="/avatar/broken-image.png" sx={{ width: 30, height: 30 }} />
+                    <Avatar size={30} alt="Mukesh Singh" src="/avatar/broken-image.pn" />
+                    {/*   */}
                 </div>
                 {
                     isSetting ? <div className="settings_model" id='settings_model' onClick={handalModalClose}>
