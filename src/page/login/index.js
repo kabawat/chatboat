@@ -5,6 +5,8 @@ import SiderButton from "@/components/button/SiderButton";
 import { CheckBoxACheck } from "@/components/comman/checkBox";
 import InputTextField from "@/components/form/field";
 import { PageLoader } from "@/components/loader/pageLoader";
+import { get_profile } from "@/redux/slice/profile";
+import socket from "@/socket";
 import { Card, Typography } from "@mui/material";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -12,6 +14,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { LuSend } from "react-icons/lu";
+import { useDispatch } from "react-redux";
 export default function LoginPage() {
     const toastInit = {
         show: false,
@@ -26,6 +29,7 @@ export default function LoginPage() {
         password: '',
     }
     const router = useRouter()
+    const dispatch = useDispatch()
     const [Toast, setToast] = useState(toastInit)
     const [loader, setLoader] = useState(false)
     const isForgotPassword = true
@@ -50,10 +54,13 @@ export default function LoginPage() {
                 type: 'success',
                 show: true,
             })
+            // get loged in user profile 
+            const saved = await dispatch(get_profile({ token: res?.data?.authToken }))
+            // after create socekt id
             setTimeout(() => {
                 Cookies.set('_x_a_t', res?.data?.authToken)
                 router.push('/chat')
-            }, [2000])
+            }, 2000)
         } catch (error) {
             setToast({
                 ...Toast,

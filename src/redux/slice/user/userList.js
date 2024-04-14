@@ -2,12 +2,12 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import endpoint from "@/api_endpoint";
 import axios from 'axios'
 import socket from "@/socket";
-export const get_profile = createAsyncThunk("get_profile", async ({ token }, { rejectWithValue }) => {
+export const get_userList = createAsyncThunk("get_userList", async ({ token }, { rejectWithValue }) => {
     try {
         let headers = {
             'x-auth-tokens': token
         }
-        const { data } = await axios.get(endpoint.PROFILE, { headers })
+        const { data } = await axios.get(endpoint.USER_LIST, { headers })
         return data
     } catch (error) {
         console.log('error : ', error)
@@ -15,8 +15,8 @@ export const get_profile = createAsyncThunk("get_profile", async ({ token }, { r
     }
 })
 
-const profile = createSlice({
-    name: "profile",
+const userList = createSlice({
+    name: "userList",
     initialState: {
         loading: false,
         error: null,
@@ -24,17 +24,16 @@ const profile = createSlice({
         status: false,
     },
     extraReducers: (builder) => {
-        builder.addCase(get_profile.pending, (state, action) => {
+        builder.addCase(get_userList.pending, (state, action) => {
             state.loading = true;
         });
-        builder.addCase(get_profile.fulfilled, (state, { payload }) => {
+        builder.addCase(get_userList.fulfilled, (state, { payload }) => {
             const { data } = payload
-            socket.emit('login', { username: data?.username, _id: data?._id })
             state.data = data;
             state.status = true
             state.loading = false
         });
-        builder.addCase(get_profile.rejected, (state, action) => {
+        builder.addCase(get_userList.rejected, (state, action) => {
             state.error = action.payload;
             state.loading = false;
             state.data = null;
@@ -47,7 +46,7 @@ const profile = createSlice({
     }
 })
 
-const profileSlice = profile.reducer
-export default profileSlice
+const userListSlice = userList.reducer
+export default userListSlice
 
-export const { update } = profile.actions
+export const { update } = userList.actions

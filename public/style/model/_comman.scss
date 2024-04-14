@@ -125,3 +125,15 @@
     place-items: center;
     backdrop-filter: blur(2px);
 }
+
+.online_user {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    padding: 10px 20px;
+    background: #675c9c;
+    color: #fff;
+    border-radius: 4px;
+}

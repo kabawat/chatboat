@@ -4,6 +4,7 @@ import { changeTheme } from '@/redux/slice/theme';
 import Avatar from '@/components/comman/Avatar';
 const Header = ({ setIsProfile }) => {
     const currentUser = useSelector(state => state.current_user)
+    const dispatch = useDispatch()
     return (
         <div className="chat_navbar d-flex align-items-center justify-content-between">
             <div className="d-flex align-items-center active_user" onClick={() => setIsProfile(true)}>

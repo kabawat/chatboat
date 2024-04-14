@@ -18,6 +18,7 @@ function Main({ children }) {
     const theme_switch = Cookies.get('theme')
     const th = useSelector(state => state.theme)
     const dispatch = useDispatch()
+
     useEffect(() => {
         if (theme_switch == 'default') {
             const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches

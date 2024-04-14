@@ -49,22 +49,34 @@ const chatList = [
     },
 ]
 const ChatPage = () => {
+    const dispatch = useDispatch()
     const theme = useSelector(state => state.theme)
     const chat_profile = useSelector(state => state.current_user)
     const profile = useSelector(state => state.profile)
-    const dispatch = useDispatch()
+    const [onlineUser, setOnlineUser] = useState('')
+    // select user from list 
     const handalSelectChat = (data) => {
         dispatch(handalCurrentUser(data))
     }
+    // socket 
     useEffect(() => {
-        console.log("socket : ", profile)
-    }, [profile])
-
-    function handalTestSocket() {
-        socket.emit("test", { name: "Mukesh Singh" })
-    }
+        console.log("socket.id : ", socket.id)
+        const logedinHandler = (data) => {
+            console.log("data : ", data)
+            setOnlineUser(data?.message)
+            setTimeout(() => {
+                setOnlineUser("")
+            }, 20000)
+        };
+        socket.on('logedin', logedinHandler);
+        // Cleanup function to remove the event listener when component unmounts
+        return () => {
+            socket.off('logedin', logedinHandler);
+        };
+    }, []);
     return (
         <div className={`${theme === 'dark' ? 'dark_mode' : ''} chat_containner`}>
+            {onlineUser ? <div className='online_user'> {onlineUser}</div> : <></>}
             <div id='aside'>
                 <div className="aside">
                     <div className="inner_side">
@@ -72,7 +84,7 @@ const ChatPage = () => {
                         <div className="side_profile">
                             {
                                 profile?.status ? <>
-                                    <div className="d-flex align-items-center profile_main" onClick={handalTestSocket}>
+                                    <div className="d-flex align-items-center profile_main">
                                         <Avatar alt={profile?.data?.firstName} src="/" size={50} />
                                         <div className='px-2'>
                                             <div className="avatar_heading">
