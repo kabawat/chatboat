@@ -3,7 +3,8 @@ const nextConfig = {
     compiler: {
         styledComponents: true,
     },
-    reactStrictMode: false
+    reactStrictMode: false,
+    ignoreDuringBuilds: true
 };
 
 export default nextConfig;

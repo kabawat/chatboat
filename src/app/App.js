@@ -1,5 +1,6 @@
 "use client"
 import React, { useEffect } from 'react'
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import theme from '../theme';
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import store from '@/redux';
@@ -29,6 +30,7 @@ function Main({ children }) {
     }, [])
     return (
         <div className="main">
+            <SpeedInsights />
             {children}
         </div>
     )
