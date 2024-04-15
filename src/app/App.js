@@ -22,7 +22,7 @@ function Main({ children }) {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if (theme_switch == 'default') {
+        if (theme_switch === 'default') {
             const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
             dispatch(changeTheme(prefersDarkMode ? 'dark' : 'light'))
         } else {
@@ -31,11 +31,22 @@ function Main({ children }) {
         socket.on('connect', () => {
             console.log("layout : socket.id : ", socket.id)
         })
+        const onConnect = () => {
+            console.log("layout : socket.id : ", socket.id)
+        };
+        const onDisconnect = () => {
+            console.log("Socket disconnected");
+        };
+
+        socket.on("connect", onConnect);
+        socket.on("disconnect", onDisconnect);
+
         return () => {
             socket.off("connect", onConnect);
             socket.off("disconnect", onDisconnect);
         };
     }, [])
+
     return (
         <div className="main">
             <SpeedInsights />
