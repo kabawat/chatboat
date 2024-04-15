@@ -12,7 +12,7 @@ export default function ChatLayout({ children }) {
     const userList = useSelector(state => state.user_list)
     const token = Cookies.get('_x_a_t')
     const dispatch = useDispatch()
-
+    console.log("socket::::::::::::", socket.id)
     useEffect(() => {
         // user profile 
         if (!profile.status && !profile?.loading) {
