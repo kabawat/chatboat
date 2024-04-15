@@ -6,7 +6,7 @@ import NoChat from '@/components/chat/no-chat';
 import ChatContainer from '@/components/chat/chat-container';
 import { useSelector, useDispatch } from 'react-redux'
 import { handalCurrentUser } from '@/redux/slice/user';
-import socket from '@/socket';
+// import socket from '@/socket';
 import Avatar from '@/components/comman/Avatar';
 import ContactListSkeleton from '@/components/skeleton/contact_list';
 import SearchSkeleton from '@/components/skeleton/seach_bar';
@@ -60,19 +60,19 @@ const ChatPage = () => {
     }
     // socket 
     useEffect(() => {
-        console.log("socket.id : ", socket.id)
-        const logedinHandler = (data) => {
-            console.log("data : ", data)
-            setOnlineUser(data?.message)
-            setTimeout(() => {
-                setOnlineUser("")
-            }, 20000)
-        };
-        socket.on('logedin', logedinHandler);
-        // Cleanup function to remove the event listener when component unmounts
-        return () => {
-            socket.off('logedin', logedinHandler);
-        };
+        // console.log("socket.id : ", socket.id)
+        // const logedinHandler = (data) => {
+        //     console.log("data : ", data)
+        //     setOnlineUser(data?.message)
+        //     setTimeout(() => {
+        //         setOnlineUser("")
+        //     }, 20000)
+        // };
+        // socket.on('logedin', logedinHandler);
+        // // Cleanup function to remove the event listener when component unmounts
+        // return () => {
+        //     socket.off('logedin', logedinHandler);
+        // };
     }, []);
     return (
         <div className={`${theme === 'dark' ? 'dark_mode' : ''} chat_containner`}>

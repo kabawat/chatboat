@@ -6,7 +6,6 @@ import { CheckBoxACheck } from "@/components/comman/checkBox";
 import InputTextField from "@/components/form/field";
 import { PageLoader } from "@/components/loader/pageLoader";
 import { get_profile } from "@/redux/slice/profile";
-import socket from "@/socket";
 import { Card, Typography } from "@mui/material";
 import axios from "axios";
 import Cookies from "js-cookie";

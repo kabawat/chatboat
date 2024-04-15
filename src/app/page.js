@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react'
 export const metadata = {
   title: "loading...",
@@ -5,7 +6,10 @@ export const metadata = {
 };
 const page = () => {
   return (
-    <div>page</div>
+    <div>
+      <Link href="/login">Login page</Link> <br />
+      <Link href="/chat">Chat page</Link> <br />
+    </div>
   )
 }
 

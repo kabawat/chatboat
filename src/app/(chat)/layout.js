@@ -4,7 +4,6 @@ import Cookies from "js-cookie"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { get_profile } from "@/redux/slice/profile"
-import socket from "@/socket"
 import { get_userList } from "@/redux/slice/user/userList"
 
 export default function ChatLayout({ children }) {

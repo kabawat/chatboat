@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 
 export function middleware(request) {
     let cookie = request.cookies.get('_x_a_t')
-    if (cookie?.name !== "_x_a_t" || cookie?.value == undefined) {
+    if (cookie?.name !== "_x_a_t" || cookie?.value == undefined || cookie?.value == "") {
         return NextResponse.redirect(new URL('/login', request.url))
     }
 }
