@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import endpoint from "@/api_endpoint";
 import axios from 'axios'
-// import socket from "@/socket";
+import socket from "@/socket";
 export const get_profile = createAsyncThunk("get_profile", async ({ token }, { rejectWithValue }) => {
     try {
         let headers = {
