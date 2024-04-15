@@ -30,7 +30,7 @@ const profile = createSlice({
         builder.addCase(get_profile.fulfilled, (state, { payload }) => {
             const { data } = payload
             console.log("get profiel function : ", { username: data?.username, _id: data?._id })
-            socket.emit('login', { username: data?.username, _id: data?._id })
+            // socket.emit('login', { username: data?.username, _id: data?._id })
             state.data = data;
             state.status = true
             state.loading = false
