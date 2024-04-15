@@ -13,7 +13,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { LuSend } from "react-icons/lu";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 export default function LoginPage() {
     const toastInit = {
         show: false,
@@ -28,6 +28,7 @@ export default function LoginPage() {
         password: '',
     }
     const router = useRouter()
+    const { socket } = useSelector(state => state.socket)
     const dispatch = useDispatch()
     const [Toast, setToast] = useState(toastInit)
     const [loader, setLoader] = useState(false)
@@ -55,7 +56,13 @@ export default function LoginPage() {
             })
             // get loged in user profile 
             const saved = await dispatch(get_profile({ token: res?.data?.authToken }))
-            // after create socekt id
+            const { data } = saved?.payload
+            console.log("data : ", data)
+            console.log("socket : ", socket.id)
+            socket.emit('login', {
+                username: data?.username,
+                _id: data?._id
+            })
             setTimeout(() => {
                 Cookies.set('_x_a_t', res?.data?.authToken)
                 router.push('/chat')

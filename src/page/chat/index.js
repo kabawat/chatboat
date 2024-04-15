@@ -133,8 +133,8 @@ const ChatPage = () => {
                                             </div>
                                         )
                                     }) : Array.from({ length: 8 }).map((_, key) => {
-                                        return <div className="py-2">
-                                            <ContactListSkeleton key={key} />
+                                        return <div className="py-2" key={key}>
+                                            <ContactListSkeleton />
                                         </div>;
                                     })
                                 }

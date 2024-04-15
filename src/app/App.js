@@ -6,7 +6,7 @@ import { Provider, useDispatch, useSelector } from 'react-redux'
 import store from '@/redux';
 import { changeTheme } from '@/redux/slice/theme';
 import Cookies from 'js-cookie';
-import socket from '@/socket';
+import { create_socket_connection } from '@/redux/slice/socket';
 const App = ({ children }) => {
     return (
         <Provider store={store}>
@@ -22,31 +22,14 @@ function Main({ children }) {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if (theme_switch === 'default') {
+        
+        if (theme_switch == 'default') {
             const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
             dispatch(changeTheme(prefersDarkMode ? 'dark' : 'light'))
         } else {
             dispatch(changeTheme(theme_switch ? theme_switch : 'light'))
         }
-        socket.on('connect', () => {
-            console.log("layout : socket.id : ", socket.id)
-        })
-        const onConnect = () => {
-            console.log("layout : socket.id : ", socket.id)
-        };
-        const onDisconnect = () => {
-            console.log("Socket disconnected");
-        };
-
-        socket.on("connect", onConnect);
-        socket.on("disconnect", onDisconnect);
-
-        return () => {
-            socket.off("connect", onConnect);
-            socket.off("disconnect", onDisconnect);
-        };
     }, [])
-
     return (
         <div className="main">
             <SpeedInsights />
