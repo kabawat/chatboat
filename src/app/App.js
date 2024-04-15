@@ -6,6 +6,7 @@ import { Provider, useDispatch, useSelector } from 'react-redux'
 import store from '@/redux';
 import { changeTheme } from '@/redux/slice/theme';
 import Cookies from 'js-cookie';
+import socket from '@/socket';
 const App = ({ children }) => {
     return (
         <Provider store={store}>
@@ -27,6 +28,13 @@ function Main({ children }) {
         } else {
             dispatch(changeTheme(theme_switch ? theme_switch : 'light'))
         }
+        socket.on('connect', () => {
+            console.log("layout : socket.id : ", socket.id)
+        })
+        return () => {
+            socket.off("connect", onConnect);
+            socket.off("disconnect", onDisconnect);
+        };
     }, [])
     return (
         <div className="main">
