@@ -1,5 +1,4 @@
 "use client"
-
 import Cookies from "js-cookie"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
@@ -12,14 +11,12 @@ export default function ChatLayout({ children }) {
     const userList = useSelector(state => state.user_list)
     const token = Cookies.get('_x_a_t')
     const dispatch = useDispatch()
-    console.log("socket::::::::::::", socket.id)
     useEffect(() => {
         // user profile 
-        if (!profile.status && !profile?.loading) {
+        if (!profile.status && !profile?.loading && socket.id) {
+            console.log("socket.id : ", socket.id)
             dispatch(get_profile({ token: token })).then(saved => {
                 const { data } = saved?.payload
-                console.log("socket ========> : ", socket.id)
-                console.log("data ========> : ", data)
                 socket.emit('login', {
                     username: data?.username,
                     _id: data?._id
@@ -30,6 +27,6 @@ export default function ChatLayout({ children }) {
         if (!userList?.status && !userList?.loading) {
             dispatch(get_userList({ token }))
         }
-    }, [profile, userList])
+    }, [profile, userList, socket.id])
     return children
 }

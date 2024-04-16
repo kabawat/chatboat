@@ -51,6 +51,7 @@ const chatList = [
 const ChatPage = () => {
     const dispatch = useDispatch()
     const theme = useSelector(state => state.theme)
+    const { socket } = useSelector(state => state.socket)
     const chat_profile = useSelector(state => state.current_user)
     const profile = useSelector(state => state.profile)
     const [onlineUser, setOnlineUser] = useState('')
@@ -60,19 +61,19 @@ const ChatPage = () => {
     }
     // socket 
     useEffect(() => {
-        // console.log("socket.id : ", socket.id)
-        // const logedinHandler = (data) => {
-        //     console.log("data : ", data)
-        //     setOnlineUser(data?.message)
-        //     setTimeout(() => {
-        //         setOnlineUser("")
-        //     }, 20000)
-        // };
-        // socket.on('logedin', logedinHandler);
-        // // Cleanup function to remove the event listener when component unmounts
-        // return () => {
-        //     socket.off('logedin', logedinHandler);
-        // };
+        console.log("socket.id : ", socket.id)
+        const logedinHandler = (data) => {
+            console.log("data : ", data)
+            setOnlineUser(data?.message)
+            setTimeout(() => {
+                setOnlineUser("")
+            }, 5000)
+        };
+        socket.on('joined', logedinHandler);
+        // Cleanup function to remove the event listener when component unmounts
+        return () => {
+            socket.off('joined', logedinHandler);
+        };
     }, []);
     return (
         <div className={`${theme === 'dark' ? 'dark_mode' : ''} chat_containner`}>

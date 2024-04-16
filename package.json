@@ -16,7 +16,6 @@
     "@mui/material-nextjs": "^5.15.11",
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "@reduxjs/toolkit": "^2.2.3",
-    "@vercel/speed-insights": "^1.0.10",
     "add": "^2.0.6",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
