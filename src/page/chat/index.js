@@ -1,7 +1,6 @@
 "use client"
 import Navigate from '@/components/aside/navigate'
 import React, { useEffect, useState } from 'react'
-import { IoSearchOutline } from "react-icons/io5";
 import NoChat from '@/components/chat/no-chat';
 import ChatContainer from '@/components/chat/chat-container';
 import { useSelector, useDispatch } from 'react-redux'
@@ -10,6 +9,7 @@ import { handalCurrentUser } from '@/redux/slice/user';
 import Avatar from '@/components/comman/Avatar';
 import ContactListSkeleton from '@/components/skeleton/contact_list';
 import SearchSkeleton from '@/components/skeleton/seach_bar';
+import Search from './search';
 const chatList = [
     {
         _id: '093803845',
@@ -61,9 +61,7 @@ const ChatPage = () => {
     }
     // socket 
     useEffect(() => {
-        console.log("socket.id : ", socket.id)
         const logedinHandler = (data) => {
-            console.log("data : ", data)
             setOnlineUser(data?.message)
             setTimeout(() => {
                 setOnlineUser("")
@@ -103,14 +101,7 @@ const ChatPage = () => {
                             <div className="search py-2">
                                 {
                                     profile?.status ? <>
-                                        <div className="searchbar d-flex">
-                                            <div className="icon d-flex align-items-center justify-content-center">
-                                                <IoSearchOutline />
-                                            </div>
-                                            <div className="search_field">
-                                                <input type="text" placeholder="Search..." />
-                                            </div>
-                                        </div>
+                                        <Search />
                                     </> : <SearchSkeleton />
                                 }
                             </div>
@@ -120,16 +111,16 @@ const ChatPage = () => {
                         <div className="side_main">
                             <div className="chatList_main_container">
                                 {
-                                    profile?.status ? chatList?.map((currentChat, key) => {
+                                    profile?.status ? profile?.data?.contacts?.map((currentChat, key) => {
                                         return (
                                             <div className={`chat_card d-flex align-items-center ${chat_profile?._id == currentChat?._id ? 'active' : ''}`} key={key} onClick={() => handalSelectChat(currentChat)}>
-                                                <Avatar alt={currentChat?.name} src="/static/images/avatar/1.jpg" size={40} />
+                                                <Avatar alt={currentChat?.firstName} src="/static/images/avatar/1.jpg" size={40} />
                                                 <div className="textBox">
                                                     <div className="textContent">
-                                                        <p className="h1">{currentChat?.name}</p>
-                                                        <span className="span">{currentChat?.last_seen}</span>
+                                                        <p className="h1">{currentChat?.firstName} {currentChat?.lastName}</p>
+                                                        <span className="span">online</span>
                                                     </div>
-                                                    <p className="p">{currentChat?.lastMsg}</p>
+                                                    <p className="p">{currentChat?.about}</p>
                                                 </div>
                                             </div>
                                         )

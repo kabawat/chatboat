@@ -3,6 +3,10 @@ const nextConfig = {
     compiler: {
         styledComponents: true,
     },
+    images: {
+        domains: ['res.cloudinary.com'],
+
+    },
     reactStrictMode: false,
     ignoreDuringBuilds: true,
     async headers() {

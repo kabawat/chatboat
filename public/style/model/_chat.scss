@@ -224,7 +224,6 @@ button:active {
     height: 38px;
     overflow: hidden;
 
-
     .icon {
         width: 15%;
         height: 100%;
@@ -241,6 +240,64 @@ button:active {
             outline: none;
             font-size: 14px;
             background: none;
+        }
+    }
+}
+
+.add_user {
+    padding: 0px 10px;
+    margin-left: 10px;
+    font-size: 18px;
+}
+
+.seach_list {
+    cursor: pointer;
+    // display: none;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    transform: translateY(100%);
+    border-radius: 8px;
+    height: 100%;
+    background: #ffffff;
+    border: 1px solid #eaeefb;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    height: 70vh;
+    z-index: 100;
+    padding: 10px;
+
+    .search_outer {
+        height: 15%;
+    }
+
+    .searchbar {
+        height: 70%;
+    }
+
+    .search_list_menu {
+        width: 100%;
+        height: 85%;
+        // background: red;
+        border-radius: 8px;
+        overflow: auto;
+
+        .profile_main {
+            width: 100%;
+
+            &:hover {
+                background: #fafafa;
+            }
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: none;
+            border-color: #fff;
+        }
+
+        &:hover::-webkit-scrollbar-thumb {
+            background: #606368;
+            border-color: #fff;
         }
     }
 }

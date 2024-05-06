@@ -11,7 +11,7 @@ const RightSideDrawer = () => {
                     <Avatar alt={'M'} src={currentUser?.profile} size={160} />
                 </div>
                 <div className="text-center profile_heading">
-                    {currentUser?.name}
+                    {currentUser?.firstName} {currentUser?.lastName}
                 </div>
                 <Typography sx={{ fontSize: 14, textAlign: 'center', width: '50%', margin: 'auto' }} color="text.secondary" gutterBottom>
                     {currentUser?.about}

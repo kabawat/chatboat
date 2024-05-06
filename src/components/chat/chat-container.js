@@ -9,7 +9,10 @@ import { FileContainer, SelectButton, SelectFileBox, FileList, FileIcon, Label, 
 import Header from './header';
 import RightSideDrawer from './right-aside';
 import Avatar from '../comman/Avatar';
+import { useSelector } from 'react-redux';
 const ChatContainer = () => {
+    const { socket } = useSelector(state => state.socket)
+    const state = useSelector(state => state)
     const inputRef = useRef(null);
     const chatOperationRef = useRef(null);
     const [isProfile, setIsProfile] = useState(false) // right side user information
@@ -19,18 +22,28 @@ const ChatContainer = () => {
         inputRef.current.focus();
     };
 
-    const handalChnage = () => {
+    const [textMSG, setTextMSG] = useState('')
+    const handalChnage = (event) => {
+        setTextMSG(event.target.innerHTML)
         if (chatOperationRef.current) {
             const height = chatOperationRef.current.offsetHeight;
             setPaddingBottom(height);
-            // console.log(inputRef.current.value)
         }
     }
 
+    // Reset the value of the file input field
     const handleFileChange = (event) => {
-        // Reset the value of the file input field
         event.target.value = '';
     };
+
+    // send message handler 
+    const handalSendMessage = () => {
+        console.log("state : ", state)
+        // socket.emit('send text', {
+        //     message: textMSG,
+        //     id: ""
+        // })
+    }
 
     return (
         <div className={`${isProfile ? 'active' : ''} chat-container`}>
@@ -144,8 +157,8 @@ const ChatContainer = () => {
 
                         {/* send button  */}
                         <div className="px-3">
-                            <button className='send_btn'>
-                                <span> Sign up </span>
+                            <button className='send_btn' onClick={handalSendMessage}>
+                                <span> Send </span>
                                 <GrSend />
                             </button>
                         </div>

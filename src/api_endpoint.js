@@ -18,11 +18,13 @@ const endpoint = {
     FINISH_SIGNUP: `${baseURL}/api/auth/finish-signup`,
     LOGIN: `${baseURL}/api/auth/login`,
 
-
     // profile endpoint
     PROFILE: `${baseURL}/api/profile`,
 
     //    users endpoint
     USER_LIST: `${baseURL}/api/user`,
+
+    //    contact endpoint
+    CONTACT: `${baseURL}/api/contact/`,
 }
 export default endpoint
