@@ -1,5 +1,6 @@
 import endpoint from '@/api_endpoint';
 import Avatar from '@/components/comman/Avatar';
+import { add_new_contact } from '@/controllers/message';
 import { get_profile } from '@/redux/slice/profile';
 import { get_userList } from '@/redux/slice/user/userList';
 import axios from 'axios';
@@ -31,13 +32,9 @@ const Search = () => {
     const handalSelectUser = async (payload) => {
         setShow(false)
         try {
-            const headers = {
-                "x-auth-tokens": token
-            }
-            const { data } = await axios.post(endpoint?.CONTACT, { contact: payload?._id }, { headers })
-            console.log("data : ", data)
-            dispatch(get_profile({ token: token }))
-            dispatch(get_userList({ token }))
+            const res = await add_new_contact(payload?._id, token) // controller
+            await dispatch(get_profile({ token: token }))
+            await dispatch(get_userList({ token }))
         } catch (error) {
             console.log("error : ", error)
         }

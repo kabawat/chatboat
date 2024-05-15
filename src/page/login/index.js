@@ -57,8 +57,6 @@ export default function LoginPage() {
             // get loged in user profile 
             const saved = await dispatch(get_profile({ token: res?.data?.authToken }))
             const { data } = saved?.payload
-            console.log("data : ", data)
-            console.log("socket : ", socket.id)
             socket.emit('login', {
                 username: data?.username,
                 _id: data?._id

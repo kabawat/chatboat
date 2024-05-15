@@ -30,16 +30,16 @@ const ThemeSwitch = () => {
         <>
             <div className='theme_switch'>
                 <input id="switch" type="checkbox" readOnly={defaultTheme} onChange={handalToggleTheme} checked={theme == 'light' ? false : true} />
-                <div class="app">
-                    <div class="content">
-                        <div class="circle">
-                            <div class="crescent"></div>
+                <div className="app">
+                    <div className="content">
+                        <div className="circle">
+                            <div className="crescent"></div>
                         </div>
                         <label for="switch">
-                            <div class="toggle"></div>
-                            <div class="names">
-                                <p class="light">Light</p>
-                                <p class="dark">Dark</p>
+                            <div className="toggle"></div>
+                            <div className="names">
+                                <p className="light">Light</p>
+                                <p className="dark">Dark</p>
                             </div>
                         </label>
                     </div>

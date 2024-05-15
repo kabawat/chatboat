@@ -17,15 +17,21 @@ export default App
 function Main({ children }) {
     const theme_switch = Cookies.get('theme')
     const th = useSelector(state => state.theme)
+    const profile = useSelector(state => state.profile)
     const { socket } = useSelector(state => state.socket)
     const dispatch = useDispatch()
     useEffect(() => {
         function onConnect() {
-            console.log("socket.id : ", socket.id)
+            if (profile?.status) {
+                socket.emit('login', {
+                    username: profile?.data?.username,
+                    _id: profile?.data?._id
+                })
+            }
         }
 
         function onDisconnect() {
-            // console.log(socket.id)
+            console.log(socket.id)
         }
 
         socket.on('connect', onConnect);

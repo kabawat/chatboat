@@ -9,7 +9,6 @@ export const get_profile = createAsyncThunk("get_profile", async ({ token }, { r
         const { data } = await axios.get(endpoint.PROFILE, { headers })
         return data
     } catch (error) {
-        console.log('error : ', error)
         return rejectWithValue(error.response)
     }
 })
@@ -28,8 +27,6 @@ const profile = createSlice({
         });
         builder.addCase(get_profile.fulfilled, (state, { payload }) => {
             const { data } = payload
-            console.log("get profiel function : ", { username: data?.username, _id: data?._id })
-            // socket.emit('login', { username: data?.username, _id: data?._id })
             state.data = data;
             state.status = true
             state.loading = false

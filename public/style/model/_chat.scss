@@ -526,6 +526,14 @@ main {
 
 .w-input-text-group {
     position: relative;
+
+    textarea {
+        padding: 0px;
+        height: 10px;
+        border: none;
+        background: none;
+        resize: none
+    }
 }
 
 .w-placeholder {

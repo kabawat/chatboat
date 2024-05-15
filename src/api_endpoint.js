@@ -26,5 +26,8 @@ const endpoint = {
 
     //    contact endpoint
     CONTACT: `${baseURL}/api/contact/`,
+
+    // chat 
+    CHAT:`${baseURL}/api/chat/`
 }
 export default endpoint

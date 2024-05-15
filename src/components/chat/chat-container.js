@@ -9,10 +9,15 @@ import { FileContainer, SelectButton, SelectFileBox, FileList, FileIcon, Label, 
 import Header from './header';
 import RightSideDrawer from './right-aside';
 import Avatar from '../comman/Avatar';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { add_new_chat } from '@/redux/slice/chat';
+import TextMessage from './msg/text';
 const ChatContainer = () => {
     const { socket } = useSelector(state => state.socket)
-    const state = useSelector(state => state)
+    const current_user = useSelector(state => state.current_user)
+    const profile = useSelector(state => state.profile)
+    const chat = useSelector(state => state.chat)
+    const dispatch = useDispatch()
     const inputRef = useRef(null);
     const chatOperationRef = useRef(null);
     const [isProfile, setIsProfile] = useState(false) // right side user information
@@ -23,8 +28,19 @@ const ChatContainer = () => {
     };
 
     const [textMSG, setTextMSG] = useState('')
+    useEffect(() => {
+        const handalSendMessage = (data) => {
+            if (`${current_user?.contact_id}` == `${data?.chat_id}`) {
+                dispatch(add_new_chat(data))
+            }
+        }
+        socket.on("received text", handalSendMessage)
+        return () => {
+            socket.off("received text", handalSendMessage)
+        };
+    }, [current_user])
     const handalChnage = (event) => {
-        setTextMSG(event.target.innerHTML)
+        setTextMSG(event.target.innerText)
         if (chatOperationRef.current) {
             const height = chatOperationRef.current.offsetHeight;
             setPaddingBottom(height);
@@ -38,11 +54,16 @@ const ChatContainer = () => {
 
     // send message handler 
     const handalSendMessage = () => {
-        console.log("state : ", state)
-        // socket.emit('send text', {
-        //     message: textMSG,
-        //     id: ""
-        // })
+        inputRef.current.innerHTML = ""
+        const data = {
+            text: textMSG,
+            receiver: current_user?.user_id,
+            sender: profile?.data?._id,
+            chat_id: current_user?.contact_id
+        }
+        dispatch(add_new_chat({ ...data, createdAt: new Date() }))
+        socket.emit('send text', data)
+        setTextMSG("")
     }
 
     return (
@@ -54,46 +75,8 @@ const ChatContainer = () => {
                         <div className="chat_section_area">
                             <div className="chat_inner_section">
                                 {
-                                    Array.from({ length: 10 }).map((_, key) => {
-                                        if (key % 2 == 0) {
-                                            return (
-                                                <div className="msg left-msg" key={key}>
-                                                    <div className="msg-img">
-                                                        <Avatar alt="m" src="/static/images/avatar/1.jpg" size={45} />
-                                                    </div>
-
-                                                    <div className="msg-bubble">
-                                                        <div className="msg-info">
-                                                            <div className="msg-info-name">BOT</div>
-                                                            <div className="msg-info-time">12:45</div>
-                                                        </div>
-
-                                                        <div className="msg-text">
-                                                            Hi, welcome to SimpleChat! Go ahead and send me a message. 😄 ,
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            )
-                                        } else {
-                                            return (
-                                                <div className="msg right-msg" key={key}>
-                                                    <div className="msg-img">
-                                                        <Avatar alt="m" src="/static/images/avatar/1.jpg" size={45} />
-                                                    </div>
-
-                                                    <div className="msg-bubble">
-                                                        <div className="msg-info">
-                                                            <div className="msg-info-name">Sajad</div>
-                                                            <div className="msg-info-time">12:46</div>
-                                                        </div>
-
-                                                        <div className="msg-text">
-                                                            You can change your name in JS section!
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            )
-                                        }
+                                    chat?.data?.map((it_chat, key) => {
+                                        return < TextMessage it_chat={it_chat} key={key} />
                                     })
                                 }
                             </div>

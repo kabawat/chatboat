@@ -13,7 +13,7 @@ const Header = ({ setIsProfile }) => {
                     <div className="avatar_heading">
                         <b> {currentUser?.firstName} {currentUser?.lastName}</b>
                     </div>
-                    <div className="avatar_title">
+                    <div className="avatar_title text-success">
                         online
                     </div>
                 </div>

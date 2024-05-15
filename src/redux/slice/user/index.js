@@ -3,12 +3,17 @@ const CurrentUser = createSlice({
     name: "CurrentUser",
     initialState: {
         _id: '',
-        name: "",
         last_seen: "",
         profile: '',
         lastMsg: "",
         notification: '',
-        status: false
+        status: false,
+        about: "",
+        contact_id: "",
+        email: "",
+        firstName: "",
+        lastName: "",
+        user_id: ""
     },
     reducers: {
         handalCurrentUser(state, action) {

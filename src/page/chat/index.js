@@ -10,6 +10,8 @@ import Avatar from '@/components/comman/Avatar';
 import ContactListSkeleton from '@/components/skeleton/contact_list';
 import SearchSkeleton from '@/components/skeleton/seach_bar';
 import Search from './search';
+import { add_new_chat, get_chat } from '@/redux/slice/chat';
+import Cookies from 'js-cookie';
 const chatList = [
     {
         _id: '093803845',
@@ -50,13 +52,16 @@ const chatList = [
 ]
 const ChatPage = () => {
     const dispatch = useDispatch()
+    // const chat = useSelector(state => state.chat)
     const theme = useSelector(state => state.theme)
     const { socket } = useSelector(state => state.socket)
     const chat_profile = useSelector(state => state.current_user)
     const profile = useSelector(state => state.profile)
     const [onlineUser, setOnlineUser] = useState('')
+    const token = Cookies.get('_x_a_t')
     // select user from list 
     const handalSelectChat = (data) => {
+        dispatch(get_chat({ token, chat_id: data?.contact_id }))
         dispatch(handalCurrentUser(data))
     }
     // socket 
@@ -73,6 +78,7 @@ const ChatPage = () => {
             socket.off('joined', logedinHandler);
         };
     }, []);
+
     return (
         <div className={`${theme === 'dark' ? 'dark_mode' : ''} chat_containner`}>
             {onlineUser ? <div className='online_user'> {onlineUser}</div> : <></>}
@@ -113,12 +119,12 @@ const ChatPage = () => {
                                 {
                                     profile?.status ? profile?.data?.contacts?.map((currentChat, key) => {
                                         return (
-                                            <div className={`chat_card d-flex align-items-center ${chat_profile?._id == currentChat?._id ? 'active' : ''}`} key={key} onClick={() => handalSelectChat(currentChat)}>
+                                            <div className={`chat_card d-flex align-items-center ${chat_profile?.contact_id == currentChat?.contact_id ? 'active' : ''}`} key={key} onClick={() => handalSelectChat(currentChat)}>
                                                 <Avatar alt={currentChat?.firstName} src="/static/images/avatar/1.jpg" size={40} />
                                                 <div className="textBox">
                                                     <div className="textContent">
                                                         <p className="h1">{currentChat?.firstName} {currentChat?.lastName}</p>
-                                                        <span className="span">online</span>
+                                                        <span className="span text-success">online</span>
                                                     </div>
                                                     <p className="p">{currentChat?.about}</p>
                                                 </div>
