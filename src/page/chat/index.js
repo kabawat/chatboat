@@ -12,6 +12,7 @@ import SearchSkeleton from '@/components/skeleton/seach_bar';
 import Search from './search';
 import { add_new_chat, get_chat } from '@/redux/slice/chat';
 import Cookies from 'js-cookie';
+import { _mark_message_as_read } from '@/controllers/chat/mark_as_read';
 const chatList = [
     {
         _id: '093803845',
@@ -60,9 +61,15 @@ const ChatPage = () => {
     const [onlineUser, setOnlineUser] = useState('')
     const token = Cookies.get('_x_a_t')
     // select user from list 
-    const handalSelectChat = (data) => {
-        dispatch(get_chat({ token, chat_id: data?.contact_id }))
-        dispatch(handalCurrentUser(data))
+    const handalSelectChat = async (data) => {
+        const payload = {
+            chat_id: data?.contact_id,
+            userID: profile?.data?._id
+        }
+        await _mark_message_as_read(payload, token)
+        await dispatch(get_chat({ token, chat_id: data?.contact_id }))
+        await dispatch(handalCurrentUser(data))
+
     }
     // socket 
     useEffect(() => {

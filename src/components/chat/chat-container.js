@@ -12,6 +12,8 @@ import Avatar from '../comman/Avatar';
 import { useDispatch, useSelector } from 'react-redux';
 import { add_new_chat } from '@/redux/slice/chat';
 import TextMessage from './msg/text';
+import { _mark_message_as_read } from '@/controllers/chat/mark_as_read';
+import Cookies from 'js-cookie';
 const ChatContainer = () => {
     const { socket } = useSelector(state => state.socket)
     const current_user = useSelector(state => state.current_user)
@@ -23,6 +25,7 @@ const ChatContainer = () => {
     const [isProfile, setIsProfile] = useState(false) // right side user information
     const [paddingBottom, setPaddingBottom] = useState(60)
     const [showFile, setShowFile] = useState(false)
+    const token = Cookies.get('_x_a_t')
     const setFocus = () => {
         inputRef.current.focus();
     };
@@ -31,7 +34,13 @@ const ChatContainer = () => {
     useEffect(() => {
         const handalSendMessage = (data) => {
             if (`${current_user?.contact_id}` == `${data?.chat_id}`) {
-                dispatch(add_new_chat(data))
+                const payload = {
+                    chat_id: data?.chat_id,
+                    userID: profile?.data?._id
+                }
+                _mark_message_as_read(payload, token).then((res) => {
+                    dispatch(add_new_chat(data))
+                })
             }
         }
         socket.on("received text", handalSendMessage)
