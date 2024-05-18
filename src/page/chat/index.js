@@ -13,6 +13,7 @@ import Search from './search';
 import { add_new_chat, get_chat } from '@/redux/slice/chat';
 import Cookies from 'js-cookie';
 import { _mark_message_as_read } from '@/controllers/chat/mark_as_read';
+import { get_contact_list } from '@/redux/slice/chat/chat_contact';
 const chatList = [
     {
         _id: '093803845',
@@ -58,19 +59,24 @@ const ChatPage = () => {
     const { socket } = useSelector(state => state.socket)
     const chat_profile = useSelector(state => state.current_user)
     const profile = useSelector(state => state.profile)
+    const contacts = useSelector(state => state.contact)
     const [onlineUser, setOnlineUser] = useState('')
     const token = Cookies.get('_x_a_t')
     // select user from list 
     const handalSelectChat = async (data) => {
         const payload = {
-            chat_id: data?.contact_id,
+            chat_id: data?.chat_id,
             userID: profile?.data?._id
         }
         await _mark_message_as_read(payload, token)
-        await dispatch(get_chat({ token, chat_id: data?.contact_id }))
+        await dispatch(get_chat({ token, chat_id: data?.chat_id }))
         await dispatch(handalCurrentUser(data))
-
     }
+    useEffect(() => {
+        if (!contacts?.status && !contacts?.loading) {
+            dispatch(get_contact_list({ token }))
+        }
+    }, [contacts])
     // socket 
     useEffect(() => {
         const logedinHandler = (data) => {
@@ -124,16 +130,16 @@ const ChatPage = () => {
                         <div className="side_main">
                             <div className="chatList_main_container">
                                 {
-                                    profile?.status ? profile?.data?.contacts?.map((currentChat, key) => {
+                                    contacts?.status ? contacts?.data?.map((currentChat, key) => {
                                         return (
-                                            <div className={`chat_card d-flex align-items-center ${chat_profile?.contact_id == currentChat?.contact_id ? 'active' : ''}`} key={key} onClick={() => handalSelectChat(currentChat)}>
+                                            <div className={`chat_card d-flex align-items-center ${chat_profile?.chat_id == currentChat?.chat_id ? 'active' : ''}`} key={key} onClick={() => handalSelectChat(currentChat)}>
                                                 <Avatar alt={currentChat?.firstName} src="/static/images/avatar/1.jpg" size={40} />
                                                 <div className="textBox">
                                                     <div className="textContent">
                                                         <p className="h1">{currentChat?.firstName} {currentChat?.lastName}</p>
                                                         <span className="span text-success">online</span>
                                                     </div>
-                                                    <p className="p">{currentChat?.about}</p>
+                                                    <p className="p">{currentChat?.last_chat?.text ? currentChat?.last_chat?.text : currentChat?.about}</p>
                                                 </div>
                                             </div>
                                         )

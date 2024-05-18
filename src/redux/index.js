@@ -6,6 +6,7 @@ import userListSlice from './slice/user/userList'
 import socketSlice from './slice/socket'
 import chatSlice from './slice/chat'
 import onlineUsersSlice from './slice/online-user'
+import chatContactSlice from './slice/chat/chat_contact'
 
 const store = configureStore({
     reducer: {
@@ -15,7 +16,8 @@ const store = configureStore({
         user_list: userListSlice,
         socket: socketSlice,
         chat: chatSlice,
-        online_users: onlineUsersSlice
+        online_users: onlineUsersSlice,
+        contact: chatContactSlice
     },
 })
 export default store

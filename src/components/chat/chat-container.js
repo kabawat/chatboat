@@ -14,6 +14,7 @@ import { add_new_chat } from '@/redux/slice/chat';
 import TextMessage from './msg/text';
 import { _mark_message_as_read } from '@/controllers/chat/mark_as_read';
 import Cookies from 'js-cookie';
+import { udpate_contact_list } from '@/redux/slice/chat/chat_contact';
 const ChatContainer = () => {
     const { socket } = useSelector(state => state.socket)
     const current_user = useSelector(state => state.current_user)
@@ -32,8 +33,8 @@ const ChatContainer = () => {
 
     const [textMSG, setTextMSG] = useState('')
     useEffect(() => {
-        const handalSendMessage = (data) => {
-            if (`${current_user?.contact_id}` == `${data?.chat_id}`) {
+        const handalReceivedMessage = (data) => {
+            if (`${current_user?.chat_id}` == `${data?.chat_id}`) {
                 const payload = {
                     chat_id: data?.chat_id,
                     userID: profile?.data?._id
@@ -42,10 +43,11 @@ const ChatContainer = () => {
                     dispatch(add_new_chat(data))
                 })
             }
+            dispatch(udpate_contact_list(data)) // update last seen message 
         }
-        socket.on("received text", handalSendMessage)
+        socket.on("received text", handalReceivedMessage)
         return () => {
-            socket.off("received text", handalSendMessage)
+            socket.off("received text", handalReceivedMessage)
         };
     }, [current_user])
     const handalChnage = (event) => {
@@ -66,9 +68,9 @@ const ChatContainer = () => {
         inputRef.current.innerHTML = ""
         const data = {
             text: textMSG,
-            receiver: current_user?.user_id,
+            receiver: current_user?._id,
             sender: profile?.data?._id,
-            chat_id: current_user?.contact_id
+            chat_id: current_user?.chat_id
         }
         dispatch(add_new_chat({ ...data, createdAt: new Date() }))
         socket.emit('send text', data)

@@ -7,7 +7,6 @@ export const get_chat = createAsyncThunk("get_chat", async ({ token, chat_id }, 
         const { data } = await axios.post(endpoint.CHAT, { chat_id: chat_id }, { headers })
         return data
     } catch (error) {
-        console.log('error : ', error)
         return rejectWithValue(error.response)
     }
 })

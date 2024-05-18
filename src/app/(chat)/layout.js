@@ -14,7 +14,6 @@ export default function ChatLayout({ children }) {
     useEffect(() => {
         // user profile 
         if (!profile.status && !profile?.loading && socket.id) {
-            console.log("socket.id : ", socket.id)
             dispatch(get_profile({ token: token })).then(saved => {
                 const { data } = saved?.payload
                 socket.emit('login', {
