@@ -585,6 +585,7 @@ main {
     // background-color: red;
     height: 100%;
     overflow-y: auto;
+    scroll-behavior: smooth;
 
     &::-webkit-scrollbar-thumb {
         background: transparent;

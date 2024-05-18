@@ -1,11 +1,10 @@
 "use client"
 import Navigate from '@/components/aside/navigate'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import NoChat from '@/components/chat/no-chat';
 import ChatContainer from '@/components/chat/chat-container';
 import { useSelector, useDispatch } from 'react-redux'
 import { handalCurrentUser } from '@/redux/slice/user';
-// import socket from '@/socket';
 import Avatar from '@/components/comman/Avatar';
 import ContactListSkeleton from '@/components/skeleton/contact_list';
 import SearchSkeleton from '@/components/skeleton/seach_bar';
@@ -13,7 +12,8 @@ import Search from './search';
 import { add_new_chat, get_chat } from '@/redux/slice/chat';
 import Cookies from 'js-cookie';
 import { _mark_message_as_read } from '@/controllers/chat/mark_as_read';
-import { get_contact_list } from '@/redux/slice/chat/chat_contact';
+import { get_contact_list, udpate_contact_list } from '@/redux/slice/chat/chat_contact';
+import { _scrollToEnd, _scrollToEndSmoothly } from '@/controllers/comman/scroll_to_end';
 const chatList = [
     {
         _id: '093803845',
@@ -54,10 +54,11 @@ const chatList = [
 ]
 const ChatPage = () => {
     const dispatch = useDispatch()
+    const mainRef = useRef(null);
     // const chat = useSelector(state => state.chat)
     const theme = useSelector(state => state.theme)
     const { socket } = useSelector(state => state.socket)
-    const chat_profile = useSelector(state => state.current_user)
+    const current_user = useSelector(state => state.current_user)
     const profile = useSelector(state => state.profile)
     const contacts = useSelector(state => state.contact)
     const [onlineUser, setOnlineUser] = useState('')
@@ -71,6 +72,7 @@ const ChatPage = () => {
         await _mark_message_as_read(payload, token)
         await dispatch(get_chat({ token, chat_id: data?.chat_id }))
         await dispatch(handalCurrentUser(data))
+        _scrollToEnd(mainRef)
     }
     useEffect(() => {
         if (!contacts?.status && !contacts?.loading) {
@@ -91,6 +93,26 @@ const ChatPage = () => {
             socket.off('joined', logedinHandler);
         };
     }, []);
+
+    useEffect(() => {
+        const handalReceivedMessage = (data) => {
+            if (`${current_user?.chat_id}` == `${data?.chat_id}`) {
+                const payload = {
+                    chat_id: data?.chat_id,
+                    userID: profile?.data?._id
+                }
+                _mark_message_as_read(payload, token).then((res) => {
+                    dispatch(add_new_chat(data))
+                })
+                _scrollToEndSmoothly(mainRef)
+            }
+            dispatch(udpate_contact_list(data)) // update last seen message 
+        }
+        socket.on("received text", handalReceivedMessage)
+        return () => {
+            socket.off("received text", handalReceivedMessage)
+        };
+    }, [current_user])
 
     return (
         <div className={`${theme === 'dark' ? 'dark_mode' : ''} chat_containner`}>
@@ -132,7 +154,7 @@ const ChatPage = () => {
                                 {
                                     contacts?.status ? contacts?.data?.map((currentChat, key) => {
                                         return (
-                                            <div className={`chat_card d-flex align-items-center ${chat_profile?.chat_id == currentChat?.chat_id ? 'active' : ''}`} key={key} onClick={() => handalSelectChat(currentChat)}>
+                                            <div className={`chat_card d-flex align-items-center ${current_user?.chat_id == currentChat?.chat_id ? 'active' : ''}`} key={key} onClick={() => handalSelectChat(currentChat)}>
                                                 <Avatar alt={currentChat?.firstName} src="/static/images/avatar/1.jpg" size={40} />
                                                 <div className="textBox">
                                                     <div className="textContent">
@@ -157,7 +179,7 @@ const ChatPage = () => {
                 <Navigate />
             </div>
             <main>
-                {chat_profile?.status ? <ChatContainer /> : <NoChat />}
+                {current_user?.status ? <ChatContainer mainRef={mainRef} /> : <NoChat />}
             </main>
         </div>
     )

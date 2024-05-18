@@ -12,10 +12,10 @@ import Avatar from '../comman/Avatar';
 import { useDispatch, useSelector } from 'react-redux';
 import { add_new_chat } from '@/redux/slice/chat';
 import TextMessage from './msg/text';
-import { _mark_message_as_read } from '@/controllers/chat/mark_as_read';
 import Cookies from 'js-cookie';
 import { udpate_contact_list } from '@/redux/slice/chat/chat_contact';
-const ChatContainer = () => {
+import { _scrollToEndSmoothly } from '@/controllers/comman/scroll_to_end';
+const ChatContainer = ({ mainRef }) => {
     const { socket } = useSelector(state => state.socket)
     const current_user = useSelector(state => state.current_user)
     const profile = useSelector(state => state.profile)
@@ -32,24 +32,6 @@ const ChatContainer = () => {
     };
 
     const [textMSG, setTextMSG] = useState('')
-    useEffect(() => {
-        const handalReceivedMessage = (data) => {
-            if (`${current_user?.chat_id}` == `${data?.chat_id}`) {
-                const payload = {
-                    chat_id: data?.chat_id,
-                    userID: profile?.data?._id
-                }
-                _mark_message_as_read(payload, token).then((res) => {
-                    dispatch(add_new_chat(data))
-                })
-            }
-            dispatch(udpate_contact_list(data)) // update last seen message 
-        }
-        socket.on("received text", handalReceivedMessage)
-        return () => {
-            socket.off("received text", handalReceivedMessage)
-        };
-    }, [current_user])
     const handalChnage = (event) => {
         setTextMSG(event.target.innerText)
         if (chatOperationRef.current) {
@@ -74,7 +56,11 @@ const ChatContainer = () => {
         }
         dispatch(add_new_chat({ ...data, createdAt: new Date() }))
         socket.emit('send text', data)
+        dispatch(udpate_contact_list(data)) // update last seen message 
         setTextMSG("")
+        setTimeout(() => {
+            _scrollToEndSmoothly(mainRef)
+        }, 100)
     }
 
     return (
@@ -84,10 +70,14 @@ const ChatContainer = () => {
                 <div className="chat_main_container" style={{ '--pb': `${paddingBottom}px` }}>
                     <div className="chat_section" onClick={() => setIsProfile(false)}>
                         <div className="chat_section_area">
-                            <div className="chat_inner_section">
+                            <div className="chat_inner_section" ref={mainRef} style={{ scrollBehavior: 'smooth' }}>
                                 {
                                     chat?.data?.map((it_chat, key) => {
-                                        return < TextMessage it_chat={it_chat} key={key} />
+                                        let isLast = false
+                                        if (key == chat?.data?.length - 1) {
+                                            isLast = true
+                                        }
+                                        return <TextMessage it_chat={it_chat} key={key} isLastChat={isLast} />
                                     })
                                 }
                             </div>
