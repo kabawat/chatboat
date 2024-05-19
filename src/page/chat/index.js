@@ -53,15 +53,18 @@ const chatList = [
     },
 ]
 const ChatPage = () => {
+    // universal variable 
+    const current_user = useSelector(state => state.current_user)
+    const { socket } = useSelector(state => state.socket)
+    const contacts = useSelector(state => state.contact)
+    const profile = useSelector(state => state.profile)
+    const theme = useSelector(state => state.theme)
+
+    const [onlineUser, setOnlineUser] = useState('')
     const dispatch = useDispatch()
     const mainRef = useRef(null);
-    // const chat = useSelector(state => state.chat)
-    const theme = useSelector(state => state.theme)
-    const { socket } = useSelector(state => state.socket)
-    const current_user = useSelector(state => state.current_user)
-    const profile = useSelector(state => state.profile)
-    const contacts = useSelector(state => state.contact)
-    const [onlineUser, setOnlineUser] = useState('')
+
+
     const token = Cookies.get('_x_a_t')
     // select user from list 
     const handalSelectChat = async (data) => {
@@ -70,7 +73,7 @@ const ChatPage = () => {
             userID: profile?.data?._id
         }
         await _mark_message_as_read(payload, token)
-        await dispatch(get_chat({ token, chat_id: data?.chat_id }))
+        await dispatch(get_chat({ token, chat_id: data?.chat_id, page: 1, clean: true }))
         await dispatch(handalCurrentUser(data))
         _scrollToEnd(mainRef)
     }
@@ -79,6 +82,7 @@ const ChatPage = () => {
             dispatch(get_contact_list({ token }))
         }
     }, [contacts])
+    
     // socket 
     useEffect(() => {
         const logedinHandler = (data) => {

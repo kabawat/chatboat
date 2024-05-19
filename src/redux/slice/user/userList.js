@@ -9,7 +9,6 @@ export const get_userList = createAsyncThunk("get_userList", async ({ token }, {
         const { data } = await axios.get(endpoint.USER_LIST, { headers })
         return data
     } catch (error) {
-        console.log('error : ', error)
         return rejectWithValue(error.response)
     }
 })

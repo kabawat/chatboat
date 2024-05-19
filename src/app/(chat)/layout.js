@@ -6,9 +6,10 @@ import { get_profile } from "@/redux/slice/profile"
 import { get_userList } from "@/redux/slice/user/userList"
 
 export default function ChatLayout({ children }) {
-    const profile = useSelector(state => state.profile)
-    const { socket } = useSelector(state => state.socket)
     const userList = useSelector(state => state.user_list)
+    const { socket } = useSelector(state => state.socket)
+    const profile = useSelector(state => state.profile)
+    
     const token = Cookies.get('_x_a_t')
     const dispatch = useDispatch()
     useEffect(() => {

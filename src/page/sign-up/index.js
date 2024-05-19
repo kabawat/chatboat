@@ -22,9 +22,9 @@ export default function SignUpPage() {
         vertical: "top",
         horizontal: 'center'
     }
-    const [step, setStep] = useState(1)
     const [Toast, setToast] = useState(toastInit)
     const [loader, setLoader] = useState(false)
+    const [step, setStep] = useState(1)
     const router = useRouter()
     const handalToast = (value) => {
         setToast({

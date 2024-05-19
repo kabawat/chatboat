@@ -1,11 +1,12 @@
 import Avatar from '@/components/comman/Avatar';
-import React from 'react'
+import React, { useRef } from 'react'
 import { useSelector } from 'react-redux';
 
-const TextMessage = ({ it_chat, isLastChat }) => {
-    console.log(isLastChat)
+const TextMessage = ({ it_chat }) => {
+    // universal state 
     const current_user = useSelector(state => state.current_user)
     const profile = useSelector(state => state.profile)
+
     const currentDate = new Date(it_chat?.createdAt);
     const timeString = currentDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
     if (`${profile?.data?._id}` == `${it_chat?.receiver}`) {

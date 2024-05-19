@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import endpoint from "@/api_endpoint";
 import axios from 'axios'
-export const get_chat = createAsyncThunk("get_chat", async ({ token, chat_id }, { rejectWithValue }) => {
+export const get_chat = createAsyncThunk("get_chat", async ({ token, chat_id, page, clean = false }, { rejectWithValue }) => {
     try {
         let headers = { 'x-auth-tokens': token }
-        const { data } = await axios.post(endpoint.CHAT, { chat_id: chat_id }, { headers })
-        return data
+        const { data } = await axios.post(endpoint.CHAT, { chat_id: chat_id, page }, { headers })
+        const mapping = { data, clean }
+        return mapping
     } catch (error) {
         return rejectWithValue(error.response)
     }
@@ -16,16 +17,23 @@ const chat = createSlice({
     initialState: {
         loading: false,
         error: null,
-        data: [],
         status: true,
+        data: [],
     },
     extraReducers: (builder) => {
         builder.addCase(get_chat.pending, (state, action) => {
             state.loading = true;
         });
         builder.addCase(get_chat.fulfilled, (state, { payload }) => {
-            const { data } = payload
-            state.data = data;
+            const { clean, data } = payload
+            if (clean) {
+                state.data = data?.data
+            } else {
+                state.data = [...data?.data, ...state.data]
+            }
+            state.page = data?.page
+            state.totalMessages = data?.totalMessages
+            state.totalPages = data?.totalPages
             state.status = true
             state.loading = false
         });

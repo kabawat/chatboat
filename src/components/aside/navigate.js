@@ -65,9 +65,9 @@ const settingList = [
     },
 ]
 const Navigate = () => {
+    const [currentSetting, setCurrentSetting] = useState(settingList[0])
     const [isSetting, setIsSetting] = useState(false)
     const pathname = usePathname()
-    const [currentSetting, setCurrentSetting] = useState(settingList[0])
 
     const handleSetting = (data) => {
         setCurrentSetting(data)

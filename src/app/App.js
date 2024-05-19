@@ -16,10 +16,12 @@ export default App
 
 function Main({ children }) {
     const theme_switch = Cookies.get('theme')
-    const th = useSelector(state => state.theme)
-    const profile = useSelector(state => state.profile)
-    const { socket } = useSelector(state => state.socket)
     const dispatch = useDispatch()
+
+    const { socket } = useSelector(state => state.socket)
+    const profile = useSelector(state => state.profile)
+    const th = useSelector(state => state.theme)
+    
     useEffect(() => {
         function onConnect() {
             if (profile?.status) {

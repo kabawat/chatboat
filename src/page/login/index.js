@@ -14,27 +14,29 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { LuSend } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
+
+const toastInit = {
+    show: false,
+    message: "",
+    type: "",
+    duration: 5000,
+    vertical: "top",
+    horizontal: 'center'
+}
+const formInit = {
+    email: '',
+    password: '',
+}
+
 export default function LoginPage() {
-    const toastInit = {
-        show: false,
-        message: "",
-        type: "",
-        duration: 5000,
-        vertical: "top",
-        horizontal: 'center'
-    }
-    const formInit = {
-        email: '',
-        password: '',
-    }
-    const router = useRouter()
     const { socket } = useSelector(state => state.socket)
-    const dispatch = useDispatch()
+    const [formData, setFormData] = useState(formInit)
+    const [showPwd, setShowPwd] = useState(false)
     const [Toast, setToast] = useState(toastInit)
     const [loader, setLoader] = useState(false)
+    const dispatch = useDispatch()
+    const router = useRouter()
     const isForgotPassword = true
-    const [showPwd, setShowPwd] = useState(false)
-    const [formData, setFormData] = useState(formInit)
 
     const handalChange = (e) => {
         const { name, value } = e.target

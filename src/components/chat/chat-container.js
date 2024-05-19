@@ -1,7 +1,6 @@
-import { Badge } from '@mui/base/Badge';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { BsPlusLg, BsFileEarmarkPdf } from 'react-icons/bs';
-import { IoSendSharp, IoVideocamOutline } from 'react-icons/io5';
+import { IoVideocamOutline } from 'react-icons/io5';
 import { IoIosMusicalNotes } from 'react-icons/io';
 import { BiImages } from 'react-icons/bi';
 import { GrSend } from "react-icons/gr";
@@ -10,28 +9,37 @@ import Header from './header';
 import RightSideDrawer from './right-aside';
 import Avatar from '../comman/Avatar';
 import { useDispatch, useSelector } from 'react-redux';
-import { add_new_chat } from '@/redux/slice/chat';
+import { add_new_chat, get_chat } from '@/redux/slice/chat';
 import TextMessage from './msg/text';
 import Cookies from 'js-cookie';
 import { udpate_contact_list } from '@/redux/slice/chat/chat_contact';
 import { _scrollToEndSmoothly } from '@/controllers/comman/scroll_to_end';
 const ChatContainer = ({ mainRef }) => {
-    const { socket } = useSelector(state => state.socket)
-    const current_user = useSelector(state => state.current_user)
-    const profile = useSelector(state => state.profile)
-    const chat = useSelector(state => state.chat)
-    const dispatch = useDispatch()
-    const inputRef = useRef(null);
-    const chatOperationRef = useRef(null);
-    const [isProfile, setIsProfile] = useState(false) // right side user information
+    // gloable state 
+    const current_user = useSelector(state => state.current_user) // current chat user
+    const { socket } = useSelector(state => state.socket) // socket information
+    const profile = useSelector(state => state.profile) // logedin user information
+    const chat = useSelector(state => state.chat) // current chat
+
+    // local state 
+    const [previousHeight, setPreviousHeight] = useState(0) // chat scroll height
     const [paddingBottom, setPaddingBottom] = useState(60)
-    const [showFile, setShowFile] = useState(false)
+    const [isProfile, setIsProfile] = useState(false) // right side user information
+    const [showFile, setShowFile] = useState(false) // styled components
+    const [textMSG, setTextMSG] = useState('') // store text message
+
+    // References 
+    const chatOperationRef = useRef(null);
+    const inputRef = useRef(null); // input box reference
+
     const token = Cookies.get('_x_a_t')
+    const dispatch = useDispatch()
+
+    // input box 
     const setFocus = () => {
         inputRef.current.focus();
     };
 
-    const [textMSG, setTextMSG] = useState('')
     const handalChnage = (event) => {
         setTextMSG(event.target.innerText)
         if (chatOperationRef.current) {
@@ -63,6 +71,26 @@ const ChatContainer = ({ mainRef }) => {
         }, 100)
     }
 
+
+    const scrollToFirstMessage = () => {
+        const newHeight = mainRef.current.scrollHeight
+        const scrollIncrease = newHeight - previousHeight
+        mainRef.current.scrollTop = scrollIncrease
+    };
+
+    const handalScroll = () => {
+        if (mainRef.current.scrollTop == 0) {
+            if (chat?.page <= chat?.totalPages) {
+                dispatch(get_chat({ token, chat_id: current_user?.chat_id, page: chat?.page, clean: false })).then(() => {
+                    scrollToFirstMessage()
+                })
+            }
+        }
+        if (mainRef) {
+            setPreviousHeight(mainRef.current.scrollHeight)
+        }
+    }
+
     return (
         <div className={`${isProfile ? 'active' : ''} chat-container`}>
             <div className="chat_area">
@@ -70,14 +98,10 @@ const ChatContainer = ({ mainRef }) => {
                 <div className="chat_main_container" style={{ '--pb': `${paddingBottom}px` }}>
                     <div className="chat_section" onClick={() => setIsProfile(false)}>
                         <div className="chat_section_area">
-                            <div className="chat_inner_section" ref={mainRef} style={{ scrollBehavior: 'smooth' }}>
+                            <div className="chat_inner_section" ref={mainRef} style={{ scrollBehavior: 'smooth' }} onScroll={handalScroll}>
                                 {
                                     chat?.data?.map((it_chat, key) => {
-                                        let isLast = false
-                                        if (key == chat?.data?.length - 1) {
-                                            isLast = true
-                                        }
-                                        return <TextMessage it_chat={it_chat} key={key} isLastChat={isLast} />
+                                        return <TextMessage it_chat={it_chat} key={key} />
                                     })
                                 }
                             </div>
