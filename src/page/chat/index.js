@@ -68,6 +68,7 @@ const ChatPage = () => {
     const token = Cookies.get('_x_a_t')
     // select user from list 
     const handalSelectChat = async (data) => {
+        
         const payload = {
             chat_id: data?.chat_id,
             userID: profile?.data?._id
@@ -82,7 +83,7 @@ const ChatPage = () => {
             dispatch(get_contact_list({ token }))
         }
     }, [contacts])
-    
+
     // socket 
     useEffect(() => {
         const logedinHandler = (data) => {
