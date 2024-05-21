@@ -4,9 +4,9 @@ import current_user from './slice/user'
 import profileSlice from './slice/profile'
 import userListSlice from './slice/user/userList'
 import socketSlice from './slice/socket'
-import chatSlice from './slice/chat'
+import chatSlice from './slice/message'
 import onlineUsersSlice from './slice/online-user'
-import chatContactSlice from './slice/chat/chat_contact'
+import chatContactSlice from './slice/chat'
 
 const store = configureStore({
     reducer: {

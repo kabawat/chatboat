@@ -6,7 +6,7 @@ export const _mark_message_as_read = async (payload, token) => {
         const headers = {
             "x-auth-tokens": token
         }
-        const { data } = await axios.put(endpoint?.CHAT, payload, { headers })
+        const { data } = await axios.put(endpoint?.MESSAGE, payload, { headers })
         return data
     } catch (error) {
         return error

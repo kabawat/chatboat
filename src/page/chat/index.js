@@ -9,12 +9,13 @@ import Avatar from '@/components/comman/Avatar';
 import ContactListSkeleton from '@/components/skeleton/contact_list';
 import SearchSkeleton from '@/components/skeleton/seach_bar';
 import Search from './search';
-import { add_new_chat, get_chat } from '@/redux/slice/chat';
 import Cookies from 'js-cookie';
-import { _mark_message_as_read } from '@/controllers/chat/mark_as_read';
-import { get_contact_list, udpate_contact_list } from '@/redux/slice/chat/chat_contact';
 import { _scrollToEnd, _scrollToEndSmoothly } from '@/controllers/comman/scroll_to_end';
 import ContaxtMenu from '@/components/chat/contaxt_menu';
+import { _mark_message_as_read } from '@/controllers/message/mark_as_read';
+import { get_contact_list } from '@/redux/slice/chat';
+import { add_new_message, get_chat_message } from '@/redux/slice/message';
+import { udpate_contact_list } from '@/redux/slice/chat';
 const chatList = [
     {
         _id: '093803845',
@@ -81,7 +82,7 @@ const ChatPage = () => {
             userID: profile?.data?._id
         }
         await _mark_message_as_read(payload, token) // make read message
-        await dispatch(get_chat({ token, chat_id: data?.chat_id, page: 1, clean: true })) // get particular chat
+        await dispatch(get_chat_message({ token, chat_id: data?.chat_id, page: 1, clean: true })) // get particular chat
         await dispatch(handalCurrentUser(data)) // set current user 
         _scrollToEnd(mainRef)// scroll bottom
     }
@@ -109,13 +110,18 @@ const ChatPage = () => {
     }, []);
 
 
-    window.addEventListener('click', () => {
-        setIsContext(false)
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            window.addEventListener('click', () => {
+                setIsContext(false)
+            })
+        }
     })
 
     // received message handal 
     useEffect(() => {
         const handalReceivedMessage = (data) => {
+            console.log("data : ", data)
             const isExits = contacts?.data?.some(item => item?.chat_id === data?.chat_id)
             if (!isExits) {
                 dispatch(get_contact_list({ token }))
@@ -127,7 +133,7 @@ const ChatPage = () => {
                 }
                 // make read message 
                 _mark_message_as_read(payload, token).then((res) => {
-                    dispatch(add_new_chat(data))
+                    dispatch(add_new_message(data))
                 })
 
                 _scrollToEndSmoothly(mainRef)

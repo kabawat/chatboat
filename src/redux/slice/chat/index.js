@@ -1,62 +1,63 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import endpoint from "@/api_endpoint";
-import axios from 'axios'
-export const get_chat = createAsyncThunk("get_chat", async ({ token, chat_id, page, clean = false }, { rejectWithValue }) => {
+import axios from "axios";
+
+const { createSlice } = require("@reduxjs/toolkit");
+const { createAsyncThunk } = require("@reduxjs/toolkit");
+
+export const get_contact_list = createAsyncThunk('contact_list', async ({ token }, { rejectWithValue }) => {
     try {
-        let headers = { 'x-auth-tokens': token }
-        const { data } = await axios.post(endpoint.CHAT, { chat_id: chat_id, page }, { headers })
-        const mapping = { data, clean }
-        return mapping
+        let headers = {
+            'x-auth-tokens': token
+        }
+        const { data } = await axios.get(endpoint.CHAT, { headers })
+        return data
     } catch (error) {
         return rejectWithValue(error.response)
     }
 })
 
-const chat = createSlice({
-    name: "chat",
+const chat_contact = createSlice({
+    name: "chat_contact",
     initialState: {
         loading: false,
         error: null,
-        status: true,
         data: [],
+        status: false,
     },
-    extraReducers: (builder) => {
-        builder.addCase(get_chat.pending, (state, action) => {
+    extraReducers: (building) => {
+        building.addCase(get_contact_list.pending, (state, action) => {
             state.loading = true;
-        });
-        builder.addCase(get_chat.fulfilled, (state, { payload }) => {
-            const { clean, data } = payload
-            if (clean) {
-                state.data = data?.data
-            } else {
-                state.data = [...data?.data, ...state.data]
-            }
-            state.page = data?.page
-            state.totalMessages = data?.totalMessages
-            state.totalPages = data?.totalPages
+        })
+        building.addCase(get_contact_list.fulfilled, (state, { payload }) => {
+            const { data } = payload
+            state.data = data;
             state.status = true
             state.loading = false
-        });
-        builder.addCase(get_chat.rejected, (state, action) => {
+        })
+        building.addCase(get_contact_list.rejected, (state, action) => {
             state.error = action.payload;
             state.loading = false;
             state.data = null;
-        });
+        })
     },
     reducers: {
-        add_new_chat(state, action) {
-            const data = {
-                time: new Date(),
-                ...action.payload
-            }
-            const new_data = [...state.data, data]
-            state.data = new_data
-            return state
+        udpate_contact_list(state, { payload }) {
+            const updatedData = []
+            state.data.map((it) => {
+                if (it?.chat_id == payload.chat_id) {
+                    updatedData.unshift({ ...it, last_chat: payload })
+                } else {
+                    updatedData.push(it)
+                }
+            })
+            state.data = updatedData
+        },
+        add_new_contact(state, { payload }) {
+            state.data.unshift(payload)
         }
     }
 })
 
-const chatSlice = chat.reducer
-export default chatSlice
-
-export const { add_new_chat } = chat.actions
+const chatContactSlice = chat_contact.reducer
+export const { udpate_contact_list, add_new_contact } = chat_contact.actions
+export default chatContactSlice

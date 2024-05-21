@@ -21,13 +21,16 @@ const endpoint = {
     // profile endpoint
     PROFILE: `${baseURL}/api/profile`,
 
-    //    users endpoint
+    // users endpoint
     USER_LIST: `${baseURL}/api/user`,
 
-    //    contact endpoint
+    // contact endpoint
     CONTACT: `${baseURL}/api/contact/`,
 
     // chat 
-    CHAT:`${baseURL}/api/chat/`
+    CHAT: `${baseURL}/api/chat/`,
+
+    // message
+    MESSAGE: `${baseURL}/api/message/`,
 }
 export default endpoint

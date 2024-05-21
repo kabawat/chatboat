@@ -2,11 +2,11 @@ import { RiDeleteBinLine } from 'react-icons/ri'
 import { AiOutlineClear } from 'react-icons/ai'
 import { BsPin } from 'react-icons/bs'
 import React from 'react'
-import { _delete_contact_chat } from '@/controllers/chat/delete_chat'
 import Cookies from 'js-cookie'
-import { get_contact_list } from '@/redux/slice/chat/chat_contact'
+import { get_contact_list } from '@/redux/slice/chat'
 import { useDispatch, useSelector } from 'react-redux'
 import { handalCurrentUser } from '@/redux/slice/user'
+import { _delete_contact_chat } from '@/controllers/chat/delete_chat'
 
 const ContaxtMenu = ({ data, mouse }) => {
     const current_user = useSelector(state => state.current_user)

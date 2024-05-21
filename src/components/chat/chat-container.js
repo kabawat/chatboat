@@ -9,11 +9,11 @@ import Header from './header';
 import RightSideDrawer from './right-aside';
 import Avatar from '../comman/Avatar';
 import { useDispatch, useSelector } from 'react-redux';
-import { add_new_chat, get_chat } from '@/redux/slice/chat';
+import { add_new_message, get_chat_message } from '@/redux/slice/message';
 import TextMessage from './msg/text';
 import Cookies from 'js-cookie';
-import { udpate_contact_list } from '@/redux/slice/chat/chat_contact';
 import { _scrollToEndSmoothly } from '@/controllers/comman/scroll_to_end';
+import { udpate_contact_list } from '@/redux/slice/chat';
 const ChatContainer = ({ mainRef }) => {
     // gloable state 
     const current_user = useSelector(state => state.current_user) // current chat user
@@ -62,8 +62,9 @@ const ChatContainer = ({ mainRef }) => {
             sender: profile?.data?._id,
             chat_id: current_user?.chat_id
         }
-        dispatch(add_new_chat({ ...data, createdAt: new Date() }))
+        dispatch(add_new_message({ ...data, createdAt: new Date() }))
         socket.emit('send text', data)
+
         dispatch(udpate_contact_list(data)) // update last seen message 
         setTextMSG("")
         setTimeout(() => {
@@ -81,7 +82,7 @@ const ChatContainer = ({ mainRef }) => {
     const handalScroll = () => {
         if (mainRef.current.scrollTop == 0) {
             if (chat?.page <= chat?.totalPages) {
-                dispatch(get_chat({ token, chat_id: current_user?.chat_id, page: chat?.page, clean: false })).then(() => {
+                dispatch(get_chat_message({ token, chat_id: current_user?.chat_id, page: chat?.page, clean: false })).then(() => {
                     scrollToFirstMessage()
                 })
             }
