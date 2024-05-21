@@ -13,9 +13,8 @@ import Cookies from 'js-cookie';
 import { _scrollToEnd, _scrollToEndSmoothly } from '@/controllers/comman/scroll_to_end';
 import ContaxtMenu from '@/components/chat/contaxt_menu';
 import { _mark_message_as_read } from '@/controllers/message/mark_as_read';
-import { get_contact_list } from '@/redux/slice/chat';
 import { add_new_message, get_chat_message } from '@/redux/slice/message';
-import { udpate_contact_list } from '@/redux/slice/chat';
+import { get_contact_list, udpate_contact_list } from '@/redux/slice/chat';
 const chatList = [
     {
         _id: '093803845',
@@ -121,11 +120,11 @@ const ChatPage = () => {
     // received message handal 
     useEffect(() => {
         const handalReceivedMessage = (data) => {
-            console.log("data : ", data)
             const isExits = contacts?.data?.some(item => item?.chat_id === data?.chat_id)
             if (!isExits) {
                 dispatch(get_contact_list({ token }))
             }
+
             if (`${current_user?.chat_id}` == `${data?.chat_id}`) {
                 const payload = {
                     chat_id: data?.chat_id,
@@ -144,7 +143,7 @@ const ChatPage = () => {
         return () => {
             socket.off("received text", handalReceivedMessage)
         };
-    }, [current_user])
+    }, [current_user, contacts])
 
     const handleContextMenu = (event, payload) => {
         setContextData(payload)

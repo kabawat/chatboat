@@ -52,7 +52,8 @@ const chat = createSlice({
             const new_data = [...state.data, data]
             state.data = new_data
             return state
-        }
+        },
+        
     }
 })
 
