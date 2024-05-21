@@ -1,22 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit'
+const initialState = {
+    _id: '',
+    last_seen: "",
+    profile: '',
+    lastMsg: "",
+    notification: '',
+    status: false,
+    about: "",
+    contact_id: "",
+    email: "",
+    firstName: "",
+    lastName: "",
+    user_id: ""
+}
 const CurrentUser = createSlice({
     name: "CurrentUser",
-    initialState: {
-        _id: '',
-        last_seen: "",
-        profile: '',
-        lastMsg: "",
-        notification: '',
-        status: false,
-        about: "",
-        contact_id: "",
-        email: "",
-        firstName: "",
-        lastName: "",
-        user_id: ""
-    },
+    initialState: initialState,
     reducers: {
         handalCurrentUser(state, action) {
+            if (action.payload == null) {
+                return initialState
+            }
             return {
                 ...action.payload,
                 status: true

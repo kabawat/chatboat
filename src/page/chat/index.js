@@ -14,6 +14,7 @@ import Cookies from 'js-cookie';
 import { _mark_message_as_read } from '@/controllers/chat/mark_as_read';
 import { get_contact_list, udpate_contact_list } from '@/redux/slice/chat/chat_contact';
 import { _scrollToEnd, _scrollToEndSmoothly } from '@/controllers/comman/scroll_to_end';
+import ContaxtMenu from '@/components/chat/contaxt_menu';
 const chatList = [
     {
         _id: '093803845',
@@ -52,6 +53,10 @@ const chatList = [
         about: 'MERN Developer'
     },
 ]
+const mousePos = {
+    x: 0,
+    y: 0
+}
 const ChatPage = () => {
     // universal variable 
     const current_user = useSelector(state => state.current_user)
@@ -60,7 +65,10 @@ const ChatPage = () => {
     const profile = useSelector(state => state.profile)
     const theme = useSelector(state => state.theme)
 
-    const [onlineUser, setOnlineUser] = useState('')
+    const [contextData, setContextData] = useState({})
+    const [onlineUser, setOnlineUser] = useState(null)
+    const [isContext, setIsContext] = useState(false)
+    const [mouse, setMouse] = useState(mousePos)
     const dispatch = useDispatch()
     const mainRef = useRef(null);
 
@@ -68,16 +76,17 @@ const ChatPage = () => {
     const token = Cookies.get('_x_a_t')
     // select user from list 
     const handalSelectChat = async (data) => {
-        
         const payload = {
             chat_id: data?.chat_id,
             userID: profile?.data?._id
         }
-        await _mark_message_as_read(payload, token)
-        await dispatch(get_chat({ token, chat_id: data?.chat_id, page: 1, clean: true }))
-        await dispatch(handalCurrentUser(data))
-        _scrollToEnd(mainRef)
+        await _mark_message_as_read(payload, token) // make read message
+        await dispatch(get_chat({ token, chat_id: data?.chat_id, page: 1, clean: true })) // get particular chat
+        await dispatch(handalCurrentUser(data)) // set current user 
+        _scrollToEnd(mainRef)// scroll bottom
     }
+
+    // get all contact list 
     useEffect(() => {
         if (!contacts?.status && !contacts?.loading) {
             dispatch(get_contact_list({ token }))
@@ -99,16 +108,28 @@ const ChatPage = () => {
         };
     }, []);
 
+
+    window.addEventListener('click', () => {
+        setIsContext(false)
+    })
+
+    // received message handal 
     useEffect(() => {
         const handalReceivedMessage = (data) => {
+            const isExits = contacts?.data?.some(item => item?.chat_id === data?.chat_id)
+            if (!isExits) {
+                dispatch(get_contact_list({ token }))
+            }
             if (`${current_user?.chat_id}` == `${data?.chat_id}`) {
                 const payload = {
                     chat_id: data?.chat_id,
                     userID: profile?.data?._id
                 }
+                // make read message 
                 _mark_message_as_read(payload, token).then((res) => {
                     dispatch(add_new_chat(data))
                 })
+
                 _scrollToEndSmoothly(mainRef)
             }
             dispatch(udpate_contact_list(data)) // update last seen message 
@@ -118,6 +139,19 @@ const ChatPage = () => {
             socket.off("received text", handalReceivedMessage)
         };
     }, [current_user])
+
+    const handleContextMenu = (event, payload) => {
+        setContextData(payload)
+        event.preventDefault()
+        setMouse({
+            x: event.pageX,
+            y: event.pageY
+        })
+        setIsContext(false)
+        setTimeout(() => {
+            setIsContext(true)
+        }, 100)
+    }
 
     return (
         <div className={`${theme === 'dark' ? 'dark_mode' : ''} chat_containner`}>
@@ -159,7 +193,13 @@ const ChatPage = () => {
                                 {
                                     contacts?.status ? contacts?.data?.map((currentChat, key) => {
                                         return (
-                                            <div className={`chat_card d-flex align-items-center ${current_user?.chat_id == currentChat?.chat_id ? 'active' : ''}`} key={key} onClick={() => handalSelectChat(currentChat)}>
+                                            <div
+                                                className={`chat_card d-flex align-items-center ${current_user?.chat_id == currentChat?.chat_id ? 'active' : ''}`}
+                                                onContextMenu={e => handleContextMenu(e, currentChat)}
+                                                onClick={() => handalSelectChat(currentChat)}
+                                                key={key}
+                                            >
+
                                                 <Avatar alt={currentChat?.firstName} src="/static/images/avatar/1.jpg" size={40} />
                                                 <div className="textBox">
                                                     <div className="textContent">
@@ -177,6 +217,7 @@ const ChatPage = () => {
                                     })
                                 }
                             </div>
+                            {isContext ? <ContaxtMenu data={contextData} mouse={mouse} /> : <></>}
                         </div>
                     </div>
                 </div>
