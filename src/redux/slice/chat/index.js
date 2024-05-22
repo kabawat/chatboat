@@ -69,10 +69,22 @@ const chat_contact = createSlice({
                 }
                 return item
             })
+        },
+        //
+        update_last_message(state, { payload }) {
+            state.data = state.data.map(item => {
+                if (item?.chat_id == payload.current_user.chat_id) {
+                    return {
+                        ...item,
+                        last_chat: payload?.chat
+                    }
+                }
+                return item
+            })
         }
     }
 })
 
 const chatContactSlice = chat_contact.reducer
-export const { udpate_contact_list, add_new_contact, clear_chat_message } = chat_contact.actions
+export const { udpate_contact_list, add_new_contact, clear_chat_message, update_last_message } = chat_contact.actions
 export default chatContactSlice

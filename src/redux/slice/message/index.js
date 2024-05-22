@@ -53,11 +53,15 @@ const chat = createSlice({
             state.data = new_data
             return state
         },
-        
+
+        delete_message(state, { payload }) {
+            state.data = state.data.filter((item, index) => !payload.includes(index));
+        }
+
     }
 })
 
 const chatSlice = chat.reducer
 export default chatSlice
 
-export const { add_new_message } = chat.actions
+export const { add_new_message, delete_message } = chat.actions

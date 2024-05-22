@@ -3,7 +3,7 @@ const initialState = {
     _id: '',
     last_seen: "",
     profile: '',
-    lastMsg: "",
+    last_chat: "",
     notification: '',
     status: false,
     about: "",
@@ -25,10 +25,13 @@ const CurrentUser = createSlice({
                 ...action.payload,
                 status: true
             };
+        },
+        update_last_chat(state, { payload }) {
+            state.last_chat = payload
         }
     }
+
 })
 const current_user = CurrentUser.reducer
-const { handalCurrentUser } = CurrentUser.actions
-export { handalCurrentUser }
+export const { handalCurrentUser, update_last_chat } = CurrentUser.actions
 export default current_user

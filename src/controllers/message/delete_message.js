@@ -1,7 +1,7 @@
 import endpoint from "@/api_endpoint"
 import axios from "axios"
 
-export const _delete_messages = async (payload, token) => {
+export const _delete_messages_controller = async (payload, token) => {
     try {
         const headers = {
             "x-auth-tokens": token

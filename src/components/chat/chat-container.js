@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { BsPlusLg, BsFileEarmarkPdf } from 'react-icons/bs';
 import { IoVideocamOutline } from 'react-icons/io5';
 import { IoIosMusicalNotes } from 'react-icons/io';
@@ -14,6 +14,11 @@ import TextMessage from './msg/text';
 import Cookies from 'js-cookie';
 import { _scrollToEndSmoothly } from '@/controllers/comman/scroll_to_end';
 import { udpate_contact_list } from '@/redux/slice/chat';
+import ChatMsgContextMenu from './contaxt_menu/chat/chat_message';
+const mouseInit = {
+    x: 0,
+    y: 0
+}
 const ChatContainer = ({ mainRef }) => {
     // gloable state 
     const current_user = useSelector(state => state.current_user) // current chat user
@@ -24,10 +29,12 @@ const ChatContainer = ({ mainRef }) => {
     // local state 
     const [previousHeight, setPreviousHeight] = useState(0) // chat scroll height
     const [paddingBottom, setPaddingBottom] = useState(60)
+    const [contextData, setContextData] = useState({})
     const [isProfile, setIsProfile] = useState(false) // right side user information
     const [showFile, setShowFile] = useState(false) // styled components
+    const [mouse, setMouse] = useState(mouseInit) // mouse position
     const [textMSG, setTextMSG] = useState('') // store text message
-
+    const [isContext, setIsContext] = useState(false)
     // References 
     const chatOperationRef = useRef(null);
     const inputRef = useRef(null); // input box reference
@@ -92,6 +99,29 @@ const ChatContainer = ({ mainRef }) => {
         }
     }
 
+    const handleContextMenu = (event, payload) => {
+        event.preventDefault()
+        setContextData(payload)
+        setMouse({
+            x: event.pageX,
+            y: event.pageY
+        })
+        setIsContext(false)
+        setTimeout(() => {
+            setIsContext(true)
+        }, 100)
+    }
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            window.addEventListener('click', () => {
+                setTimeout(() => {
+                    setIsContext(false)
+                }, 100)
+            })
+        }
+    })
+
     return (
         <div className={`${isProfile ? 'active' : ''} chat-container`}>
             <div className="chat_area">
@@ -102,9 +132,10 @@ const ChatContainer = ({ mainRef }) => {
                             <div className="chat_inner_section" ref={mainRef} style={{ scrollBehavior: 'smooth' }} onScroll={handalScroll}>
                                 {
                                     chat?.data?.map((it_chat, key) => {
-                                        return <TextMessage it_chat={it_chat} key={key} />
+                                        return <TextMessage it_chat={it_chat} key={key} handleContextMenu={handleContextMenu} keys={key} />
                                     })
                                 }
+                                {isContext ? <ChatMsgContextMenu mouse={mouse} payload={contextData} /> : <></>}
                             </div>
                         </div>
                     </div>

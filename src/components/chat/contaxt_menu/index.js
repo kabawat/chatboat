@@ -1,14 +1,14 @@
+import { clear_chat_message, get_contact_list } from '@/redux/slice/chat'
+import { _delete_messages_controller } from '@/controllers/message/delete_message'
+import { _delete_contact_chat } from '@/controllers/chat/delete_chat'
+import { get_chat_message } from '@/redux/slice/message'
+import { useDispatch, useSelector } from 'react-redux'
+import { handalCurrentUser } from '@/redux/slice/user'
 import { RiDeleteBinLine } from 'react-icons/ri'
 import { AiOutlineClear } from 'react-icons/ai'
 import { BsPin } from 'react-icons/bs'
-import React from 'react'
 import Cookies from 'js-cookie'
-import { clear_chat_message, get_contact_list } from '@/redux/slice/chat'
-import { useDispatch, useSelector } from 'react-redux'
-import { handalCurrentUser } from '@/redux/slice/user'
-import { _delete_contact_chat } from '@/controllers/chat/delete_chat'
-import { _delete_messages } from '@/controllers/message/delete_message'
-import { get_chat_message } from '@/redux/slice/message'
+import React from 'react'
 
 const ContaxtMenu = ({ data, mouse }) => {
     const current_user = useSelector(state => state.current_user)
@@ -29,7 +29,7 @@ const ContaxtMenu = ({ data, mouse }) => {
 
     // clear message 
     const handleClearMessage = async () => {
-        const res = await _delete_messages(payload, token)
+        const res = await _delete_messages_controller(payload, token)
         dispatch(clear_chat_message(data))
         if (current_user?.chat_id == payload?.chat_id) {
             dispatch(get_chat_message({ token, chat_id: current_user?.chat_id, page: 1, clean: true }))
