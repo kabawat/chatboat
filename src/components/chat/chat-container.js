@@ -15,6 +15,7 @@ import Cookies from 'js-cookie';
 import { _scrollToEndSmoothly } from '@/controllers/comman/scroll_to_end';
 import { udpate_contact_list } from '@/redux/slice/chat';
 import ChatMsgContextMenu from './contaxt_menu/chat/chat_message';
+import Image from 'next/image';
 const mouseInit = {
     x: 0,
     y: 0
@@ -69,14 +70,16 @@ const ChatContainer = ({ mainRef }) => {
             sender: profile?.data?._id,
             chat_id: current_user?.chat_id
         }
-        dispatch(add_new_message({ ...data, createdAt: new Date() }))
-        socket.emit('send text', data)
+        if (textMSG) {
+            dispatch(add_new_message({ ...data, createdAt: new Date() }))
+            socket.emit('send text', data)
 
-        dispatch(udpate_contact_list(data)) // update last seen message 
-        setTextMSG("")
-        setTimeout(() => {
-            _scrollToEndSmoothly(mainRef)
-        }, 100)
+            dispatch(udpate_contact_list(data)) // update last seen message 
+            setTextMSG("")
+            setTimeout(() => {
+                _scrollToEndSmoothly(mainRef)
+            }, 100)
+        }
     }
 
 
@@ -134,6 +137,19 @@ const ChatContainer = ({ mainRef }) => {
                                     chat?.data?.map((it_chat, key) => {
                                         return <TextMessage it_chat={it_chat} key={key} handleContextMenu={handleContextMenu} keys={key} />
                                     })
+                                }
+                                {
+                                    !chat?.data?.length ? <>
+                                        <div className="no_chat_container">
+                                            <div className="p-3 d-flex flex-column align-items-center">
+                                                <Image width={300} height={300} src="/assets/no-chat.png" />
+                                                <h3 className='text-center'>let's start chatting!</h3>
+                                                <p className='text-center'>
+                                                    How was starting your first chat with your friends
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </> : <></>
                                 }
                                 {isContext ? <ChatMsgContextMenu mouse={mouse} payload={contextData} /> : <></>}
                             </div>
