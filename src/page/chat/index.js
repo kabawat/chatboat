@@ -15,6 +15,9 @@ import ContaxtMenu from '@/components/chat/contaxt_menu';
 import { _mark_message_as_read } from '@/controllers/message/mark_as_read';
 import { add_new_message, get_chat_message } from '@/redux/slice/message';
 import { get_contact_list, udpate_contact_list } from '@/redux/slice/chat';
+import { FaArrowRightLong } from "react-icons/fa6";
+import Image from 'next/image';
+import { get_userList } from '@/redux/slice/user/userList';
 const chatList = [
     {
         _id: '093803845',
@@ -68,7 +71,9 @@ const ChatPage = () => {
     const [contextData, setContextData] = useState({})
     const [onlineUser, setOnlineUser] = useState(null)
     const [isContext, setIsContext] = useState(false)
+    const [getStart, setGetStart] = useState(false)
     const [mouse, setMouse] = useState(mousePos)
+
     const dispatch = useDispatch()
     const mainRef = useRef(null);
 
@@ -158,6 +163,10 @@ const ChatPage = () => {
         }, 100)
     }
 
+    const getStartWithNewChat = async () => {
+        await dispatch(get_userList({ token })); // Get the user list from the API
+        setGetStart(true); // Show the modal
+    }
     return (
         <div className={`${theme === 'dark' ? 'dark_mode' : ''} chat_containner`}>
             {onlineUser ? <div className='online_user'> {onlineUser}</div> : <></>}
@@ -186,7 +195,7 @@ const ChatPage = () => {
                             <div className="search py-2">
                                 {
                                     profile?.status ? <>
-                                        <Search />
+                                        <Search getStart={getStart} setGetStart={setGetStart} />
                                     </> : <SearchSkeleton />
                                 }
                             </div>
@@ -220,6 +229,21 @@ const ChatPage = () => {
                                             <ContactListSkeleton />
                                         </div>;
                                     })
+                                }
+                                {
+                                    contacts?.status && !contacts?.data?.length ? <div className='no_chat_container'>
+                                        <div className="d-flex flex-column">
+                                            <Image src="/assets/no-contact.svg" width={300} height={200} />
+                                            <div className="avatar_heading text-center py-2 mt-2">
+                                                <b>No Chat Yet</b>
+                                            </div   >
+                                            <div className="avatar_title text-center">Zero chats, zero fun! <br /> Pick someone and get chatting!</div>
+                                            <div className="py-1 d-flex justify-content-center">
+                                                <button className='btn text-primary' onClick={getStartWithNewChat}>Get Start <FaArrowRightLong /></button>
+                                            </div>
+                                        </div>
+                                    </div> : <>
+                                    </>
                                 }
                             </div>
                             {isContext ? <ContaxtMenu data={contextData} mouse={mouse} /> : <></>}

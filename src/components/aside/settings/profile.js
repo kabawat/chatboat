@@ -7,10 +7,8 @@ import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 const Profile = () => {
     const profile = useSelector(state => state.profile.data)
-    console.log(profile)
     const router = useRouter()
     const handleLogout = () => {
-        console.log('helo')
         Cookies.remove('_x_a_t')
         router.push('/login')
         setTimeout(() => {

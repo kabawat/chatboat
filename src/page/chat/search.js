@@ -7,41 +7,39 @@ import { handalCurrentUser } from '@/redux/slice/user';
 import { get_userList } from '@/redux/slice/user/userList';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Modal } from 'react-bootstrap'
 import { IoSearchOutline } from "react-icons/io5";
 import { RiUserAddLine } from "react-icons/ri";
 import { useDispatch, useSelector } from 'react-redux';
-const Search = () => {
+const Search = ({ getStart, setGetStart }) => {
     const contacts = useSelector(state => state.contact); // Get the contacts from the Redux store
     const user = useSelector(state => state.user_list); // Get the user list from the Redux store
-    const [searchValue, setSeachValue] = useState(''); // Set up a state variable for the search value
-    const [show, setShow] = useState(false); // Set up a state variable for showing/hiding the modal
+    const [searchValue, setSeachValue] = useState(''); // Set up a state variable for the search value // Set up a state variable for showing/hiding the modal
     const token = Cookies.get('_x_a_t'); // Get the token from the cookies
     const dispatch = useDispatch(); // Get the dispatch function from Redux
 
     // Handle change in the search input
     const handalChange = ({ target }) => {
-        setShow(true); // Show the modal
+        setGetStart(true); // Show the modal
         const { value } = target; // Get the value from the target
         setSeachValue(value); // Set the search value state variable
-    }   
+    }
 
     // Handle close modal
     const handalCloseModal = () => {
-        setShow(false); // Hide the modal
+        setGetStart(false); // Hide the modal
         setSeachValue(''); // Clear the search value state variable
     }
 
     // Handle show user modal
     const handalShowUserModal = async () => {
         await dispatch(get_userList({ token })); // Get the user list from the API
-        setShow(true); // Show the modal
+        setGetStart(true); // Show the modal
     }
-
     // Handle select user
     const handalSelectUser = async (payload) => {
-        setShow(false); // Hide the modal
+        setGetStart(false); // Hide the modal
         try {
             const data = { contact: payload?._id }; // Set up the data object with the contact ID
             const res = await _add_new_chat(data, token); // Add a new chat with the selected user
@@ -79,8 +77,7 @@ const Search = () => {
                     <RiUserAddLine />
                 </button>
             </div>
-
-            <Modal show={show} onHide={handalCloseModal}>
+            <Modal show={getStart} onHide={handalCloseModal}>
                 <div className="seach_list">
                     <div className="search_outer">
                         <div className="searchbar d-flex">
