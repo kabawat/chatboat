@@ -14,6 +14,7 @@ import { useState } from 'react'
 import General from './settings/General';
 import Personalization from './settings/personalization';
 import Avatar from '../comman/Avatar';
+import Profile from './settings/profile';
 const navigateData = [
     {
         link: '/chat',
@@ -61,7 +62,7 @@ const settingList = [
     {
         icon: <BiUser />,
         title: 'Profile',
-        components: <>6</>
+        components: <Profile />
     },
 ]
 const Navigate = () => {
