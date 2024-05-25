@@ -106,11 +106,22 @@ const ChatContainer = ({ mainRef }) => {
     const handleContextMenu = (event, payload) => {
         event.preventDefault()
         setContextData(payload)
-        setMouse({
-            x: event.pageX,
-            y: event.pageY
-        })
+
+        // Get the x and y coordinates of the mouse pointer from the event object
+        let x = event.pageX
+        let y = event.pageY
+
+        // Adjust the x and y coordinates if the context menu would appear outside the window
+        if (event.pageX + 171 > window.innerWidth) {
+            x = event.pageX - 171
+        }
+        if (event.pageY + 200 > window.innerHeight) {
+            y = event.pageY - 200
+        }
+        setMouse({ x, y })
+        //if show Contact menu then Hide the context menu temporarily
         setIsContext(false)
+        // Show the context menu after a 100ms delay
         setTimeout(() => {
             setIsContext(true)
         }, 100)
