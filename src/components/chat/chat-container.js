@@ -28,6 +28,7 @@ const ChatContainer = ({ mainRef }) => {
     const chat = useSelector(state => state.chat) // current chat
 
     // local state 
+    const [clipBoardReact, setClipBoardReact] = useState(null) // message reaction
     const [previousHeight, setPreviousHeight] = useState(0) // chat scroll height
     const [paddingBottom, setPaddingBottom] = useState(60)
     const [contextData, setContextData] = useState({})
@@ -135,7 +136,7 @@ const ChatContainer = ({ mainRef }) => {
                             <div className="chat_inner_section" ref={mainRef} style={{ scrollBehavior: 'smooth' }} onScroll={handalScroll}>
                                 {
                                     chat?.data?.map((it_chat, key) => {
-                                        return <TextMessage it_chat={it_chat} key={key} handleContextMenu={handleContextMenu} keys={key} />
+                                        return <TextMessage it_chat={it_chat} key={key} handleContextMenu={handleContextMenu} keys={key} clipBoardReact={clipBoardReact} />
                                     })
                                 }
                                 {
@@ -151,7 +152,7 @@ const ChatContainer = ({ mainRef }) => {
                                         </div>
                                     </> : <></>
                                 }
-                                {isContext ? <ChatMsgContextMenu mouse={mouse} payload={contextData} /> : <></>}
+                                {isContext ? <ChatMsgContextMenu mouse={mouse} payload={contextData} setClipBoardReact={setClipBoardReact} /> : <></>}
                             </div>
                         </div>
                     </div>

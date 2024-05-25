@@ -11,7 +11,7 @@ import { delete_message } from '@/redux/slice/message';
 import { clear_chat_message, update_last_message } from '@/redux/slice/chat';
 import { update_last_chat } from '@/redux/slice/user';
 
-const ChatMsgContextMenu = ({ mouse, payload }) => {
+const ChatMsgContextMenu = ({ mouse, payload, setClipBoardReact }) => {
     const current_user = useSelector(state => state.current_user)
     const chat = useSelector(state => state.chat)
     const token = Cookies.get('_x_a_t')
@@ -33,6 +33,17 @@ const ChatMsgContextMenu = ({ mouse, payload }) => {
             }
         }
     }
+
+    const handleCopyMessage = async () => {
+        await navigator.clipboard.writeText(payload.text)
+        setClipBoardReact({
+            id: payload?.id,
+            msg: 'copied'
+        })
+        setTimeout(() => {
+            setClipBoardReact(null)
+        }, 1200)
+    }
     return (
         <div className="contact_context_menu" style={{ '--left': `${mouse.x}px`, '--top': `${mouse.y}px` }}>
             <div className="contact_menu_inner">
@@ -41,7 +52,7 @@ const ChatMsgContextMenu = ({ mouse, payload }) => {
                 </button>
             </div>
             <div className="contact_menu_inner">
-                <button >
+                <button onClick={handleCopyMessage}>
                     <MdOutlineContentCopy /> <span>Copy</span>
                 </button>
             </div>

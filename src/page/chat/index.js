@@ -68,7 +68,7 @@ const ChatPage = () => {
     const profile = useSelector(state => state.profile)
     const theme = useSelector(state => state.theme)
 
-    const [myContact, setMyContact] = useState(contacts?.data)
+    const [myContact, setMyContact] = useState([])
     const [contextData, setContextData] = useState({})
     const [onlineUser, setOnlineUser] = useState(null)
     const [isContext, setIsContext] = useState(false)
@@ -125,6 +125,7 @@ const ChatPage = () => {
 
     // received message handal 
     useEffect(() => {
+        setMyContact(contacts?.data)
         const handalReceivedMessage = (data) => {
             const isExits = contacts?.data?.some(item => item?.chat_id === data?.chat_id)
             if (!isExits) {

@@ -2,7 +2,7 @@ import Avatar from '@/components/comman/Avatar';
 import React, { useRef, useState } from 'react'
 import { useSelector } from 'react-redux';
 
-const TextMessage = ({ it_chat, handleContextMenu, keys }) => {
+const TextMessage = ({ it_chat, handleContextMenu, keys, clipBoardReact }) => {
     // universal state 
     const current_user = useSelector(state => state.current_user)
     const profile = useSelector(state => state.profile)
@@ -29,10 +29,6 @@ const TextMessage = ({ it_chat, handleContextMenu, keys }) => {
     } else {
         return (
             <div className="msg right-msg">
-                <div className="msg-img">
-                    <Avatar alt="m" src="/static/images/avatar/1.jpg" size={45} />
-                </div>
-
                 <div className="msg-bubble" onContextMenu={(e) => handleContextMenu(e, { ...it_chat, id: keys })}>
                     <div className="msg-info">
                         <div className="msg-info-name">{`${profile?.data?.firstName} ${profile?.data?.lastName}`}</div>
@@ -43,6 +39,7 @@ const TextMessage = ({ it_chat, handleContextMenu, keys }) => {
                         {it_chat?.text}
                     </div>
                 </div>
+                {clipBoardReact != null && clipBoardReact?.id == keys ? <div className="ClipBoard">{clipBoardReact?.msg}</div> : <></>}
             </div>
         )
     }
