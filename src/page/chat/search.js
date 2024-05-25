@@ -12,10 +12,11 @@ import { Modal } from 'react-bootstrap'
 import { IoSearchOutline } from "react-icons/io5";
 import { RiUserAddLine } from "react-icons/ri";
 import { useDispatch, useSelector } from 'react-redux';
-const Search = ({ getStart, setGetStart }) => {
+const Search = ({ getStart, setGetStart, setMyContact }) => {
     const contacts = useSelector(state => state.contact); // Get the contacts from the Redux store
     const user = useSelector(state => state.user_list); // Get the user list from the Redux store
-    const [searchValue, setSeachValue] = useState(''); // Set up a state variable for the search value // Set up a state variable for showing/hiding the modal
+    const [searchLocal, setSearchLocal] = useState("")
+    const [searchValue, setSeachValue] = useState('');
     const token = Cookies.get('_x_a_t'); // Get the token from the cookies
     const dispatch = useDispatch(); // Get the dispatch function from Redux
 
@@ -62,6 +63,27 @@ const Search = ({ getStart, setGetStart }) => {
         }
     }
 
+    function searchUsers(searchTerm) {
+        return
+    }
+
+    const handleSearchMyContact = ({ target }) => {
+        const searchTerm = target.value
+        setSearchLocal(searchTerm)
+
+        const newContacts = contacts.data.filter(user => {
+            const { firstName, lastName, email } = user;
+            const term = searchTerm.toLowerCase();
+
+            return (
+                firstName.toLowerCase().includes(term) ||
+                lastName.toLowerCase().includes(term) ||
+                email.toLowerCase().includes(term)
+            );
+        });
+        setMyContact(newContacts)
+    }
+
     return (
         <div className='postion-relative'>
             <div className="d-flex align-items-center">
@@ -70,7 +92,7 @@ const Search = ({ getStart, setGetStart }) => {
                         <IoSearchOutline />
                     </div>
                     <div className="search_field">
-                        <input type="text" placeholder="Search..." />
+                        <input type="text" placeholder="Search..." value={searchLocal} onChange={handleSearchMyContact} />
                     </div>
                 </div>
                 <button className='add_user' onClick={handalShowUserModal}>

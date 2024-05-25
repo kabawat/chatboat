@@ -68,6 +68,7 @@ const ChatPage = () => {
     const profile = useSelector(state => state.profile)
     const theme = useSelector(state => state.theme)
 
+    const [myContact, setMyContact] = useState(contacts?.data)
     const [contextData, setContextData] = useState({})
     const [onlineUser, setOnlineUser] = useState(null)
     const [isContext, setIsContext] = useState(false)
@@ -195,7 +196,7 @@ const ChatPage = () => {
                             <div className="search py-2">
                                 {
                                     profile?.status ? <>
-                                        <Search getStart={getStart} setGetStart={setGetStart} />
+                                        <Search getStart={getStart} setGetStart={setGetStart} setMyContact={setMyContact} />
                                     </> : <SearchSkeleton />
                                 }
                             </div>
@@ -205,7 +206,7 @@ const ChatPage = () => {
                         <div className="side_main">
                             <div className="chatList_main_container">
                                 {
-                                    contacts?.status ? contacts?.data?.map((currentChat, key) => {
+                                    contacts?.status ? myContact?.map((currentChat, key) => {
                                         return (
                                             <div
                                                 className={`chat_card d-flex align-items-center ${current_user?.chat_id == currentChat?.chat_id ? 'active' : ''}`}
@@ -231,7 +232,7 @@ const ChatPage = () => {
                                     })
                                 }
                                 {
-                                    contacts?.status && !contacts?.data?.length ? <div className='no_chat_container'>
+                                    contacts?.status && !myContact?.length ? <div className='no_chat_container'>
                                         <div className="d-flex flex-column">
                                             <Image src="/assets/no-contact.svg" width={300} height={200} />
                                             <div className="avatar_heading text-center py-2 mt-2">
