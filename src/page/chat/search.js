@@ -20,13 +20,21 @@ const Search = ({ getStart, setGetStart, setMyContact }) => {
     const token = Cookies.get('_x_a_t'); // Get the token from the cookies
     const dispatch = useDispatch(); // Get the dispatch function from Redux
 
-    // Handle change in the search input
+    // user search 
     const handalChange = ({ target }) => {
-        setGetStart(true); // Show the modal
         const { value } = target; // Get the value from the target
         setSeachValue(value); // Set the search value state variable
     }
+    useEffect(() => {
+        const timerId = setTimeout(() => {
+            dispatch(get_userList({ token: token, query: searchValue }));
+        }, 500);
+        return () => {
+            clearTimeout(timerId);
+        };
+    }, [searchValue, token, dispatch]);
 
+    
     // Handle close modal
     const handalCloseModal = () => {
         setGetStart(false); // Hide the modal
@@ -86,6 +94,7 @@ const Search = ({ getStart, setGetStart, setMyContact }) => {
 
     return (
         <div className='postion-relative'>
+            {/* contact list search  */}
             <div className="d-flex align-items-center">
                 <div className="searchbar d-flex">
                     <div className="icon d-flex align-items-center justify-content-center">
@@ -99,6 +108,8 @@ const Search = ({ getStart, setGetStart, setMyContact }) => {
                     <RiUserAddLine />
                 </button>
             </div>
+
+            {/* user search  */}
             <Modal show={getStart} onHide={handalCloseModal}>
                 <div className="seach_list">
                     <div className="search_outer">
