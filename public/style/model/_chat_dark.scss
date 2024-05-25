@@ -6,9 +6,11 @@
 
 .chat_containner.dark_mode {
     background: #202124;
-    .add_user{
+
+    .add_user {
         color: #fff;
     }
+
     #aside {
         .aside {
             background: #222429f7;
@@ -151,7 +153,8 @@
 
     #w-input-text {
         color: #fff;
-        &::-webkit-scrollbar-thumb{
+
+        &::-webkit-scrollbar-thumb {
             border-color: #33464f;
         }
     }
@@ -173,7 +176,8 @@
             .profile_heading {
                 color: #ffff;
             }
-            p{
+
+            p {
                 color: #fff9f99c;
             }
         }
@@ -199,5 +203,13 @@
         .msg-bubble {
             background: #33464f
         }
+    }
+
+    .ClipBoard {
+        color: #fff
+    }
+
+    .default_message {
+        color: #fff;
     }
 }

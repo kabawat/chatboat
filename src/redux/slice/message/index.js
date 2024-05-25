@@ -16,8 +16,8 @@ const chat = createSlice({
     name: "chat",
     initialState: {
         loading: false,
+        status: false,
         error: null,
-        status: true,
         data: [],
     },
     extraReducers: (builder) => {

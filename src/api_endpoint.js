@@ -32,5 +32,8 @@ const endpoint = {
 
     // message
     MESSAGE: `${baseURL}/api/message/`,
+
+    // static 
+    STATIC: `${baseURL}/api/static/`,
 }
 export default endpoint

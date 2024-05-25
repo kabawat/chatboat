@@ -756,8 +756,6 @@ main {
     align-self: self-start;
     border-radius: 5px;
     margin: 4px 10px;
-    /* color: #fff;
-    background: rgba(0, 0, 0, 0.8); */
     font-size: 14px;
     padding: 4px;
     transform: scale(0);
@@ -800,4 +798,10 @@ main {
             transform: scale(0);
         }
     }
+}
+
+.default_message {
+    background: #fff;
+    cursor: pointer;
+    border: 1px solid #ddd;
 }

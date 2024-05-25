@@ -1,27 +1,30 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { FileContainer, SelectButton, SelectFileBox, FileList, FileIcon, Label, Title } from './style';
 import { BsPlusLg, BsFileEarmarkPdf } from 'react-icons/bs';
+import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { IoVideocamOutline } from 'react-icons/io5';
 import { IoIosMusicalNotes } from 'react-icons/io';
 import { BiImages } from 'react-icons/bi';
 import { GrSend } from "react-icons/gr";
-import { FileContainer, SelectButton, SelectFileBox, FileList, FileIcon, Label, Title } from './style';
-import Header from './header';
-import RightSideDrawer from './right-aside';
-import Avatar from '../comman/Avatar';
-import { useDispatch, useSelector } from 'react-redux';
+
 import { add_new_message, get_chat_message } from '@/redux/slice/message';
-import TextMessage from './msg/text';
-import Cookies from 'js-cookie';
 import { _scrollToEndSmoothly } from '@/controllers/comman/scroll_to_end';
 import { udpate_contact_list } from '@/redux/slice/chat';
+
 import ChatMsgContextMenu from './contaxt_menu/chat/chat_message';
+import RightSideDrawer from './right-aside';
+import Avatar from '../comman/Avatar';
+import TextMessage from './msg/text';
+import Cookies from 'js-cookie';
 import Image from 'next/image';
+import Header from './header';
 const mouseInit = {
     x: 0,
     y: 0
 }
 const ChatContainer = ({ mainRef }) => {
     // gloable state 
+    const defaultMessage = useSelector(state => state.startMsg)
     const current_user = useSelector(state => state.current_user) // current chat user
     const { socket } = useSelector(state => state.socket) // socket information
     const profile = useSelector(state => state.profile) // logedin user information
@@ -127,6 +130,12 @@ const ChatContainer = ({ mainRef }) => {
         }, 100)
     }
 
+    const handleSendDefaultMsg = (msg) => {
+        inputRef.current.innerHTML = msg
+        setFocus()
+        setTextMSG(msg)
+    }
+
     useEffect(() => {
         if (typeof window !== 'undefined') {
             window.addEventListener('click', () => {
@@ -159,6 +168,14 @@ const ChatContainer = ({ mainRef }) => {
                                                 <p className='text-center'>
                                                     How was starting your first chat with your friends
                                                 </p>
+                                                <div className="d-flex">
+                                                    <span className='rounded px-2 py-1 m-2 default_message' onClick={() => handleSendDefaultMsg(`hello! ${current_user?.firstName}`)}>hello! {current_user?.firstName}</span>
+                                                    {
+                                                        defaultMessage?.data?.map((item, key) => {
+                                                            return <span key={key} className='rounded px-2 py-1 m-2 default_message' onClick={() => handleSendDefaultMsg(item)}>{item}</span>
+                                                        })
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
                                     </> : <></>
@@ -236,7 +253,7 @@ const ChatContainer = ({ mainRef }) => {
 
             {/* right side  */}
             <RightSideDrawer />
-        </div>
+        </div >
     );
 };
 

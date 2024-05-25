@@ -1,23 +1,30 @@
 "use client"
-import Navigate from '@/components/aside/navigate'
-import React, { useEffect, useRef, useState } from 'react'
-import NoChat from '@/components/chat/no-chat';
-import ChatContainer from '@/components/chat/chat-container';
+import Cookies from 'js-cookie';
+import Image from 'next/image';
+
+import { useEffect, useRef, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { handalCurrentUser } from '@/redux/slice/user';
-import Avatar from '@/components/comman/Avatar';
+import { FaArrowRightLong } from "react-icons/fa6";
+
+
 import ContactListSkeleton from '@/components/skeleton/contact_list';
 import SearchSkeleton from '@/components/skeleton/seach_bar';
-import Search from './search';
-import Cookies from 'js-cookie';
-import { _scrollToEnd, _scrollToEndSmoothly } from '@/controllers/comman/scroll_to_end';
+import ChatContainer from '@/components/chat/chat-container';
 import ContaxtMenu from '@/components/chat/contaxt_menu';
-import { _mark_message_as_read } from '@/controllers/message/mark_as_read';
-import { add_new_message, get_chat_message } from '@/redux/slice/message';
+import Navigate from '@/components/aside/navigate'
+import NoChat from '@/components/chat/no-chat';
+import Avatar from '@/components/comman/Avatar';
+
 import { get_contact_list, udpate_contact_list } from '@/redux/slice/chat';
-import { FaArrowRightLong } from "react-icons/fa6";
-import Image from 'next/image';
+import { _scrollToEnd, _scrollToEndSmoothly } from '@/controllers/comman/scroll_to_end';
+import { add_new_message, get_chat_message } from '@/redux/slice/message';
+import { _mark_message_as_read } from '@/controllers/message/mark_as_read';
+import { handalCurrentUser } from '@/redux/slice/user';
+import { getStartMessage } from '@/redux/slice/static';
 import { get_userList } from '@/redux/slice/user/userList';
+
+import Search from './search';
+
 const chatList = [
     {
         _id: '093803845',
@@ -68,10 +75,10 @@ const ChatPage = () => {
     const profile = useSelector(state => state.profile)
     const theme = useSelector(state => state.theme)
 
-    const [myContact, setMyContact] = useState([])
     const [contextData, setContextData] = useState({})
     const [onlineUser, setOnlineUser] = useState(null)
     const [isContext, setIsContext] = useState(false)
+    const [myContact, setMyContact] = useState([])
     const [getStart, setGetStart] = useState(false)
     const [mouse, setMouse] = useState(mousePos)
 
@@ -87,7 +94,11 @@ const ChatPage = () => {
             userID: profile?.data?._id
         }
         await _mark_message_as_read(payload, token) // make read message
-        await dispatch(get_chat_message({ token, chat_id: data?.chat_id, page: 1, clean: true })) // get particular chat
+        await dispatch(get_chat_message({ token, chat_id: data?.chat_id, page: 1, clean: true })).then(item => {
+            if (!item.payload?.data?.totalMessages) {
+                dispatch(getStartMessage({ token }))
+            }
+        })
         await dispatch(handalCurrentUser(data)) // set current user 
         _scrollToEnd(mainRef)// scroll bottom
     }
