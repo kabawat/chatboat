@@ -1,17 +1,21 @@
-import endpoint from '@/api_endpoint';
-import Avatar from '@/components/comman/Avatar';
-import { _add_new_chat } from '@/controllers/chat/add_new_chat';
-import { add_new_contact, get_contact_list, udpate_contact_list } from '@/redux/slice/chat';
-import { get_chat_message } from '@/redux/slice/message';
-import { handalCurrentUser } from '@/redux/slice/user';
-import { get_userList } from '@/redux/slice/user/userList';
-import axios from 'axios';
-import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react'
-import { Modal } from 'react-bootstrap'
+import axios from 'axios';
+
+import { useDispatch, useSelector } from 'react-redux';
 import { IoSearchOutline } from "react-icons/io5";
 import { RiUserAddLine } from "react-icons/ri";
-import { useDispatch, useSelector } from 'react-redux';
+import { Modal } from 'react-bootstrap'
+
+import { add_new_contact, get_contact_list, udpate_contact_list } from '@/redux/slice/chat';
+import { handalCurrentUser } from '@/redux/slice/user';
+import { get_chat_message } from '@/redux/slice/message';
+import { _add_new_chat } from '@/controllers/chat/add_new_chat';
+import { get_userList } from '@/redux/slice/user/userList';
+
+import endpoint from '@/api_endpoint';
+import Cookies from 'js-cookie';
+import Avatar from '@/components/comman/Avatar';
+
 const Search = ({ getStart, setGetStart, setMyContact }) => {
     const contacts = useSelector(state => state.contact); // Get the contacts from the Redux store
     const user = useSelector(state => state.user_list); // Get the user list from the Redux store
@@ -34,7 +38,7 @@ const Search = ({ getStart, setGetStart, setMyContact }) => {
         };
     }, [searchValue, token, dispatch]);
 
-    
+
     // Handle close modal
     const handalCloseModal = () => {
         setGetStart(false); // Hide the modal

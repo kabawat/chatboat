@@ -260,6 +260,7 @@ const ChatPage = () => {
                                 }
                             </div>
                             {isContext ? <ContaxtMenu data={contextData} mouse={mouse} /> : <></>}
+
                         </div>
                     </div>
                 </div>

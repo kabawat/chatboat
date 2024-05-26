@@ -1,17 +1,22 @@
-import { RiDeleteBinLine } from 'react-icons/ri'
-import { TbArrowBackUp, TbArrowForwardUp } from "react-icons/tb";
-import { MdOutlineContentCopy, MdOutlineEmojiEmotions } from "react-icons/md";
-import { HiOutlineStar } from "react-icons/hi";
-import { AiOutlineDelete } from "react-icons/ai";
-import React from 'react'
-import { _delete_messages_controller } from '@/controllers/message/delete_message';
 import Cookies from 'js-cookie';
-import { useDispatch, useSelector } from 'react-redux';
-import { delete_message } from '@/redux/slice/message';
-import { clear_chat_message, update_last_message } from '@/redux/slice/chat';
-import { update_last_chat } from '@/redux/slice/user';
+import React, { useState } from 'react'
 
-const ChatMsgContextMenu = ({ mouse, payload, setClipBoardReact }) => {
+import { MdOutlineContentCopy, MdOutlineEmojiEmotions } from "react-icons/md";
+import { TbArrowBackUp, TbArrowForwardUp } from "react-icons/tb";
+import { useDispatch, useSelector } from 'react-redux';
+import { AiOutlineDelete } from "react-icons/ai";
+import { RiDeleteBinLine } from 'react-icons/ri'
+import { HiOutlineStar } from "react-icons/hi";
+import { Modal } from 'react-bootstrap';
+
+
+import { clear_chat_message, update_last_message } from '@/redux/slice/chat';
+import { _delete_messages_controller } from '@/controllers/message/delete_message';
+import { update_last_chat } from '@/redux/slice/user';
+import { delete_message } from '@/redux/slice/message';
+import Avatar from '@/components/comman/Avatar';
+
+const ChatMsgContextMenu = ({ mouse, payload, setClipBoardReact, handleForwardMsgModal }) => {
     const current_user = useSelector(state => state.current_user)
     const chat = useSelector(state => state.chat)
     const token = Cookies.get('_x_a_t')
@@ -34,6 +39,7 @@ const ChatMsgContextMenu = ({ mouse, payload, setClipBoardReact }) => {
         }
     }
 
+    // copy message functionality 
     const handleCopyMessage = async () => {
         await navigator.clipboard.writeText(payload.text)
         setClipBoardReact({
@@ -44,39 +50,43 @@ const ChatMsgContextMenu = ({ mouse, payload, setClipBoardReact }) => {
             setClipBoardReact(null)
         }, 1200)
     }
+
     return (
-        <div className="contact_context_menu" style={{ '--left': `${mouse.x}px`, '--top': `${mouse.y}px` }}>
-            <div className="contact_menu_inner">
-                <button >
-                    <TbArrowBackUp /> <span>Reply</span>
-                </button>
+        <>
+            <div className="contact_context_menu" style={{ '--left': `${mouse.x}px`, '--top': `${mouse.y}px` }}>
+                <div className="contact_menu_inner">
+                    <button >
+                        <TbArrowBackUp /> <span>Reply</span>
+                    </button>
+                </div>
+                <div className="contact_menu_inner">
+                    <button onClick={handleCopyMessage}>
+                        <MdOutlineContentCopy /> <span>Copy</span>
+                    </button>
+                </div>
+                <div className="contact_menu_inner">
+                    <button >
+                        <MdOutlineEmojiEmotions /> <span>React to message</span>
+                    </button>
+                </div>
+                <div className="contact_menu_inner">
+                    <button onClick={() => handleForwardMsgModal(payload)}>
+                        <TbArrowForwardUp /> <span>Forword</span>
+                    </button>
+                </div>
+                <div className="contact_menu_inner">
+                    <button >
+                        <HiOutlineStar /> <span>Star</span>
+                    </button>
+                </div>
+                <div className="contact_menu_inner">
+                    <button onClick={handleDeleteMessage}>
+                        <AiOutlineDelete /> <span>Delete</span>
+                    </button>
+                </div>
             </div>
-            <div className="contact_menu_inner">
-                <button onClick={handleCopyMessage}>
-                    <MdOutlineContentCopy /> <span>Copy</span>
-                </button>
-            </div>
-            <div className="contact_menu_inner">
-                <button >
-                    <MdOutlineEmojiEmotions /> <span>React to message</span>
-                </button>
-            </div>
-            <div className="contact_menu_inner">
-                <button >
-                    <TbArrowForwardUp /> <span>Forword</span>
-                </button>
-            </div>
-            <div className="contact_menu_inner">
-                <button >
-                    <HiOutlineStar /> <span>Star</span>
-                </button>
-            </div>
-            <div className="contact_menu_inner">
-                <button onClick={handleDeleteMessage}>
-                    <AiOutlineDelete /> <span>Delete</span>
-                </button>
-            </div>
-        </div>
+
+        </>
     )
 }
 
