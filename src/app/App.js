@@ -5,6 +5,9 @@ import { Provider, useDispatch, useSelector } from 'react-redux'
 import store from '@/redux';
 import { changeTheme } from '@/redux/slice/theme';
 import Cookies from 'js-cookie';
+import fetchIPAddress from '@/service/fetchIPAddress';
+import parseUserAgent from '@/service/parseUserAgent';
+import getCurrentLocation from '@/service/getCurrentLocation';
 const App = ({ children }) => {
     return (
         <Provider store={store}>
@@ -21,7 +24,7 @@ function Main({ children }) {
     const { socket } = useSelector(state => state.socket)
     const profile = useSelector(state => state.profile)
     const th = useSelector(state => state.theme)
-    
+
     useEffect(() => {
         function onConnect() {
             if (profile?.status) {

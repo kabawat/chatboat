@@ -9,7 +9,6 @@ const fetchBaseURL = () => {
 }
 const baseURL = fetchBaseURL()
 const endpoint = {
-
     // auth endpoint 
     BASE_URL: baseURL,
     SEND_OTP_ON_EMIAL: `${baseURL}/api/auth/send-otp`,
@@ -35,5 +34,10 @@ const endpoint = {
 
     // static 
     STATIC: `${baseURL}/api/static/`,
+
+    //password 
+    FORGOT_PASSWORD_OTP: `${baseURL}/api/password/send-otp`,
+    VERIFY_OTP: `${baseURL}/api/password/verify-otp`,
+    CHANGE_PASSWORD: `${baseURL}/api/password/change-password`
 }
 export default endpoint

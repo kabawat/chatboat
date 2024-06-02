@@ -45,6 +45,7 @@ export default function LoginPage() {
 
     const handalLogin = async () => {
         const { email, password } = formData
+        setLoader(true)
         try {
             if (email == "" || password == "") {
                 throw new Error('All fields are required, Try again or sign up!')
@@ -64,7 +65,7 @@ export default function LoginPage() {
                 _id: data?._id
             })
             setTimeout(() => {
-                Cookies.set('_x_a_t', res?.data?.authToken)
+                Cookies.set('_x_a_t', res?.data?.authToken, { expires: 30 })
                 router.push('/chat')
             }, 2000)
         } catch (error) {
@@ -74,6 +75,7 @@ export default function LoginPage() {
                 type: 'error',
                 show: true,
             })
+            setLoader(false)
         }
     }
     return (
