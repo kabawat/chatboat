@@ -8,7 +8,7 @@ const RightSideDrawer = () => {
         <div className="user_profile_section">
             <div className="profile_detaile">
                 <div className="profile_avator d-flex justify-content-center">
-                    <Avatar alt={'M'} src={currentUser?.profile} size={160} />
+                    <Avatar alt={'M'} src={currentUser?.picture} size={160} />
                 </div>
                 <div className="text-center profile_heading">
                     {currentUser?.firstName} {currentUser?.lastName}

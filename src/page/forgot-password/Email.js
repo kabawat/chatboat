@@ -75,7 +75,6 @@ export default function SendOtpSection({ setChange }) {
             const res = await _verify_otp({ otp, email }, token)
             if (res?.status) {
                 const tenMinutesFromNow = new Date(new Date().getTime() + 10 * 60 * 1000);
-                console.log("res : ", res)
                 Cookies.set('_x_p_a_t', res.data.access_token, { expires: tenMinutesFromNow })
                 setChange(true)
             } else {

@@ -1,0 +1,45 @@
+.crop_container {
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    padding: 40px 0px;
+    height: 100vh;
+    background: rgba($color: #000000, $alpha: 0.4);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    place-items: center;
+    position: fixed;
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+}
+
+.crop {
+    width: auto;
+    height: 80%;
+    margin: 20px auto;
+    .ReactCrop__child-wrapper {
+        height: 100%;
+    }
+}
+
+.close_btn {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    width: 45px;
+    height: 45px;
+    font-size: 30px;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    color: #fafafa;
+    font-weight: bold;
+    border-radius: 50%;
+    border: 1px solid #fafafa43;
+}
+
+.main_image {
+    max-height: 90% !important;
+    /* max-width: 400px !important; */
+}

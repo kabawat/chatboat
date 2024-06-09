@@ -191,7 +191,7 @@ const ChatPage = () => {
                             {
                                 profile?.status ? <>
                                     <div className="d-flex align-items-center profile_main">
-                                        <Avatar alt={profile?.data?.firstName} src="/" size={50} />
+                                        <Avatar alt={profile?.data?.firstName} src={profile?.data?.picture} size={50} />
                                         <div className='px-2'>
                                             <div className="avatar_heading">
                                                 <b>{profile?.data?.firstName} {profile?.data?.lastName}</b>
@@ -227,7 +227,7 @@ const ChatPage = () => {
                                                 key={key}
                                             >
 
-                                                <Avatar alt={currentChat?.firstName} src="/static/images/avatar/1.jpg" size={40} />
+                                                <Avatar alt={currentChat?.firstName} src={currentChat?.picture || ""} size={40} />
                                                 <div className="textBox">
                                                     <div className="textContent">
                                                         <p className="h1">{currentChat?.firstName} {currentChat?.lastName}</p>

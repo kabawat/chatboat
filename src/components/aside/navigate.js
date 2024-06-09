@@ -15,6 +15,7 @@ import General from './settings/General';
 import Personalization from './settings/personalization';
 import Avatar from '../comman/Avatar';
 import Profile from './settings/profile';
+import { useSelector } from 'react-redux';
 const navigateData = [
     {
         link: '/chat',
@@ -66,6 +67,7 @@ const settingList = [
     },
 ]
 const Navigate = () => {
+    const profile = useSelector(state => state.profile)
     const [currentSetting, setCurrentSetting] = useState(settingList[0])
     const [isSetting, setIsSetting] = useState(false)
     const pathname = usePathname()
@@ -105,7 +107,7 @@ const Navigate = () => {
                     </div>
                 </div>
                 <div className='my-1' style={{ cursor: 'pointer' }} onClick={() => handleSetting(settingList[settingList?.length - 1])}>
-                    <Avatar size={30} alt="Mukesh Singh" src="/avatar/broken-image.pn" />
+                    <Avatar size={30} alt="Mukesh Singh" src={profile?.data?.picture} />
                     {/*   */}
                 </div>
                 {

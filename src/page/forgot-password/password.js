@@ -71,6 +71,8 @@ export default function ChangePassword() {
                     type: 'success',
                     show: true,
                 })
+                Cookies.remove('_x_p_a_t')
+                Cookies.remove('_x_a_t')
                 setTimeout(() => {
                     router.push('/login')
                 }, 1000)

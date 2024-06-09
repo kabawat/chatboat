@@ -1,31 +1,41 @@
+import Cookies from "js-cookie";
+import axios from "axios";
+
+import { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { BsPlusLg } from "react-icons/bs";
+
 import InputTextField from "@/components/form/field";
 import SiderButton from "@/components/button/SiderButton";
-import { PageLoader } from "@/components/loader/pageLoader";
-import { BsPlusLg } from "react-icons/bs";
-import { Typography } from "@mui/material";
-import axios from "axios";
-import { useState } from "react";
 import endpoint from "@/api_endpoint";
-import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+
+import { PageLoader } from "@/components/loader/pageLoader";
+import { Typography } from "@mui/material";
+
+import CropPicture from "./crop_img";
+
 const StepThree = ({ setStep, toastBox }) => {
-    const router = useRouter()
+    const [isCropModal, setIsCropModal] = useState(false)
+    const [preview, setPriview] = useState(null)
     const [loader, setLoader] = useState(false)
     const [file, setFile] = useState()
-    const [preview, setPriview] = useState()
+
+    const previewCanvasRef = useRef(null);
+    const router = useRouter()
+
     const handalChanage = ({ target }) => {
         const { files } = target
         setFile(files[0])
         const url = URL.createObjectURL(files[0]);
         setPriview(url)
+        setIsCropModal(true)
     }
 
-    const handalSubmit = async () => {
+    const handleSubmit = async () => {
         try {
-            setLoader(true)
-            if (!file) throw new Error("Please select a file")
+            const file_res = await canvasToFile(previewCanvasRef)
             let formData = new FormData();
-            formData.append('file', file);
+            formData.append('file', file_res);
             formData.append('is_file', 1);
             const headers = {
                 "x-verification-tokens": Cookies.get('_xvt')
@@ -44,13 +54,31 @@ const StepThree = ({ setStep, toastBox }) => {
             setLoader(false)
         }
     }
+    function canvasToFile(canvasRef) {
+        return new Promise((resolve, reject) => {
+            const canvas = canvasRef.current;
+            canvas.toBlob(blob => {
+                if (!blob) {
+                    reject(new Error('Failed to convert canvas to blob'));
+                    return;
+                }
+                const file = new File([blob], 'generated_image.png', { type: 'image/png' });
+                resolve(file);
+            }, 'image/png');
+        });
+    }
+
     return (
         <>
+            {
+                preview && isCropModal ? <CropPicture preview={preview} previewCanvasRef={previewCanvasRef} setIsCropModal={setIsCropModal} /> : null
+
+            }
             <div component="div" className="text_center form-heading" sx={{ paddingBottom: '10px ' }} > Profile Picture </div>
             <div className="my-3">
                 <form className="d-flex justify-content-center overflow-hidden ">
                     <label htmlFor="file_input" className="drop-container">
-                        {!preview ? <span> <BsPlusLg /></span> : <img src={preview} className="preview" alt="M" />}
+                        {!preview ? <span> <BsPlusLg /></span> : <canvas ref={previewCanvasRef} />}
                         <input type="file" accept="image/*" id="file_input" onChange={handalChanage} />
                     </label>
                 </form>
@@ -59,7 +87,7 @@ const StepThree = ({ setStep, toastBox }) => {
                 </Typography>
             </div>
             <div className="d-flex justify-content-center mt-2">
-                <SiderButton title={"save & finish"} endIcon={<></>} handalClick={handalSubmit} />
+                <SiderButton title={"save & finish"} endIcon={<></>} handalClick={handleSubmit} />
             </div>
 
             {/* loader  */}
