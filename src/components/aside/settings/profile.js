@@ -19,7 +19,7 @@ const Profile = () => {
         <div className='setting_inner_container'>
             <div className="profile_image d-flex justify-content-center">
                 <div>
-                    <Avatar size={100} src={profile?.profilePicture?.secure_url} alt={profile?.firstName} fontSize={10} />
+                    <Avatar size={100} src={profile?.picture} alt={profile?.firstName} fontSize={10} />
                 </div>
             </div>
             <div className='text-center avatar_heading'>

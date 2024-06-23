@@ -12,7 +12,7 @@ const TextMessage = ({ it_chat, handleContextMenu, keys, clipBoardReact }) => {
         return (
             <div className="msg left-msg">
                 <div className="msg-img">
-                    <Avatar alt="m" src="/static/images/avatar/1.jpg" size={45} />
+                    <Avatar alt="m" src={current_user?.picture || "/static/images/avatar/1.jpg"} size={45} />
                 </div>
 
                 <div className="msg-bubble" onContextMenu={(e) => handleContextMenu(e, { ...it_chat, id: keys })}>

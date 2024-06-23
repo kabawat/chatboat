@@ -14,7 +14,7 @@ const Header = ({ setIsProfile }) => {
                         <b> {currentUser?.firstName} {currentUser?.lastName}</b>
                     </div>
                     <div className="avatar_title text-success">
-                        online
+                        {currentUser?.last_seen}
                     </div>
                 </div>
             </div>

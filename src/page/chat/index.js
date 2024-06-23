@@ -136,6 +136,7 @@ const ChatPage = () => {
 
     // received message handal 
     useEffect(() => {
+        // receive message handal 
         setMyContact(contacts?.data)
         const handalReceivedMessage = (data) => {
             const isExits = contacts?.data?.some(item => item?.chat_id === data?.chat_id)
@@ -157,11 +158,31 @@ const ChatPage = () => {
             }
             dispatch(udpate_contact_list(data)) // update last seen message 
         }
+
+        // sender typing 
+        const handleUserTyping = (data) => {
+            const newList = contacts?.data?.map((current) => {
+                if (`${current?._id}` === `${data?.sender}`) {
+                    return {
+                        ...current,
+                        last_seen: 'typing...'
+                    }
+                } else {
+                    return current
+                }
+            })
+            setMyContact(newList)
+            console.log("user is typing", newList)
+        }
+
         socket.on("received text", handalReceivedMessage)
+        socket.on('typing', handleUserTyping)
         return () => {
+            socket.off("typing", handleUserTyping)
             socket.off("received text", handalReceivedMessage)
         };
     }, [current_user, contacts])
+
 
     const handleContextMenu = (event, payload) => {
         setContextData(payload)
@@ -231,7 +252,7 @@ const ChatPage = () => {
                                                 <div className="textBox">
                                                     <div className="textContent">
                                                         <p className="h1">{currentChat?.firstName} {currentChat?.lastName}</p>
-                                                        <span className="span text-success">online</span>
+                                                        <span className="span text-success">{currentChat?.last_seen}</span>
                                                     </div>
                                                     <p className="p">{currentChat?.last_chat?.text ? currentChat?.last_chat?.text : currentChat?.about}</p>
                                                 </div>

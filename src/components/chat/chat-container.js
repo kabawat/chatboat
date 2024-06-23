@@ -61,6 +61,10 @@ const ChatContainer = ({ mainRef }) => {
 
     // input box 
     const setFocus = () => {
+        socket.emit('typing', {
+            receiver: current_user?._id,
+            sender: profile?.data?._id,
+        })
         inputRef.current.focus();
     };
 
