@@ -5,9 +5,9 @@ import { Provider, useDispatch, useSelector } from 'react-redux'
 import store from '@/redux';
 import { changeTheme } from '@/redux/slice/theme';
 import Cookies from 'js-cookie';
-import fetchIPAddress from '@/service/fetchIPAddress';
-import parseUserAgent from '@/service/parseUserAgent';
-import getCurrentLocation from '@/service/getCurrentLocation';
+import fetchIPAddress from '@/utils/fetchIPAddress';
+import parseUserAgent from '@/utils/parseUserAgent';
+import getCurrentLocation from '@/utils/getCurrentLocation';
 const App = ({ children }) => {
     return (
         <Provider store={store}>

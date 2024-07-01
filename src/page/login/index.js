@@ -57,16 +57,10 @@ export default function LoginPage() {
                 type: 'success',
                 show: true,
             })
-            // get loged in user profile 
-            const saved = await dispatch(get_profile({ token: res?.data?.authToken }))
-            const { data } = saved?.payload
-            socket.emit('login', {
-                username: data?.username,
-                _id: data?._id
-            })
             setTimeout(() => {
                 Cookies.set('_x_a_t', res?.data?.authToken, { expires: 30 })
-                router.push('/chat')
+                // router.push('/chat')
+                window.location.href = '/chat'
             }, 2000)
         } catch (error) {
             setToast({

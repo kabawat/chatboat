@@ -1,5 +1,4 @@
 "use client"
-import Cookies from 'js-cookie';
 import Image from 'next/image';
 
 import { useEffect, useRef, useState } from 'react'
@@ -25,44 +24,6 @@ import { get_userList } from '@/redux/slice/user/userList';
 
 import Search from './search';
 
-const chatList = [
-    {
-        _id: '093803845',
-        name: "Mukesh Singh",
-        last_seen: "10 min ago",
-        profile: '',
-        lastMsg: "Xhattmahs is not attacking attacking attacking attacking your base!",
-        notification: '12',
-        about: 'Full Stack Developer'
-    },
-    {
-        _id: '093803846',
-        name: "Narendra Singh",
-        last_seen: "13 min ago",
-        profile: '',
-        lastMsg: "Xhattmahs is not attacking attacking attacking attacking your base!",
-        notification: '78',
-        about: 'React Developer'
-    },
-    {
-        _id: '093803847',
-        name: "Milap Singh",
-        last_seen: "40 min ago",
-        profile: '',
-        lastMsg: "Xhattmahs is not attacking attacking attacking attacking your base!",
-        notification: '100',
-        about: 'Node Developer'
-    },
-    {
-        _id: '093803848',
-        name: "denny jangid",
-        last_seen: "6 min ago",
-        profile: '',
-        lastMsg: "Xhattmahs is not attacking attacking attacking attacking your base!",
-        notification: '90',
-        about: 'MERN Developer'
-    },
-]
 const mousePos = {
     x: 0,
     y: 0
@@ -85,18 +46,16 @@ const ChatPage = () => {
     const dispatch = useDispatch()
     const mainRef = useRef(null);
 
-
-    const token = Cookies.get('_x_a_t')
     // select user from list 
     const handalSelectChat = async (data) => {
         const payload = {
             chat_id: data?.chat_id,
             userID: profile?.data?._id
         }
-        await _mark_message_as_read(payload, token) // make read message
-        await dispatch(get_chat_message({ token, chat_id: data?.chat_id, page: 1, clean: true })).then(item => {
+        await _mark_message_as_read(payload) // make read message
+        await dispatch(get_chat_message({ chat_id: data?.chat_id, page: 1, clean: true })).then(item => {
             if (!item.payload?.data?.totalMessages) {
-                dispatch(getStartMessage({ token }))
+                dispatch(getStartMessage())
             }
         })
         await dispatch(handalCurrentUser(data)) // set current user 
@@ -106,7 +65,7 @@ const ChatPage = () => {
     // get all contact list 
     useEffect(() => {
         if (!contacts?.status && !contacts?.loading) {
-            dispatch(get_contact_list({ token }))
+            dispatch(get_contact_list())
         }
     }, [contacts])
 
@@ -141,7 +100,7 @@ const ChatPage = () => {
         const handalReceivedMessage = (data) => {
             const isExits = contacts?.data?.some(item => item?.chat_id === data?.chat_id)
             if (!isExits) {
-                dispatch(get_contact_list({ token }))
+                dispatch(get_contact_list())
             }
 
             if (`${current_user?.chat_id}` == `${data?.chat_id}`) {
@@ -150,7 +109,7 @@ const ChatPage = () => {
                     userID: profile?.data?._id
                 }
                 // make read message 
-                _mark_message_as_read(payload, token).then((res) => {
+                _mark_message_as_read(payload).then((res) => {
                     dispatch(add_new_message(data))
                 })
 
@@ -198,7 +157,7 @@ const ChatPage = () => {
     }
 
     const getStartWithNewChat = async () => {
-        await dispatch(get_userList({ token })); // Get the user list from the API
+        await dispatch(get_userList({})); // Get the user list from the API
         setGetStart(true); // Show the modal
     }
     return (

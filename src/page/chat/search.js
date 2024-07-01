@@ -21,7 +21,6 @@ const Search = ({ getStart, setGetStart, setMyContact }) => {
     const user = useSelector(state => state.user_list); // Get the user list from the Redux store
     const [searchLocal, setSearchLocal] = useState("")
     const [searchValue, setSeachValue] = useState('');
-    const token = Cookies.get('_x_a_t'); // Get the token from the cookies
     const dispatch = useDispatch(); // Get the dispatch function from Redux
 
     // user search 
@@ -31,12 +30,12 @@ const Search = ({ getStart, setGetStart, setMyContact }) => {
     }
     useEffect(() => {
         const timerId = setTimeout(() => {
-            dispatch(get_userList({ token: token, query: searchValue }));
+            dispatch(get_userList({ query: searchValue }));
         }, 500);
         return () => {
             clearTimeout(timerId);
         };
-    }, [searchValue, token, dispatch]);
+    }, [searchValue, dispatch]);
 
 
     // Handle close modal
@@ -47,7 +46,7 @@ const Search = ({ getStart, setGetStart, setMyContact }) => {
 
     // Handle show user modal
     const handalShowUserModal = async () => {
-        await dispatch(get_userList({ token })); // Get the user list from the API
+        await dispatch(get_userList({})); // Get the user list from the API
         setGetStart(true); // Show the modal
     }
     // Handle select user
@@ -55,12 +54,12 @@ const Search = ({ getStart, setGetStart, setMyContact }) => {
         setGetStart(false); // Hide the modal
         try {
             const data = { contact: payload?._id }; // Set up the data object with the contact ID
-            const res = await _add_new_chat(data, token); // Add a new chat with the selected user
+            const res = await _add_new_chat(data); // Add a new chat with the selected user
             let contact_data = {}; // Set up an empty object for the contact data
 
             // If the contact data is null, get the contact list from the API
             if (res?.contact == null) {
-                await dispatch(get_contact_list({ token })).then(({ payload }) => {
+                await dispatch(get_contact_list()).then(({ payload }) => {
                     contact_data = payload?.data[0];
                 });
             } else {
@@ -68,7 +67,7 @@ const Search = ({ getStart, setGetStart, setMyContact }) => {
             }
 
             // Get the chat messages for the selected user
-            await dispatch(get_chat_message({ token, chat_id: contact_data?.chat_id, page: 1, clean: true }));
+            await dispatch(get_chat_message({ chat_id: contact_data?.chat_id, page: 1, clean: true }));
             await dispatch(handalCurrentUser(res?.contact)); // Set the current user to the selected user
         } catch (error) {
             console.log("error : ", error); // Log any errors

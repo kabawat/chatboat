@@ -56,7 +56,6 @@ const ChatContainer = ({ mainRef }) => {
     const chatOperationRef = useRef(null);
     const inputRef = useRef(null); // input box reference
 
-    const token = Cookies.get('_x_a_t')
     const dispatch = useDispatch()
 
     // input box 
@@ -112,7 +111,7 @@ const ChatContainer = ({ mainRef }) => {
     const handalScroll = () => {
         if (mainRef.current.scrollTop == 0) {
             if (chat?.page <= chat?.totalPages) {
-                dispatch(get_chat_message({ token, chat_id: current_user?.chat_id, page: chat?.page, clean: false })).then(() => {
+                dispatch(get_chat_message({ chat_id: current_user?.chat_id, page: chat?.page, clean: false })).then(() => {
                     scrollToFirstMessage()
                 })
             }
@@ -200,7 +199,7 @@ const ChatContainer = ({ mainRef }) => {
         await dispatch(add_new_message({ ...data, createdAt: new Date() }))
         socket.emit('send text', data)
         await dispatch(udpate_contact_list(data))
-        await dispatch(get_chat_message({ token, chat_id: payload?.chat_id, page: 1, clean: true }))
+        await dispatch(get_chat_message({ chat_id: payload?.chat_id, page: 1, clean: true }))
         await dispatch(handalCurrentUser(payload))
         setTimeout(() => {
             _scrollToEndSmoothly(mainRef)

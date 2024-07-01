@@ -1,15 +1,12 @@
 import endpoint from "@/api_endpoint";
-import axios from "axios";
-
+import ServiceAuthApi from '@/service/auth_service'
+const Service = ServiceAuthApi()
 const { createSlice } = require("@reduxjs/toolkit");
 const { createAsyncThunk } = require("@reduxjs/toolkit");
 
-export const get_contact_list = createAsyncThunk('contact_list', async ({ token }, { rejectWithValue }) => {
+export const get_contact_list = createAsyncThunk('contact_list', async (_,{ rejectWithValue }) => {
     try {
-        let headers = {
-            'x-auth-tokens': token
-        }
-        const { data } = await axios.get(endpoint.CHAT, { headers })
+        const { data } = await Service.get(endpoint.CHAT)
         return data
     } catch (error) {
         return rejectWithValue(error.response)

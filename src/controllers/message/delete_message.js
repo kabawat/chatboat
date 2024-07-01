@@ -1,12 +1,9 @@
 import endpoint from "@/api_endpoint"
-import axios from "axios"
-
-export const _delete_messages_controller = async (payload, token) => {
+import ServiceAuthApi from '@/service/auth_service'
+const Service = ServiceAuthApi()
+export const _delete_messages_controller = async (payload) => {
     try {
-        const headers = {
-            "x-auth-tokens": token
-        }
-        const { data } = await axios.delete(endpoint?.MESSAGE, { headers, data: payload })
+        const { data } = await Service.delete(endpoint?.MESSAGE, { data: payload })
         return data
     } catch (error) {
         return error

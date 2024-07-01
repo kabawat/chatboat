@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { CheckBoxACheck } from "@/components/comman/checkBox";
-import { Box, Dialog, DialogTitle, Typography } from "@mui/material";
+import { Box, Dialog, Typography } from "@mui/material";
 import InputTextField from "@/components/form/field";
 import { LuSend } from "react-icons/lu";
 import SiderButton from "@/components/button/SiderButton";
@@ -9,6 +8,7 @@ import OTPInput from "@/components/otp/otp";
 import axios from "axios";
 import endpoint from "@/api_endpoint";
 import Cookies from "js-cookie";
+import ServiceVerifyApi from "@/service/verify_service";
 const StepOne = ({ setStep, toastBox }) => {
     const [loader, setLoader] = useState(false)
     const [successMsg, setSuccessMsg] = useState('')
@@ -23,6 +23,7 @@ const StepOne = ({ setStep, toastBox }) => {
     }
 
     const [formData, setFormData] = useState({ ...formInit })
+    const Service = ServiceVerifyApi()
     // handle input change
     const handalChange = ({ target }) => {
         const { name, value } = target
@@ -68,10 +69,7 @@ const StepOne = ({ setStep, toastBox }) => {
             return setOtpError("Please enter a valid otp")
         } else {
             try {
-                const headers = {
-                    "x-verification-tokens": Cookies.get('_xvt')
-                }
-                const res = await axios.post(endpoint?.VERIFY_EMAIL_USING_OTP, { otp }, { headers })
+                const res = await Service.post(endpoint?.VERIFY_EMAIL_USING_OTP, { otp })
                 toastBox({
                     message: res?.data?.message,
                     type: 'success',
@@ -85,13 +83,6 @@ const StepOne = ({ setStep, toastBox }) => {
                 setOtpError(error?.response?.data?.error ? error?.response?.data?.error : error?.message)
             }
         }
-    }
-
-    // close OTP modal 
-    function handalCloseOtpModal() {
-        // setIsOtpModal(false)
-        // setOtp('')
-        // setOtpError('')
     }
 
     return (

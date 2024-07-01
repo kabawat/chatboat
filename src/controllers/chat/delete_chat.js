@@ -1,12 +1,9 @@
 import endpoint from "@/api_endpoint"
-import axios from "axios"
-
-export const _delete_contact_chat = async (payload, token) => {
+import ServiceAuthApi from '@/service/auth_service'
+const Service = ServiceAuthApi()
+export const _delete_contact_chat = async (payload) => {
     try {
-        const headers = {
-            "x-auth-tokens": token
-        }
-        const { data } = await axios.delete(endpoint?.CHAT, { headers, data: payload })
+        const { data } = await Service.delete(endpoint?.CHAT, { data: payload })
         return data
     } catch (error) {
         return error

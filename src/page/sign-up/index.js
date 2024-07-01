@@ -10,9 +10,8 @@ import ToastSnackbar from "@/components/Snackbar";
 import endpoint from "@/api_endpoint";
 import Cookies from "js-cookie";
 import { PageLoader } from "@/components/loader/pageLoader";
-import axios from "axios";
 import { useRouter } from "next/navigation";
-
+import ServiceVerifyApi from "@/service/verify_service";
 export default function SignUpPage() {
     const toastInit = {
         show: false,
@@ -26,6 +25,7 @@ export default function SignUpPage() {
     const [loader, setLoader] = useState(false)
     const [step, setStep] = useState(1)
     const router = useRouter()
+    const Service = ServiceVerifyApi()
     const handalToast = (value) => {
         setToast({
             ...Toast,
@@ -35,10 +35,7 @@ export default function SignUpPage() {
     const handalSubmit = async () => {
         try {
             setLoader(true)
-            const headers = {
-                "x-verification-tokens": Cookies.get('_xvt')
-            }
-            const res = await axios.post(endpoint.FINISH_SIGNUP, { is_file: 0 }, { headers })
+            const res = await Service.post(endpoint.FINISH_SIGNUP, { is_file: 0 })
             Cookies.remove('_xvt')
             Cookies.set('_x_a_t', res?.data?.authToken)
 

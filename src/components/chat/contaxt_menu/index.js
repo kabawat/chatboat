@@ -7,12 +7,10 @@ import { handalCurrentUser } from '@/redux/slice/user'
 import { RiDeleteBinLine } from 'react-icons/ri'
 import { AiOutlineClear } from 'react-icons/ai'
 import { BsPin } from 'react-icons/bs'
-import Cookies from 'js-cookie'
 import React from 'react'
 
 const ContaxtMenu = ({ data, mouse }) => {
     const current_user = useSelector(state => state.current_user)
-    const token = Cookies.get('_x_a_t')
     const dispatch = useDispatch()
     // delete chat 
     const payload = {
@@ -20,8 +18,8 @@ const ContaxtMenu = ({ data, mouse }) => {
     }
 
     const handleDelete = async () => {
-        const res = await _delete_contact_chat(payload, token)
-        dispatch(get_contact_list({ token }))
+        const res = await _delete_contact_chat(payload)
+        dispatch(get_contact_list())
         if (data?.chat_id == current_user?.chat_id) {
             dispatch(handalCurrentUser(null))
         }
@@ -29,10 +27,10 @@ const ContaxtMenu = ({ data, mouse }) => {
 
     // clear message 
     const handleClearMessage = async () => {
-        const res = await _delete_messages_controller(payload, token)
+        const res = await _delete_messages_controller(payload)
         dispatch(clear_chat_message(data))
         if (current_user?.chat_id == payload?.chat_id) {
-            dispatch(get_chat_message({ token, chat_id: current_user?.chat_id, page: 1, clean: true }))
+            dispatch(get_chat_message({ chat_id: current_user?.chat_id, page: 1, clean: true }))
         }
     }
 
