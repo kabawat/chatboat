@@ -2,12 +2,12 @@ import InputTextField from "@/components/form/field";
 import SiderButton from "@/components/button/SiderButton";
 import { PageLoader } from "@/components/loader/pageLoader";
 import { useState } from "react";
-import Cookies from "js-cookie";
 import endpoint from "@/api_endpoint";
-import axios from "axios";
 import { Typography } from "@mui/material";
 import { CheckBoxACheck } from "../comman/checkBox";
+import ServiceVerifyApi from "@/service/verify_service";
 const StepTwo = ({ setStep, toastBox }) => {
+    const Service = ServiceVerifyApi()
     const [loader, setLoader] = useState(false);
     const [showPwd, setShowPwd] = useState(false)
     const formInit = {
@@ -29,10 +29,7 @@ const StepTwo = ({ setStep, toastBox }) => {
             if (!username && !password) throw new Error("Oops! Looks like you forgot to fill out everything. 🤔")
             if (!username) throw new Error("Hey there! Username field can't be empty")
             if (!password) throw new Error("Hey there! Password field can't be empty, friend!")
-            const headers = {
-                "x-verification-tokens": Cookies.get('_xvt')
-            }
-            const res = await axios.post(endpoint?.REGISTRATION, formData, { headers })
+            const res = await Service.post(endpoint?.REGISTRATION, formData)
             toastBox({
                 message: res?.data?.message,
                 type: 'success',

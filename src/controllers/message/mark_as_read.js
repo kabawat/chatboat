@@ -1,12 +1,9 @@
 import endpoint from "@/api_endpoint"
-import axios from "axios"
-
-export const _mark_message_as_read = async (payload, token) => {
+import ServiceAuthApi from '@/service/auth_service'
+const Service = ServiceAuthApi()
+export const _mark_message_as_read = async (payload) => {
     try {
-        const headers = {
-            "x-auth-tokens": token
-        }
-        const { data } = await axios.put(endpoint?.MESSAGE, payload, { headers })
+        const { data } = await Service.put(endpoint?.MESSAGE, payload)
         return data
     } catch (error) {
         return error

@@ -11,26 +11,26 @@ const baseURL = fetchBaseURL()
 const endpoint = {
     // auth endpoint 
     BASE_URL: baseURL,
-    SEND_OTP_ON_EMIAL: `${baseURL}/api/auth/send-otp`,
-    VERIFY_EMAIL_USING_OTP: `${baseURL}/api/auth/verify-email`,
-    REGISTRATION: `${baseURL}/api/auth/registration`,
-    FINISH_SIGNUP: `${baseURL}/api/auth/finish-signup`,
     LOGIN: `${baseURL}/api/auth/login`,
+    SEND_OTP_ON_EMIAL: `${baseURL}/api/auth/send-otp`,
+    VERIFY_EMAIL_USING_OTP: `/api/auth/verify-email`,
+    REGISTRATION: `/api/auth/registration`,
+    FINISH_SIGNUP: `/api/auth/finish-signup`,
 
     // profile endpoint
-    PROFILE: `${baseURL}/api/profile`,
+    PROFILE: `/api/profile`,
 
     // users endpoint
-    USER_LIST: `${baseURL}/api/user`,
+    USER_LIST: `/api/user`,
 
     // contact endpoint
-    CONTACT: `${baseURL}/api/contact/`,
+    CONTACT: `/api/contact/`,
 
     // chat 
-    CHAT: `${baseURL}/api/chat/`,
+    CHAT: `/api/chat/`,
 
     // message
-    MESSAGE: `${baseURL}/api/message/`,
+    MESSAGE: `/api/message/`,
 
     // static 
     STATIC: `${baseURL}/api/static/`,

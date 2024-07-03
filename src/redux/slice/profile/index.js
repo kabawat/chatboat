@@ -1,12 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import endpoint from "@/api_endpoint";
-import axios from 'axios'
-export const get_profile = createAsyncThunk("get_profile", async ({ token }, { rejectWithValue }) => {
+import ServiceAuthApi from '@/service/auth_service'
+const Service = ServiceAuthApi()
+export const get_profile = createAsyncThunk("get_profile", async (_, { rejectWithValue }) => {
     try {
-        let headers = {
-            'x-auth-tokens': token
-        }
-        const { data } = await axios.get(endpoint.PROFILE, { headers })
+        const { data } = await Service.get(endpoint.PROFILE)
         return data
     } catch (error) {
         return rejectWithValue(error.response)

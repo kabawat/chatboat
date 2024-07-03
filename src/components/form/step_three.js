@@ -1,11 +1,10 @@
 import Cookies from "js-cookie";
-import axios from "axios";
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { BsPlusLg } from "react-icons/bs";
 
-import InputTextField from "@/components/form/field";
+import ServiceVerifyApi from "@/service/verify_service";
 import SiderButton from "@/components/button/SiderButton";
 import endpoint from "@/api_endpoint";
 
@@ -13,7 +12,6 @@ import { PageLoader } from "@/components/loader/pageLoader";
 import { Typography } from "@mui/material";
 
 import CropPicture from "./crop_img";
-
 const StepThree = ({ setStep, toastBox }) => {
     const [isCropModal, setIsCropModal] = useState(false)
     const [preview, setPriview] = useState(null)
@@ -21,6 +19,7 @@ const StepThree = ({ setStep, toastBox }) => {
     const [file, setFile] = useState()
 
     const previewCanvasRef = useRef(null);
+    const Service = ServiceVerifyApi()
     const router = useRouter()
 
     const handalChanage = ({ target }) => {
@@ -37,10 +36,7 @@ const StepThree = ({ setStep, toastBox }) => {
             let formData = new FormData();
             formData.append('file', file_res);
             formData.append('is_file', 1);
-            const headers = {
-                "x-verification-tokens": Cookies.get('_xvt')
-            }
-            const res = await axios.post(endpoint.FINISH_SIGNUP, formData, { headers })
+            const res = await Service.post(endpoint.FINISH_SIGNUP, formData)
             Cookies.remove('_xvt')
             Cookies.set('_x_a_t', res?.data?.authToken)
             router.push('/login')

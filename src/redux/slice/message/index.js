@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import endpoint from "@/api_endpoint";
-import axios from 'axios'
-export const get_chat_message = createAsyncThunk("get_chat_message", async ({ token, chat_id, page, clean = false }, { rejectWithValue }) => {
+import ServiceAuthApi from '@/service/auth_service'
+const Service = ServiceAuthApi()
+export const get_chat_message = createAsyncThunk("get_chat_message", async ({ chat_id, page, clean = false }, { rejectWithValue }) => {
     try {
-        let headers = { 'x-auth-tokens': token }
-        const { data } = await axios.post(endpoint.MESSAGE, { chat_id: chat_id, page }, { headers })
+        const { data } = await Service.post(endpoint.MESSAGE, { chat_id: chat_id, page })
         const mapping = { data, clean }
         return mapping
     } catch (error) {

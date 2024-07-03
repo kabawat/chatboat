@@ -11,14 +11,13 @@ import { Modal } from 'react-bootstrap';
 
 import { add_new_message, get_chat_message } from '@/redux/slice/message';
 import { _scrollToEndSmoothly } from '@/controllers/comman/scroll_to_end';
-import { udpate_contact_list } from '@/redux/slice/chat';
-import { handalCurrentUser } from '@/redux/slice/user';
+import { block_user_contact, udpate_contact_list } from '@/redux/slice/chat';
+import { handalCurrentUser, update_current_user } from '@/redux/slice/user';
 
 import ChatMsgContextMenu from './contaxt_menu/chat/chat_message';
 import RightSideDrawer from './right-aside';
 import Avatar from '../comman/Avatar';
 import TextMessage from './msg/text';
-import Cookies from 'js-cookie';
 import Image from 'next/image';
 import Header from './header';
 const mouseInit = {
@@ -56,7 +55,6 @@ const ChatContainer = ({ mainRef }) => {
     const chatOperationRef = useRef(null);
     const inputRef = useRef(null); // input box reference
 
-    const token = Cookies.get('_x_a_t')
     const dispatch = useDispatch()
 
     // input box 
@@ -112,7 +110,7 @@ const ChatContainer = ({ mainRef }) => {
     const handalScroll = () => {
         if (mainRef.current.scrollTop == 0) {
             if (chat?.page <= chat?.totalPages) {
-                dispatch(get_chat_message({ token, chat_id: current_user?.chat_id, page: chat?.page, clean: false })).then(() => {
+                dispatch(get_chat_message({ chat_id: current_user?.chat_id, page: chat?.page, clean: false })).then(() => {
                     scrollToFirstMessage()
                 })
             }
@@ -152,6 +150,7 @@ const ChatContainer = ({ mainRef }) => {
         setFocus()
         setTextMSG(msg)
     }
+
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -200,12 +199,30 @@ const ChatContainer = ({ mainRef }) => {
         await dispatch(add_new_message({ ...data, createdAt: new Date() }))
         socket.emit('send text', data)
         await dispatch(udpate_contact_list(data))
-        await dispatch(get_chat_message({ token, chat_id: payload?.chat_id, page: 1, clean: true }))
+        await dispatch(get_chat_message({ chat_id: payload?.chat_id, page: 1, clean: true }))
         await dispatch(handalCurrentUser(payload))
         setTimeout(() => {
             _scrollToEndSmoothly(mainRef)
         }, 100)
         setShowModal(false)
+    }
+
+    const handleUnblockContact = async () => {
+        const payload = {
+            chat_id: current_user?.chat_id,
+            is_block: false, // query for unblock
+            blocked_by: profile?.data?._id, // unblock by userself
+            blocked_user: current_user?._id // unblock user
+        }
+        dispatch(block_user_contact(payload))
+        socket.emit("block user", payload)
+        const blocked_by = current_user.blocked_by.filter(item => `${item}` != `${profile?.data?._id}`)
+        const currentUser = {
+            ...current_user,
+            blocked_by: blocked_by,
+            is_block: blocked_by?.length ? true : false,
+        }
+        dispatch(update_current_user(currentUser))
     }
 
     return (
@@ -290,69 +307,92 @@ const ChatContainer = ({ mainRef }) => {
                         </div>
                     </div>
                 </div>
-                <div className="chat_operation" ref={chatOperationRef}>
-                    <div className="d-flex align-items-end">
-                        {/* file select sectin  */}
-                        <div className="FileContainer">
-                            <FileContainer>
-                                <SelectButton type='button' x={showFile ? 45 : 0} onClick={() => setShowFile(!showFile)}>
-                                    <BsPlusLg />
-                                </SelectButton>
-                                <SelectFileBox show={showFile ? 'visible' : 'hidden'}>
-                                    <FileList type='button' show={showFile}>
-                                        <input type="file" id='pdf' name='pdf' accept='application/pdf' disabled />
-                                        <FileIcon>
-                                            <BsFileEarmarkPdf />
-                                            <Label htmlFor='pdf'></Label>
-                                            <Title htmlFor='pdf'>PDF</Title>
-                                        </FileIcon>
-                                    </FileList>
-                                    <FileList type='button' show={showFile}>
-                                        <input type="file" id='picture' name="picture" accept='image/*' onChange={handleFileChange} />
-                                        <FileIcon>
-                                            <BiImages />
-                                            <Label htmlFor='picture'></Label>
-                                            <Title htmlFor='picture'>Image</Title>
-                                        </FileIcon>
-                                    </FileList>
-                                    <FileList type='button' show={showFile}>
-                                        <input type="file" id='video' name="video" accept='video/*' onChange={handleFileChange} />
-                                        <FileIcon>
-                                            <IoVideocamOutline />
-                                            <Label htmlFor='video'></Label>
-                                            <Title htmlFor='video'>Video</Title>
-                                        </FileIcon>
-                                    </FileList>
-                                    <FileList type='button' show={showFile}>
-                                        <input type="file" id='music' name="audio" accept=".mp3" onChange={handleFileChange} />
-                                        <FileIcon>
-                                            <IoIosMusicalNotes />
-                                            <Label htmlFor='music'></Label>
-                                            <Title htmlFor='music'>Music</Title>
-                                        </FileIcon>
-                                    </FileList>
-                                </SelectFileBox>
-                            </FileContainer>
-                        </div>
 
-                        {/* input section  */}
-                        <div id="w-input-container" onClick={setFocus}>
-                            <div className="w-input-text-group">
-                                <div id="w-input-text" ref={inputRef} onInput={handalChnage} contentEditable></div>
-                                <div className="w-placeholder">
-                                    Type a message
+                {/* chat operation container  */}
+                <div className="chat_operation" ref={chatOperationRef}>
+                    {
+                        current_user?.is_block ? <>
+                            <div className='block_user_container'>
+                                {
+                                    current_user?.blocked_by.includes(`${profile.data._id}`) ? <>
+                                        <div className='block_contact_container'>
+                                            <div className="block_box avatar_title py-1 px-2" onClick={handleUnblockContact}>
+                                                You blocked this contact. <span>Tap to unblock</span>
+                                            </div>
+                                        </div>
+                                    </> : <>
+                                        <div className='block_contact_container'>
+                                            <div className="avatar_title py-1 px-2">
+                                                You are unable to chat with <span>{current_user?.firstName} {current_user?.lastName}</span> because they have blocked you.
+                                            </div>
+                                        </div>
+                                    </>
+                                }
+                            </div>
+                        </> : <>
+                            <div className="d-flex align-items-end">
+                                {/* file select sectin  */}
+                                <div className="FileContainer">
+                                    <FileContainer>
+                                        <SelectButton type='button' x={showFile ? 45 : 0} onClick={() => setShowFile(!showFile)}>
+                                            <BsPlusLg />
+                                        </SelectButton>
+                                        <SelectFileBox show={showFile ? 'visible' : 'hidden'}>
+                                            <FileList type='button' show={showFile}>
+                                                <input type="file" id='pdf' name='pdf' accept='application/pdf' disabled />
+                                                <FileIcon>
+                                                    <BsFileEarmarkPdf />
+                                                    <Label htmlFor='pdf'></Label>
+                                                    <Title htmlFor='pdf'>PDF</Title>
+                                                </FileIcon>
+                                            </FileList>
+                                            <FileList type='button' show={showFile}>
+                                                <input type="file" id='picture' name="picture" accept='image/*' onChange={handleFileChange} />
+                                                <FileIcon>
+                                                    <BiImages />
+                                                    <Label htmlFor='picture'></Label>
+                                                    <Title htmlFor='picture'>Image</Title>
+                                                </FileIcon>
+                                            </FileList>
+                                            <FileList type='button' show={showFile}>
+                                                <input type="file" id='video' name="video" accept='video/*' onChange={handleFileChange} />
+                                                <FileIcon>
+                                                    <IoVideocamOutline />
+                                                    <Label htmlFor='video'></Label>
+                                                    <Title htmlFor='video'>Video</Title>
+                                                </FileIcon>
+                                            </FileList>
+                                            <FileList type='button' show={showFile}>
+                                                <input type="file" id='music' name="audio" accept=".mp3" onChange={handleFileChange} />
+                                                <FileIcon>
+                                                    <IoIosMusicalNotes />
+                                                    <Label htmlFor='music'></Label>
+                                                    <Title htmlFor='music'>Music</Title>
+                                                </FileIcon>
+                                            </FileList>
+                                        </SelectFileBox>
+                                    </FileContainer>
+                                </div>
+
+                                {/* input section  */}
+                                <div id="w-input-container" onClick={setFocus}>
+                                    <div className="w-input-text-group">
+                                        <div id="w-input-text" ref={inputRef} onInput={handalChnage} contentEditable></div>
+                                        <div className="w-placeholder"> Type a message</div>
+                                    </div>
+                                </div>
+
+                                {/* send button  */}
+                                <div className="px-3">
+                                    <button className='send_btn' onClick={handalSendMessage}>
+                                        <span> Send </span>
+                                        <GrSend />
+                                    </button>
                                 </div>
                             </div>
-                        </div>
+                        </>
+                    }
 
-                        {/* send button  */}
-                        <div className="px-3">
-                            <button className='send_btn' onClick={handalSendMessage}>
-                                <span> Send </span>
-                                <GrSend />
-                            </button>
-                        </div>
-                    </div>
                 </div>
             </div>
 

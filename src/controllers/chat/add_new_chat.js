@@ -1,15 +1,22 @@
 import endpoint from "@/api_endpoint"
-import axios from "axios"
+import ServiceAuthApi from '@/service/auth_service'
+const Service = ServiceAuthApi()
 
-export const _add_new_chat = async (payload, token) => {
+// create new contact
+export const _add_new_chat = async (payload) => {
     try {
-        const headers = {
-            "x-auth-tokens": token
-        }
-        // create new contact
-        const { data } = await axios.post(endpoint?.CONTACT, payload, { headers })
+        const { data } = await Service.post(endpoint?.CONTACT, payload)
         return data
     } catch (error) {
         return error
+    }
+}
+
+// block user rest API
+export const _block_user_contact = async (payload) => {
+    try {
+        await Service.post(endpoint.CONTACT + "/block", payload)
+    } catch (error) {
+        console.log("error : ", error)
     }
 }
