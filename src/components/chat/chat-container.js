@@ -228,7 +228,7 @@ const ChatContainer = ({ mainRef }) => {
     return (
         <div className={`${isProfile ? 'active' : ''} chat-container`}>
             <div className="chat_area">
-                <Header setIsProfile={setIsProfile} />
+                <Header setIsProfile={setIsProfile} data={current_user} />
                 <div className="chat_main_container" style={{ '--pb': `${paddingBottom}px` }}>
                     <div className="chat_section" onClick={() => setIsProfile(false)}>
                         <div className="chat_section_area">
