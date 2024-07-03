@@ -28,7 +28,6 @@ export async function _verify_otp(payload, token) {
     }
 }
 export async function _change_password(payload, headers) {
-    console.log("headers : ", headers)
     try {
         const response = await axios.put(endpoint?.CHANGE_PASSWORD, payload, { headers })
         return {

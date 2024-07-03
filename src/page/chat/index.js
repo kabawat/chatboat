@@ -14,11 +14,11 @@ import Navigate from '@/components/aside/navigate'
 import NoChat from '@/components/chat/no-chat';
 import Avatar from '@/components/comman/Avatar';
 
-import { get_contact_list, udpate_contact_list } from '@/redux/slice/chat';
+import { block_user_contact, get_contact_list, udpate_contact_list } from '@/redux/slice/chat';
 import { _scrollToEnd, _scrollToEndSmoothly } from '@/controllers/comman/scroll_to_end';
 import { add_new_message, get_chat_message } from '@/redux/slice/message';
 import { _mark_message_as_read } from '@/controllers/message/mark_as_read';
-import { handalCurrentUser } from '@/redux/slice/user';
+import { handalCurrentUser, update_current_user } from '@/redux/slice/user';
 import { getStartMessage } from '@/redux/slice/static';
 import { get_userList } from '@/redux/slice/user/userList';
 
@@ -134,9 +134,37 @@ const ChatPage = () => {
             console.log("user is typing", newList)
         }
 
+        // block user 
+        const blockUserHandler = (data) => {
+            dispatch(block_user_contact(data))
+            // update current user 
+            if (current_user.chat_id == data?.chat_id) {
+                let currentUser = {}
+                if (data.is_block) {
+                    currentUser = {
+                        ...current_user,
+                        blocked_by: [...current_user.blocked_by, data.blocked_by]
+                    }
+                } else {
+                    const blocked_by = current_user.blocked_by.filter(item => `${item}` != `${data.blocked_by}`)
+                    currentUser = {
+                        ...current_user,
+                        blocked_by: blocked_by
+                    }
+                }
+                currentUser = {
+                    ...currentUser,
+                    is_block: currentUser?.blocked_by?.length ? true : false,
+                }
+                dispatch(update_current_user(currentUser))
+            }
+        }
+
+        socket.on("blocked user", blockUserHandler)
         socket.on("received text", handalReceivedMessage)
         socket.on('typing', handleUserTyping)
         return () => {
+            socket.off("blocked user", blockUserHandler)
             socket.off("typing", handleUserTyping)
             socket.off("received text", handalReceivedMessage)
         };

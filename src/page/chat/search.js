@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { IoSearchOutline } from "react-icons/io5";
 import { RiUserAddLine } from "react-icons/ri";
 import { Modal } from 'react-bootstrap'
 
-import { add_new_contact, get_contact_list, udpate_contact_list } from '@/redux/slice/chat';
+import { add_new_contact, get_contact_list } from '@/redux/slice/chat';
 import { handalCurrentUser } from '@/redux/slice/user';
 import { get_chat_message } from '@/redux/slice/message';
 import { _add_new_chat } from '@/controllers/chat/add_new_chat';
 import { get_userList } from '@/redux/slice/user/userList';
 
-import endpoint from '@/api_endpoint';
-import Cookies from 'js-cookie';
 import Avatar from '@/components/comman/Avatar';
 
 const Search = ({ getStart, setGetStart, setMyContact }) => {
@@ -72,10 +69,6 @@ const Search = ({ getStart, setGetStart, setMyContact }) => {
         } catch (error) {
             console.log("error : ", error); // Log any errors
         }
-    }
-
-    function searchUsers(searchTerm) {
-        return
     }
 
     const handleSearchMyContact = ({ target }) => {
