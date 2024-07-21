@@ -5,15 +5,12 @@ import SiderButton from "@/components/button/SiderButton";
 import { CheckBoxACheck } from "@/components/comman/checkBox";
 import InputTextField from "@/components/form/field";
 import { PageLoader } from "@/components/loader/pageLoader";
-import { get_profile } from "@/redux/slice/profile";
 import { Card, Typography } from "@mui/material";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { LuSend } from "react-icons/lu";
-import { useDispatch, useSelector } from "react-redux";
 
 const toastInit = {
     show: false,
@@ -29,13 +26,10 @@ const formInit = {
 }
 
 export default function LoginPage() {
-    const { socket } = useSelector(state => state.socket)
     const [formData, setFormData] = useState(formInit)
     const [showPwd, setShowPwd] = useState(false)
     const [Toast, setToast] = useState(toastInit)
     const [loader, setLoader] = useState(false)
-    const dispatch = useDispatch()
-    const router = useRouter()
     const isForgotPassword = true
 
     const handalChange = (e) => {
