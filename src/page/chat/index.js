@@ -15,12 +15,13 @@ import NoChat from '@/components/chat/no-chat';
 import Avatar from '@/components/comman/Avatar';
 
 import { block_user_contact, get_contact_list, udpate_contact_list } from '@/redux/slice/chat';
+import { handalCurrentUser, update_current_user } from '@/redux/slice/user';
 import { _scrollToEnd, _scrollToEndSmoothly } from '@/controllers/comman/scroll_to_end';
 import { add_new_message, get_chat_message } from '@/redux/slice/message';
 import { _mark_message_as_read } from '@/controllers/message/mark_as_read';
-import { handalCurrentUser, update_current_user } from '@/redux/slice/user';
 import { getStartMessage } from '@/redux/slice/static';
 import { get_userList } from '@/redux/slice/user/userList';
+import { useSocket } from '@/app/(chat)/layout';
 
 import Search from './search';
 
@@ -29,9 +30,10 @@ const mousePos = {
     y: 0
 }
 const ChatPage = () => {
+    const socket = useSocket()
+
     // universal variable 
     const current_user = useSelector(state => state.current_user)
-    const { socket } = useSelector(state => state.socket)
     const contacts = useSelector(state => state.contact)
     const profile = useSelector(state => state.profile)
     const theme = useSelector(state => state.theme)
