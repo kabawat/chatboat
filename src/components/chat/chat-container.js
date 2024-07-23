@@ -9,26 +9,29 @@ import { BiImages } from 'react-icons/bi';
 import { GrSend } from "react-icons/gr";
 import { Modal } from 'react-bootstrap';
 
-import { add_new_message, get_chat_message } from '@/redux/slice/message';
-import { _scrollToEndSmoothly } from '@/controllers/comman/scroll_to_end';
 import { block_user_contact, udpate_contact_list } from '@/redux/slice/chat';
 import { handalCurrentUser, update_current_user } from '@/redux/slice/user';
+import { add_new_message, get_chat_message } from '@/redux/slice/message';
+import { _scrollToEndSmoothly } from '@/controllers/comman/scroll_to_end';
+import { useSocket } from '@/app/(chat)/layout';
 
 import ChatMsgContextMenu from './contaxt_menu/chat/chat_message';
 import RightSideDrawer from './right-aside';
-import Avatar from '../comman/Avatar';
 import TextMessage from './msg/text';
-import Image from 'next/image';
+import Avatar from '../comman/Avatar';
 import Header from './header';
+import Image from 'next/image';
+
 const mouseInit = {
     x: 0,
     y: 0
 }
 const ChatContainer = ({ mainRef }) => {
+    const socket = useSocket() // socket information
+
     // gloable state 
     const defaultMessage = useSelector(state => state.startMsg)
     const current_user = useSelector(state => state.current_user) // current chat user
-    const { socket } = useSelector(state => state.socket) // socket information
     const contacts = useSelector(state => state?.contact)
     const profile = useSelector(state => state.profile) // logedin user information
     const chat = useSelector(state => state.chat) // current chat
@@ -228,7 +231,7 @@ const ChatContainer = ({ mainRef }) => {
     return (
         <div className={`${isProfile ? 'active' : ''} chat-container`}>
             <div className="chat_area">
-                <Header setIsProfile={setIsProfile} />
+                <Header setIsProfile={setIsProfile} data={current_user} />
                 <div className="chat_main_container" style={{ '--pb': `${paddingBottom}px` }}>
                     <div className="chat_section" onClick={() => setIsProfile(false)}>
                         <div className="chat_section_area">

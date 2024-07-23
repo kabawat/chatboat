@@ -19,7 +19,6 @@ const toastInit = {
     horizontal: 'center'
 }
 export default function SendOtpSection({ setChange }) {
-    const token = Cookies.get('')
     const [isOtpModal, setIsOtpModal] = useState(false)
     const [otpError, setOtpError] = useState('')
     const [loader, setLoader] = useState(false)
@@ -32,12 +31,6 @@ export default function SendOtpSection({ setChange }) {
     }, [otp])
     const handleChange = ({ target }) => {
         setEmail(target.value)
-    }
-    // close OTP modal 
-    const handalCloseOtpModal = () => {
-        setIsOtpModal(false)
-        setOtp('')
-        setOtpError('')
     }
 
     // send otp 

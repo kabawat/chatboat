@@ -1,19 +1,21 @@
 import { block_user_contact, clear_chat_message, get_contact_list } from '@/redux/slice/chat'
+import { handalCurrentUser, update_current_user } from '@/redux/slice/user'
 import { _delete_messages_controller } from '@/controllers/message/delete_message'
+import { useDispatch, useSelector } from 'react-redux'
 import { _delete_contact_chat } from '@/controllers/chat/delete_chat'
 import { get_chat_message } from '@/redux/slice/message'
-import { useDispatch, useSelector } from 'react-redux'
-import { handalCurrentUser, update_current_user } from '@/redux/slice/user'
 import { RiDeleteBinLine } from 'react-icons/ri'
 import { AiOutlineClear } from 'react-icons/ai'
+import { useSocket } from '@/app/(chat)/layout'
 import { ImBlocked } from "react-icons/im";
 import { BsPin } from 'react-icons/bs'
 import React from 'react'
+
 const ContaxtMenu = ({ data, mouse }) => {
     const current_user = useSelector(state => state.current_user)
     const profile = useSelector(state => state.profile)
-    const { socket } = useSelector(state => state.socket)
     const dispatch = useDispatch()
+    const socket = useSocket()
     // delete chat 
     const payload = {
         chat_id: data?.chat_id
