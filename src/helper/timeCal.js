@@ -8,7 +8,7 @@ export function formatTimeDifference(givenDate) {
     const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
 
     if (seconds < 60) {
-        return `${seconds} sec ago`;
+        return `Now`;
     } else if (minutes < 60) {
         return `${minutes} min ago`;
     } else if (hours < 24) {
