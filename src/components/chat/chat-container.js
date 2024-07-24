@@ -9,7 +9,7 @@ import { BiImages } from 'react-icons/bi';
 import { GrSend } from "react-icons/gr";
 import { Modal } from 'react-bootstrap';
 
-import { block_user_contact, udpate_contact_list } from '@/redux/slice/chat';
+import { block_user_contact, udpate_contact_lastchat } from '@/redux/slice/chat';
 import { handalCurrentUser, update_current_user } from '@/redux/slice/user';
 import { add_new_message, get_chat_message } from '@/redux/slice/message';
 import { _scrollToEndSmoothly } from '@/controllers/comman/scroll_to_end';
@@ -95,7 +95,7 @@ const ChatContainer = ({ mainRef }) => {
             dispatch(add_new_message({ ...data, createdAt: new Date() }))
             socket.emit('send text', data)
 
-            dispatch(udpate_contact_list(data)) // update last seen message 
+            dispatch(udpate_contact_lastchat(data)) // update last seen message 
             setTextMSG("")
             setTimeout(() => {
                 _scrollToEndSmoothly(mainRef)
@@ -201,7 +201,7 @@ const ChatContainer = ({ mainRef }) => {
         }
         await dispatch(add_new_message({ ...data, createdAt: new Date() }))
         socket.emit('send text', data)
-        await dispatch(udpate_contact_list(data))
+        await dispatch(udpate_contact_lastchat(data))
         await dispatch(get_chat_message({ chat_id: payload?.chat_id, page: 1, clean: true }))
         await dispatch(handalCurrentUser(payload))
         setTimeout(() => {
