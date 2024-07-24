@@ -1,13 +1,18 @@
 import Avatar from '@/components/comman/Avatar';
 import { formatTimeDifference } from '@/helper/timeCal';
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux';
 
 const TextMessage = ({ it_chat, handleContextMenu, keys, clipBoardReact }) => {
     // universal state 
     const current_user = useSelector(state => state.current_user)
     const profile = useSelector(state => state.profile)
-    const timeString = formatTimeDifference(it_chat?.createdAt)
+    const [timeString, setTimeString] = useState(formatTimeDifference(it_chat?.createdAt))
+    useEffect(() => {
+        setInterval(() => {
+            setTimeString(formatTimeDifference(it_chat?.createdAt))
+        }, 60000)
+    }, [])
     if (`${profile?.data?._id}` == `${it_chat?.receiver}`) {
         return (
             <div className="msg left-msg">

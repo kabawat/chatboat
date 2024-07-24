@@ -1,10 +1,11 @@
-const environment = process.env.NEXT_PUBLIC_ENVIRONMENT
+import SECRETS from "./configs/env.configs"
+const environment = SECRETS.ENVIRONMENT
 const fetchBaseURL = () => {
     if (environment == "development") {
-        return process.env.NEXT_PUBLIC_APP_LOCAL_API_URL
+        return SECRETS.LOCAL_API_URL
     }
     if (environment == "production") {
-        return process.env.NEXT_PUBLIC_APP_PRODUCTION_API_URL
+        return SECRETS.PRODUCTION_API_URL
     }
 }
 const baseURL = fetchBaseURL()

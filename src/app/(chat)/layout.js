@@ -3,19 +3,20 @@ import { createContext, useContext, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { get_profile } from "@/redux/slice/profile"
 import { get_userList } from "@/redux/slice/user/userList"
+import SECRETS from "@/configs/env.configs"
 
 const SocketContext = createContext(null)
 
 import Cookies from "js-cookie"
 import io from 'socket.io-client'
 
-const environment = process.env.NEXT_PUBLIC_ENVIRONMENT
+const environment = SECRETS.ENVIRONMENT
 const fetchBaseURL = () => {
     if (environment == "development") {
-        return process.env.NEXT_PUBLIC_APP_LOCAL_SOCKET_URL
+        return SECRETS.LOCAL_SOCKET_URL
     }
     if (environment == "production") {
-        return process.env.NEXT_PUBLIC_APP_PRODUCTION_SOCKET_URL
+        return SECRETS.PRODUCTION_SOCKET_URL
     }
 }
 
@@ -31,10 +32,9 @@ export default function ChatLayout({ children }) {
         const baseURL = fetchBaseURL()
         const socket = io(baseURL, { query });
         setSocketIO(socket)
-
         function onConnect() {
             socket.on('token', res_token => {
-                Cookies.set('_x_s_t', res_token)
+                Cookies.set('_x_s_t', res_token, { expires: 30 })
             })
         }
 

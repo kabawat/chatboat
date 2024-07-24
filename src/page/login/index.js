@@ -53,7 +53,7 @@ export default function LoginPage() {
             })
             setTimeout(() => {
                 Cookies.set('_x_a_t', res?.data?.authToken, { expires: 30 })
-                Cookies.set("_x_s_t", res.data.socket_token)
+                Cookies.set("_x_s_t", res.data.socket_token, { expires: 30 })
                 // router.push('/chat')
                 window.location.href = '/chat'
             }, 2000)
