@@ -38,11 +38,26 @@ const chat_contact = createSlice({
         })
     },
     reducers: {
-        udpate_contact_list(state, { payload }) {
+        udpate_contact_lastchat(state, { payload }) {
             const updatedData = []
             state.data.map((it) => {
                 if (it?.chat_id == payload.chat_id) {
                     updatedData.unshift({ ...it, last_chat: payload })
+                } else {
+                    updatedData.push(it)
+                }
+            })
+            state.data = updatedData
+        },
+        udpate_contact_lastseen(state, { payload }) {
+            const updatedData = []
+            state.data.map((it) => {
+                if (`${it?._id}` == `${payload.user_id}`) {
+                    updatedData.push({
+                        ...it,
+                        isOnline: payload?.isOnline,
+                        lastSeen: payload?.lastSeen
+                    })
                 } else {
                     updatedData.push(it)
                 }
@@ -106,5 +121,5 @@ const chat_contact = createSlice({
 })
 
 const chatContactSlice = chat_contact.reducer
-export const { udpate_contact_list, add_new_contact, clear_chat_message, update_last_message, block_user_contact } = chat_contact.actions
+export const { udpate_contact_lastchat, udpate_contact_lastseen, add_new_contact, clear_chat_message, update_last_message, block_user_contact } = chat_contact.actions
 export default chatContactSlice

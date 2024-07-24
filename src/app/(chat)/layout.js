@@ -41,7 +41,6 @@ export default function ChatLayout({ children }) {
         function onDisconnect() {
             console.log(socket.id)
         }
-
         socket.on('connect', onConnect);
         socket.on('disconnect', onDisconnect);
 

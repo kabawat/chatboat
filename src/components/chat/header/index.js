@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import ContaxtMenu from '@/components/chat/contaxt_menu';
 import Avatar from '@/components/comman/Avatar';
+import { formatTimeDifference } from "@/helper/timeCal";
 const mousePos = {
     x: 0,
     y: 0
@@ -10,7 +11,9 @@ const mousePos = {
 const Header = ({ setIsProfile, data }) => {
     const currentUser = useSelector(state => state.current_user)
     const [isContext, setIsContext] = useState()
+    const [lastSeen, setLastSeen] = useState('Online')
     const [mouse, setMouse] = useState(mousePos)
+    
     const handleModal = (event) => {
         setMouse({
             x: event.pageX - 150,
@@ -29,6 +32,11 @@ const Header = ({ setIsProfile, data }) => {
             })
         }
     })
+
+    useEffect(() => {
+        const status = currentUser?.isOnline ? 'Online' : formatTimeDifference(new Date(currentUser?.lastSeen))
+        setLastSeen(status)
+    }, [currentUser])
     return (
         <div className="chat_navbar d-flex align-items-center justify-content-between">
             <div className="d-flex align-items-center active_user" onClick={() => setIsProfile(true)}>
@@ -38,7 +46,7 @@ const Header = ({ setIsProfile, data }) => {
                         <b> {currentUser?.firstName} {currentUser?.lastName}</b>
                     </div>
                     <div className="avatar_title text-success">
-                        {currentUser?.last_seen}
+                        {lastSeen}
                     </div>
                 </div>
             </div>
