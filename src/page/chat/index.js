@@ -72,13 +72,16 @@ const ChatPage = () => {
         }
     })
 
-    // received message handal 
     useEffect(() => {
         // get all contact list 
+        setMyContact(contacts?.data)
         if (!contacts?.status && !contacts?.loading) {
             dispatch(get_contact_list())
         }
+    }, [contacts?.status])
 
+    // received message handal 
+    useEffect(() => {
         // user come to online 
         const logedinHandler = (data) => {
             if (current_user?._id == data.data?.user_id) {
@@ -115,7 +118,6 @@ const ChatPage = () => {
         };
 
         // receive message handal 
-        setMyContact(contacts?.data)
         const handalReceivedMessage = (data) => {
             const isExits = contacts?.data?.some(item => item?.chat_id === data?.chat_id)
             if (!isExits) {
@@ -135,22 +137,6 @@ const ChatPage = () => {
                 _scrollToEndSmoothly(mainRef)
             }
             dispatch(udpate_contact_lastchat(data)) // update last seen message 
-        }
-
-        // sender typing 
-        const handleUserTyping = (data) => {
-            const newList = contacts?.data?.map((current) => {
-                if (`${current?._id}` === `${data?.sender}`) {
-                    return {
-                        ...current,
-                        last_seen: 'typing...'
-                    }
-                } else {
-                    return current
-                }
-            })
-            setMyContact(newList)
-            console.log("user is typing", newList)
         }
 
         // block user 
@@ -179,11 +165,35 @@ const ChatPage = () => {
             }
         }
 
+        // sender typing 
+        const handleUserTyping = (data) => {
+            // update contact list 
+            const newList = contacts?.data?.map((current) => {
+                if (`${current?._id}` === `${data?.sender}`) {
+                    return {
+                        ...current,
+                        isOnline: data?.isTyping ? 'typing...' : true
+                    }
+                } else {
+                    return current
+                }
+            })
+            // update cuurent chat 
+            if (current_user?._id == data?.sender) {
+                let currentUser = {
+                    ...current_user,
+                    isOnline: data?.isTyping ? 'typing...' : true
+                }
+                dispatch(update_current_user(currentUser))
+            }
+            setMyContact(newList)
+        }
+
         socket.on("received text", handalReceivedMessage)
         socket.on("blocked user", blockUserHandler)
         socket.on('offline', offlineHandler);
-        socket.on('typing', handleUserTyping)
         socket.on('joined', logedinHandler);
+        socket.on('typing', handleUserTyping)
         return () => {
             socket.off("received text", handalReceivedMessage)
             socket.off("blocked user", blockUserHandler)
@@ -250,7 +260,13 @@ const ChatPage = () => {
                             <div className="chatList_main_container">
                                 {
                                     contacts?.status ? myContact?.map((currentChat, key) => {
-                                        const lastSeen = currentChat?.isOnline ? 'Online' : formatTimeDifference(new Date(currentChat?.lastSeen))
+                                        let lastSeen = currentChat?.isOnline // lastSeen : true | fasle | typing... (default)
+                                        if (lastSeen === true) {
+                                            lastSeen = "Online"
+                                        }
+                                        if (lastSeen === false) {
+                                            lastSeen = formatTimeDifference(new Date(currentChat?.lastSeen))
+                                        }
                                         return (
                                             <div
                                                 className={`chat_card d-flex align-items-center ${current_user?.chat_id == currentChat?.chat_id ? 'active' : ''}`}
@@ -262,7 +278,7 @@ const ChatPage = () => {
                                                 <div className="textBox">
                                                     <div className="textContent">
                                                         <p className="h1">{currentChat?.firstName} {currentChat?.lastName}</p>
-                                                        <span className={`span ${currentChat?.isOnline ? 'text-success' : 'text-primary'}`}>{lastSeen}</span>
+                                                        <span className={`span ${currentChat?.isOnline ? 'text-success' : 'text-primary'}`}>{current_user?.chat_id == currentChat?.chat_id ? "" : lastSeen}</span>
                                                     </div>
                                                     <p className="p">{currentChat?.last_chat?.text ? currentChat?.last_chat?.text : currentChat?.about}</p>
                                                 </div>

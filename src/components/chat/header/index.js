@@ -13,7 +13,7 @@ const Header = ({ setIsProfile, data }) => {
     const [isContext, setIsContext] = useState()
     const [lastSeen, setLastSeen] = useState('Online')
     const [mouse, setMouse] = useState(mousePos)
-    
+
     const handleModal = (event) => {
         setMouse({
             x: event.pageX - 150,
@@ -34,7 +34,13 @@ const Header = ({ setIsProfile, data }) => {
     })
 
     useEffect(() => {
-        const status = currentUser?.isOnline ? 'Online' : formatTimeDifference(new Date(currentUser?.lastSeen))
+        let status = currentUser?.isOnline // status may be true || false || tryping... (set default)
+        if (status === true) {
+            status = "Online"
+        }
+        if (status === false) {
+            status = formatTimeDifference(new Date(currentUser?.lastSeen))
+        }
         setLastSeen(status)
     }, [currentUser])
     return (

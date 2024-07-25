@@ -53,11 +53,12 @@ const chat_contact = createSlice({
             const updatedData = []
             state.data.map((it) => {
                 if (`${it?._id}` == `${payload.user_id}`) {
-                    updatedData.push({
+                    const newData = {
                         ...it,
                         isOnline: payload?.isOnline,
                         lastSeen: payload?.lastSeen
-                    })
+                    }
+                    updatedData.push(newData)
                 } else {
                     updatedData.push(it)
                 }
