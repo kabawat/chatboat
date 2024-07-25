@@ -56,26 +56,50 @@ const ChatContainer = ({ mainRef }) => {
     }
     // References 
     const chatOperationRef = useRef(null);
+    const typingTimeoutRef = useRef(null);
     const inputRef = useRef(null); // input box reference
 
     const dispatch = useDispatch()
 
     // input box 
     const setFocus = () => {
-        socket.emit('typing', {
-            receiver: current_user?._id,
-            sender: profile?.data?._id,
-        })
         inputRef.current.focus();
     };
 
-    const handalChnage = (event) => {
-        setTextMSG(event.target.innerText)
+    const handleChange = (event) => {
+        socket.emit('typing', {
+            receiver: current_user?._id,
+            sender: profile?.data?._id,
+            isTyping: true
+        });
+        setTextMSG(event.target.innerText);
+
         if (chatOperationRef.current) {
             const height = chatOperationRef.current.offsetHeight;
             setPaddingBottom(height);
         }
-    }
+
+        // Clear previous timeout if exists
+        if (typingTimeoutRef.current) {
+            clearTimeout(typingTimeoutRef.current);
+        }
+
+        // Set new timeout for 5 seconds
+        typingTimeoutRef.current = setTimeout(() => {
+            socket.emit('typing', {
+                receiver: current_user?._id,
+                sender: profile?.data?._id,
+                isTyping: false
+            });
+        }, 1000);
+    };
+    useEffect(() => {
+        return () => {
+            if (typingTimeoutRef.current) {
+                clearTimeout(typingTimeoutRef.current);
+            }
+        };
+    }, []);
 
     // Reset the value of the file input field
     const handleFileChange = (event) => {
@@ -380,7 +404,7 @@ const ChatContainer = ({ mainRef }) => {
                                 {/* input section  */}
                                 <div id="w-input-container" onClick={setFocus}>
                                     <div className="w-input-text-group">
-                                        <div id="w-input-text" ref={inputRef} onInput={handalChnage} contentEditable></div>
+                                        <div id="w-input-text" ref={inputRef} onInput={handleChange} contentEditable></div>
                                         <div className="w-placeholder"> Type a message</div>
                                     </div>
                                 </div>
