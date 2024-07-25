@@ -14,7 +14,7 @@ import Navigate from '@/components/aside/navigate'
 import NoChat from '@/components/chat/no-chat';
 import Avatar from '@/components/comman/Avatar';
 
-import { block_user_contact, get_contact_list, udpate_contact_lastchat, udpate_contact_lastseen } from '@/redux/slice/chat';
+import { block_user_contact, get_contact_list, udpate_contact_lastchat, udpate_contact_status } from '@/redux/slice/chat';
 import { handalCurrentUser, update_current_user } from '@/redux/slice/user';
 import { _scrollToEnd, _scrollToEndSmoothly } from '@/controllers/comman/scroll_to_end';
 import { add_new_message, get_chat_message } from '@/redux/slice/message';
@@ -23,8 +23,8 @@ import { getStartMessage } from '@/redux/slice/static';
 import { get_userList } from '@/redux/slice/user/userList';
 import { useSocket } from '@/app/(chat)/layout';
 
-import Search from './search';
 import { formatTimeDifference } from '@/helper/timeCal';
+import Search from './search';
 
 const mousePos = {
     x: 0,
@@ -101,11 +101,15 @@ const ChatPage = () => {
                     }
                 })
             }
-            dispatch(udpate_contact_lastseen(data.data))
+            dispatch(udpate_contact_status(data.data))
         };
 
         // user go to offline 
         const offlineHandler = (data) => {
+            // update contact list 
+            dispatch(udpate_contact_status(data))
+
+            // update current chat user 
             if (current_user?._id == data?.user_id) {
                 let currentUser = {
                     ...current_user,
@@ -114,11 +118,10 @@ const ChatPage = () => {
                 }
                 dispatch(update_current_user(currentUser))
             }
-            dispatch(udpate_contact_lastseen(data))
         };
 
         // receive message handal 
-        const handalReceivedMessage = (data) => {
+        const handalReceivedMessage = async (data) => {
             const isExits = contacts?.data?.some(item => item?.chat_id === data?.chat_id)
             if (!isExits) {
                 dispatch(get_contact_list())
@@ -136,7 +139,8 @@ const ChatPage = () => {
 
                 _scrollToEndSmoothly(mainRef)
             }
-            dispatch(udpate_contact_lastchat(data)) // update last seen message 
+            await dispatch(udpate_contact_lastchat(data))
+
         }
 
         // block user 
@@ -168,16 +172,7 @@ const ChatPage = () => {
         // sender typing 
         const handleUserTyping = (data) => {
             // update contact list 
-            const newList = contacts?.data?.map((current) => {
-                if (`${current?._id}` === `${data?.sender}`) {
-                    return {
-                        ...current,
-                        isOnline: data?.isTyping ? 'typing...' : true
-                    }
-                } else {
-                    return current
-                }
-            })
+            dispatch(udpate_contact_status({ ...data, Typing: true }))
             // update cuurent chat 
             if (current_user?._id == data?.sender) {
                 let currentUser = {
@@ -186,9 +181,9 @@ const ChatPage = () => {
                 }
                 dispatch(update_current_user(currentUser))
             }
-            setMyContact(newList)
         }
 
+        setMyContact(contacts?.data)
         socket.on("received text", handalReceivedMessage)
         socket.on("blocked user", blockUserHandler)
         socket.on('offline', offlineHandler);

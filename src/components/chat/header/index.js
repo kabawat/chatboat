@@ -1,15 +1,16 @@
-import { HiOutlineDotsVertical } from "react-icons/hi";
 import React, { useEffect, useState } from 'react'
+import { HiOutlineDotsVertical } from "react-icons/hi";
+import { formatTimeDifference } from "@/helper/timeCal";
 import { useSelector } from 'react-redux'
 import ContaxtMenu from '@/components/chat/contaxt_menu';
 import Avatar from '@/components/comman/Avatar';
-import { formatTimeDifference } from "@/helper/timeCal";
 const mousePos = {
     x: 0,
     y: 0
 }
 const Header = ({ setIsProfile, data }) => {
     const currentUser = useSelector(state => state.current_user)
+
     const [isContext, setIsContext] = useState()
     const [lastSeen, setLastSeen] = useState('Online')
     const [mouse, setMouse] = useState(mousePos)
