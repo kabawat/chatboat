@@ -21,6 +21,7 @@ import TextMessage from './msg/text';
 import Avatar from '../comman/Avatar';
 import Header from './header';
 import Image from 'next/image';
+import { DividerTextShip } from '../comman/DividerText';
 
 const mouseInit = {
     x: 0,
@@ -262,7 +263,15 @@ const ChatContainer = ({ mainRef }) => {
                             <div className="chat_inner_section" ref={mainRef} style={{ scrollBehavior: 'smooth' }} onScroll={handalScroll}>
                                 {
                                     chat?.data?.map((it_chat, key) => {
-                                        return <TextMessage it_chat={it_chat} key={key} handleContextMenu={handleContextMenu} keys={key} clipBoardReact={clipBoardReact} />
+                                        console.log(it_chat)
+                                        if (it_chat?.isUnRead) {
+                                            console.log("yes")
+                                            return <div className="p-2">
+                                                <DividerTextShip align="center" label="Unread message" />
+                                            </div>
+                                        } else {
+                                            return <TextMessage it_chat={it_chat} key={key} handleContextMenu={handleContextMenu} keys={key} clipBoardReact={clipBoardReact} />
+                                        }
                                     })
                                 }
                                 {

@@ -17,7 +17,7 @@ import Avatar from '@/components/comman/Avatar';
 import { block_user_contact, get_contact_list, udpate_contact_lastchat, udpate_contact_status } from '@/redux/slice/chat';
 import { handalCurrentUser, update_current_user } from '@/redux/slice/user';
 import { _scrollToEnd, _scrollToEndSmoothly } from '@/controllers/comman/scroll_to_end';
-import { add_new_message, get_chat_message } from '@/redux/slice/message';
+import { add_new_message, get_chat_message, get_chat_unread_message } from '@/redux/slice/message';
 import { _mark_message_as_read } from '@/controllers/message/mark_as_read';
 import { getStartMessage } from '@/redux/slice/static';
 import { get_userList } from '@/redux/slice/user/userList';
@@ -54,12 +54,20 @@ const ChatPage = () => {
             chat_id: data?.chat_id,
             userID: profile?.data?._id
         }
-        await _mark_message_as_read(payload) // make read message
+        // get read message 
         await dispatch(get_chat_message({ chat_id: data?.chat_id, page: 1, clean: true })).then(item => {
             if (!item.payload?.data?.totalMessages) {
                 dispatch(getStartMessage())
             }
         })
+
+        // get unread message 
+        await dispatch(get_chat_unread_message({ chat_id: data?.chat_id })).then(item => {
+            if (!item.payload?.data) {
+                dispatch(getStartMessage())
+            }
+        })
+        // await _mark_message_as_read(payload) // make read message
         await dispatch(handalCurrentUser(data)) // set current user 
         _scrollToEnd(mainRef)// scroll bottom
     }
@@ -130,10 +138,11 @@ const ChatPage = () => {
             if (`${current_user?.chat_id}` == `${data?.chat_id}`) {
                 const payload = {
                     chat_id: data?.chat_id,
-                    userID: profile?.data?._id
+                    userID: profile?.data?._id,
+                    only_read: true
                 }
                 // make read message 
-                _mark_message_as_read(payload).then((res) => {
+                await _mark_message_as_read(payload).then(() => {
                     dispatch(add_new_message(data))
                 })
 
