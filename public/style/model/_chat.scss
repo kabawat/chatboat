@@ -414,6 +414,19 @@ button:active {
         font-family: 'Poppins' sans-serif;
     }
 
+    .totalCount {
+        font-size: 10px;
+        line-height: 1;
+        padding: 0px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #1976d2;
+        color: #fff;
+        display: grid;
+        place-items: center
+    }
+
     .textContent {
         width: 100%;
         display: flex;
@@ -533,7 +546,8 @@ main {
             display: flex;
             align-items: center;
             justify-content: center;
-            span{
+
+            span {
                 font-weight: bold;
             }
         }

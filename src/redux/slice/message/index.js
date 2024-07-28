@@ -60,7 +60,7 @@ const chat = createSlice({
         builder.addCase(get_chat_unread_message.fulfilled, (state, { payload }) => {
             const { data } = payload
             if (data?.data?.length) {
-                state.data = [...state.data, { isUnRead: true }, ...data?.data]
+                state.data = [...state.data, { isUnRead: true, total: data.data.length }, ...data?.data]
             } else {
                 // state.data = [...data?.data]
             }
