@@ -35,7 +35,7 @@ const ChatMsgContextMenu = ({ mouse, payload, setClipBoardReact, handleForwardMs
 
     // copy message functionality 
     const handleCopyMessage = async () => {
-        await navigator.clipboard.writeText(payload.text)
+        await navigator?.clipboard?.writeText(payload.text)
         setClipBoardReact({
             id: payload?.id,
             msg: 'copied'

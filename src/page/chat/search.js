@@ -64,8 +64,11 @@ const Search = ({ getStart, setGetStart, setMyContact }) => {
             }
 
             // Get the chat messages for the selected user
-            await dispatch(get_chat_message({ chat_id: contact_data?.chat_id, page: 1, clean: true }));
-            await dispatch(handalCurrentUser(res?.contact)); // Set the current user to the selected user
+            await dispatch(get_chat_message({ chat_id: contact_data?.chat_id, page: 1, clean: true })).then(() => {
+               console.log("res?.contact : ",res?.contact)
+                dispatch(handalCurrentUser(res?.contact)); // Set the current user to the selected user
+            })
+
         } catch (error) {
             console.log("error : ", error); // Log any errors
         }

@@ -34,10 +34,13 @@ const CurrentUser = createSlice({
         },
         update_current_user(state, { payload }) {
             return payload
+        },
+        reset_current_user(state, { }) {
+            return initialState
         }
     }
 
 })
 const current_user = CurrentUser.reducer
-export const { handalCurrentUser, update_last_chat, update_current_user } = CurrentUser.actions
+export const { handalCurrentUser, update_last_chat, update_current_user, reset_current_user } = CurrentUser.actions
 export default current_user

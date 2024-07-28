@@ -14,10 +14,10 @@ import Navigate from '@/components/aside/navigate'
 import NoChat from '@/components/chat/no-chat';
 import Avatar from '@/components/comman/Avatar';
 
-import { block_user_contact, get_contact_list, udpate_contact_lastchat, udpate_contact_status } from '@/redux/slice/chat';
-import { handalCurrentUser, update_current_user } from '@/redux/slice/user';
+import { block_user_contact, get_contact_list, udpate_contact_lastchat, udpate_contact_status, update_contact_unread_message } from '@/redux/slice/chat';
+import { add_new_message, get_chat_message, get_chat_unread_message } from '@/redux/slice/message';
+import { handalCurrentUser, reset_current_user, update_current_user } from '@/redux/slice/user';
 import { _scrollToEnd, _scrollToEndSmoothly } from '@/controllers/comman/scroll_to_end';
-import { add_new_message, get_chat_message } from '@/redux/slice/message';
 import { _mark_message_as_read } from '@/controllers/message/mark_as_read';
 import { getStartMessage } from '@/redux/slice/static';
 import { get_userList } from '@/redux/slice/user/userList';
@@ -50,18 +50,26 @@ const ChatPage = () => {
 
     // select user from list 
     const handalSelectChat = async (data) => {
-        const payload = {
-            chat_id: data?.chat_id,
-            userID: profile?.data?._id
-        }
-        await _mark_message_as_read(payload) // make read message
+        // get read message 
         await dispatch(get_chat_message({ chat_id: data?.chat_id, page: 1, clean: true })).then(item => {
             if (!item.payload?.data?.totalMessages) {
                 dispatch(getStartMessage())
             }
         })
-        await dispatch(handalCurrentUser(data)) // set current user 
-        _scrollToEnd(mainRef)// scroll bottom
+
+        // get unread message 
+        await dispatch(get_chat_unread_message({ chat_id: data?.chat_id })).then(item => {
+            if (!item.payload?.data) {
+                dispatch(getStartMessage())
+            }
+        })
+        dispatch(update_contact_unread_message(data))
+        // await _mark_message_as_read(payload) // make read message
+        dispatch(reset_current_user())
+        setTimeout(async () => {
+            await dispatch(handalCurrentUser(data)) // set current user 
+            _scrollToEnd(mainRef)// scroll bottom
+        })
     }
 
     useEffect(() => {
@@ -108,7 +116,6 @@ const ChatPage = () => {
         const offlineHandler = (data) => {
             // update contact list 
             dispatch(udpate_contact_status(data))
-
             // update current chat user 
             if (current_user?._id == data?.user_id) {
                 let currentUser = {
@@ -130,10 +137,11 @@ const ChatPage = () => {
             if (`${current_user?.chat_id}` == `${data?.chat_id}`) {
                 const payload = {
                     chat_id: data?.chat_id,
-                    userID: profile?.data?._id
+                    userID: profile?.data?._id,
+                    only_read: true
                 }
                 // make read message 
-                _mark_message_as_read(payload).then((res) => {
+                await _mark_message_as_read(payload).then(() => {
                     dispatch(add_new_message(data))
                 })
 
@@ -275,14 +283,19 @@ const ChatPage = () => {
                                                         <p className="h1">{currentChat?.firstName} {currentChat?.lastName}</p>
                                                         <span className={`span ${currentChat?.isOnline ? 'text-success' : 'text-primary'}`}>{current_user?.chat_id == currentChat?.chat_id ? "" : lastSeen}</span>
                                                     </div>
-                                                    <p className="p">{currentChat?.last_chat?.text ? currentChat?.last_chat?.text : currentChat?.about}</p>
+                                                    <div className="d-flex justify-content-between">
+                                                        <p className="p">{currentChat?.last_chat?.text ? currentChat?.last_chat?.text : currentChat?.about}</p>
+                                                        {currentChat?.totalUnRead && current_user?.chat_id != currentChat?.chat_id ? <p className='totalCount'>{currentChat?.totalUnRead}</p> : ""}
+                                                    </div>
                                                 </div>
                                             </div>
                                         )
                                     }) : Array.from({ length: 8 }).map((_, key) => {
-                                        return <div className="py-2" key={key}>
-                                            <ContactListSkeleton />
-                                        </div>;
+                                        return (
+                                            <div className="py-2" key={key}>
+                                                <ContactListSkeleton />
+                                            </div>
+                                        )
                                     })
                                 }
                                 {
@@ -297,8 +310,7 @@ const ChatPage = () => {
                                                 <button className='btn text-primary' onClick={getStartWithNewChat}>Get Start <FaArrowRightLong /></button>
                                             </div>
                                         </div>
-                                    </div> : <>
-                                    </>
+                                    </div> : <></>
                                 }
                             </div>
                             {isContext ? <ContaxtMenu data={contextData} mouse={mouse} /> : <></>}

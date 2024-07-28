@@ -9,7 +9,7 @@ import { BiImages } from 'react-icons/bi';
 import { GrSend } from "react-icons/gr";
 import { Modal } from 'react-bootstrap';
 
-import { block_user_contact, udpate_contact_lastchat } from '@/redux/slice/chat';
+import { block_user_contact, udpate_contact_lastchat, update_contact_unread_message } from '@/redux/slice/chat';
 import { handalCurrentUser, update_current_user } from '@/redux/slice/user';
 import { add_new_message, get_chat_message } from '@/redux/slice/message';
 import { _scrollToEndSmoothly } from '@/controllers/comman/scroll_to_end';
@@ -21,6 +21,7 @@ import TextMessage from './msg/text';
 import Avatar from '../comman/Avatar';
 import Header from './header';
 import Image from 'next/image';
+import { DividerTextShip } from '../comman/DividerText';
 
 const mouseInit = {
     x: 0,
@@ -119,7 +120,8 @@ const ChatContainer = ({ mainRef }) => {
             dispatch(add_new_message({ ...data, createdAt: new Date() }))
             socket.emit('send text', data)
 
-            dispatch(udpate_contact_lastchat(data)) // update last seen message 
+            dispatch(udpate_contact_lastchat({ ...data, isRead: true }))
+            // update last seen message 
             setTextMSG("")
             setTimeout(() => {
                 _scrollToEndSmoothly(mainRef)
@@ -262,7 +264,13 @@ const ChatContainer = ({ mainRef }) => {
                             <div className="chat_inner_section" ref={mainRef} style={{ scrollBehavior: 'smooth' }} onScroll={handalScroll}>
                                 {
                                     chat?.data?.map((it_chat, key) => {
-                                        return <TextMessage it_chat={it_chat} key={key} handleContextMenu={handleContextMenu} keys={key} clipBoardReact={clipBoardReact} />
+                                        if (it_chat?.isUnRead) {
+                                            return <div className="p-2">
+                                                <DividerTextShip align="center" label={`${it_chat?.total} UNREAD MESSAGES`} />
+                                            </div>
+                                        } else {
+                                            return <TextMessage it_chat={it_chat} key={key} handleContextMenu={handleContextMenu} keys={key} clipBoardReact={clipBoardReact} />
+                                        }
                                     })
                                 }
                                 {
