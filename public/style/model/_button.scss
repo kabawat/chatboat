@@ -5,8 +5,8 @@
     font-weight: 500;
     font-size: 17px;
     padding: 8px 20px;
-    color: white;
-    background: rgb(103, 92, 156);
+    // color: white;
+    // background: #675c9c;
     border: none;
     box-shadow: 0 0.7em 1.5em -0.5em rgba(59, 48, 78, 0.527);
     letter-spacing: 0.05em;
@@ -71,9 +71,8 @@
 
 // ---------------- send button  =------------------
 .send_btn {
-    --primary-color: #645bff;
+    --primary-color: #63a0de;
     --secondary-color: #fff;
-    --hover-color: #111;
     box-sizing: border-box;
     border: 0;
     border-radius: 10px;
@@ -96,10 +95,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.send_btn:hover {
-    background-color: var(--hover-color);
 }
 
 .send_btn:hover .arrow {

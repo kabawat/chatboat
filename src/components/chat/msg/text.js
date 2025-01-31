@@ -1,7 +1,7 @@
-import Avatar from '@/components/comman/Avatar';
+import React, { useEffect, useState } from 'react'
 import { formatTimeDifference } from '@/helper/timeCal';
-import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux';
+import Avatar from '@/components/comman/Avatar';
 
 const TextMessage = ({ it_chat, handleContextMenu, keys, clipBoardReact }) => {
     // universal state 
@@ -21,27 +21,28 @@ const TextMessage = ({ it_chat, handleContextMenu, keys, clipBoardReact }) => {
                 </div>
 
                 <div className="msg-bubble" onContextMenu={(e) => handleContextMenu(e, { ...it_chat, id: keys })}>
-                    <div className="msg-info">
-                        <div className="msg-info-name">{`${current_user?.firstName} ${current_user?.lastName}`}</div>
-                        <div className="msg-info-time text-success">{timeString}</div>
-                    </div>
                     <div className="msg-text">
                         {it_chat?.text}
                     </div>
+                    <div className="msg-info">
+                        {/* <div className="msg-info-name">{`${current_user?.firstName} ${current_user?.lastName}`}</div> */}
+                        <div className="msg-info-time text-success">{timeString}</div>
+                    </div>
                 </div>
+                {clipBoardReact != null && clipBoardReact?.id == keys ? <div className="ClipBoard">{clipBoardReact?.msg}</div> : <></>}
             </div>
         )
     } else {
         return (
             <div className="msg right-msg">
                 <div className="msg-bubble" onContextMenu={(e) => handleContextMenu(e, { ...it_chat, id: keys })}>
-                    <div className="msg-info">
-                        <div className="msg-info-name">{`${profile?.data?.firstName} ${profile?.data?.lastName}`}</div>
-                        <div className="msg-info-time">{timeString}</div>
-                    </div>
 
                     <div className="msg-text">
                         {it_chat?.text}
+                    </div>
+                    <div className="msg-info">
+                        {/* <div className="msg-info-name">{`${profile?.data?.firstName} ${profile?.data?.lastName}`}</div> */}
+                        <div className="msg-info-time">{timeString}</div>
                     </div>
                 </div>
                 {clipBoardReact != null && clipBoardReact?.id == keys ? <div className="ClipBoard">{clipBoardReact?.msg}</div> : <></>}
