@@ -74,9 +74,13 @@ export default function ChatLayout({ children }) {
         )
     } else {
         return (
-            <div className="d-flex flex-column justify-content-center align-items-center" style={{ width: '100%', height: '100vh' }}>
-                <div className="spinner-border text-primary" role="status"></div>
-                <div className="ps-2 mt-2">Loading...</div>
+            <div className="loading_page">
+                <div className="d-flex flex-column justify-content-center align-items-center inner_page">
+                    <div className="circal">
+                        <div className="spinner-border text-primary" role="status"></div>
+                        <div className="ps-2 mt-2">Loading...</div>
+                    </div>
+                </div>
             </div>
         )
     }

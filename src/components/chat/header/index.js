@@ -58,7 +58,7 @@ const Header = ({ setIsProfile, data }) => {
                 </div>
             </div>
             <div>
-                <button className="" onClick={handleModal} >
+                <button className="menu_btn" onClick={handleModal} >
                     <HiOutlineDotsVertical />
                 </button>
             </div>

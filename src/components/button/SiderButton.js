@@ -1,8 +1,8 @@
 import React from 'react'
 
-const SiderButton = ({ handalClick, title, endIcon, startIcon }) => {
+const SiderButton = ({ handalClick, title, endIcon, startIcon, bgColor = "#675c9c", color = "#fff" }) => {
     return (
-        <button className="button-one text-center" onClick={handalClick}>
+        <button style={{ background: bgColor, color: color }} className="button-one text-center" onClick={handalClick}>
             {
                 startIcon ? startIcon : ''
             }

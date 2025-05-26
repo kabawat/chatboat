@@ -51,5 +51,24 @@
         p {
             color: #fafafa;
         }
+
+        .get_start_btn {
+            color: #55abff;
+        }
+
+
     }
+
+    .no_chat {
+        .inner_chat {
+            // background: rgba(0, 0, 0, 0.5);
+            background: none;
+        }
+    }
+}
+
+.send_btn {
+    --primary-color: #52708e;
+    --secondary-color: #fff;
+    background: var(--primary-color);
 }

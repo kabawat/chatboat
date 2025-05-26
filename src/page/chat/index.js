@@ -307,7 +307,7 @@ const ChatPage = () => {
                                             </div   >
                                             <div className="avatar_title text-center">Zero chats, zero fun! <br /> Pick someone and get chatting!</div>
                                             <div className="py-1 d-flex justify-content-center">
-                                                <button className='btn text-primary' onClick={getStartWithNewChat}>Get Start <FaArrowRightLong /></button>
+                                                <button className='btn get_start_btn' onClick={getStartWithNewChat}>Get Start <FaArrowRightLong /></button>
                                             </div>
                                         </div>
                                     </div> : <></>

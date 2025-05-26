@@ -61,8 +61,6 @@ const chat = createSlice({
             const { data } = payload
             if (data?.data?.length) {
                 state.data = [...state.data, { isUnRead: true, total: data.data.length }, ...data?.data]
-            } else {
-                // state.data = [...data?.data]
             }
             state.status = true
             state.loading = false
@@ -85,14 +83,13 @@ const chat = createSlice({
             } else {
                 new_data = [data]
             }
-            state.data = new_data
+            state.data = new_data.filter((item) => !item?.isUnRead)
             return state
         },
 
         delete_message(state, { payload }) {
-            state.data = state.data.filter((item, index) => !payload.includes(index));
-        }
-
+            state.data = state.data.filter((_, index) => !payload.includes(index));
+        },
     }
 })
 

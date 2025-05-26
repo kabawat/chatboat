@@ -19,7 +19,7 @@ export const SelectButton = styled(Button)`
     width: 45px;
     height: 45px;
     border-radius:50%;
-    background:rgb(25 118 210);
+    background:#63a0de;
     display: grid;
     place-items: center;
     color: #fff;
